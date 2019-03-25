@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".ActivityQLCongViec">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,18 +16,10 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#26862E"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Trang chủ"/>
+            app:title="Quản lý công việc"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|end"-->
-    <!--android:layout_margin="@dimen/fab_margin"-->
-    <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+    <include layout="@layout/content_quanly_congviec" />
 
 </android.support.design.widget.CoordinatorLayout>

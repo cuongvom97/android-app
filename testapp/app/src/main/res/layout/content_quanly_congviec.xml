@@ -5,11 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    android:gravity="center">
-    <TextView
+    tools:context=".ActivityQLCongViec">
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tạm thời chưa biết để cái gì ở đây mọi thứ chỉ là demo đã kết nối firebase"
-        android:textSize="30dp"/>
+        android:layout_height="match_parent"
+        android:id="@+id/lsvDS"></ListView>
 </LinearLayout>

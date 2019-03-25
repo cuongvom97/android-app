@@ -6,47 +6,55 @@
     android:layout_height="match_parent">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="80dp"
     android:orientation="vertical"
     tools:ignore="MissingConstraints"
-    android:gravity="center">
+    android:gravity="center"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="4">
-        <TextView
+        android:weightSum="4"
+        android:gravity="center">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvtieude"
-            android:text="Tiêu đề 1"
-            android:textSize="20dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_weight="1"/>
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:weightSum="4">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvtieude"
+                android:text="Tiêu đề 1"
+                android:textSize="23dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvbatdau"
+                android:text="23/03/2019"
+                android:textSize="13dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvketthuc"
+                android:text="30/04/2019"
+                android:textSize="13dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvnoidung"
             android:text="Nội dung được ghi chú"
             android:textSize="13dp"
-            android:layout_weight="2"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvbatdau"
-                android:text="23/03/2019"
-                android:textSize="13dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvketthuc"
-                android:text="30/04/2019"
-                android:textSize="13dp"/>
-        </LinearLayout>
+            android:layout_weight="3"/>
     </LinearLayout>
 </LinearLayout>
 </android.support.constraint.ConstraintLayout>
