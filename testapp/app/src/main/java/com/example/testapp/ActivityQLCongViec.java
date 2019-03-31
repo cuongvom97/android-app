@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,13 +24,11 @@ import android.widget.Toast;
 
 import com.example.testapp.Custome.CustomeXemDanhSachCV;
 import com.example.testapp.Model.CongViec;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,14 +202,6 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         LayoutInflater inflater=getLayoutInflater();
         View view=inflater.inflate(R.layout.dialog_chitiet_congviec,null);
         TextView tieude,batdau,ketthuc,ghichu;
-        tieude=view.findViewById(R.id.tvtieude_chitiet);
-        batdau=view.findViewById(R.id.tvbatdau_chitiet);
-        ketthuc=view.findViewById(R.id.tvketthuc_chitiet);
-        ghichu=view.findViewById(R.id.tvghichu_chitiet);
-        tieude.setText(congViec.getTieude()+"");
-        batdau.setText(congViec.getBatdau()+"");
-        ketthuc.setText(congViec.getKetthuc()+"");
-        ghichu.setText(congViec.getGhichu()+"");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Chi tiết công việc");
         builder.setView(view);

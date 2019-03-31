@@ -29,10 +29,6 @@ public class CustomeXoaCongViec extends ArrayAdapter<CongViec> {
         tvbatdau=convertView.findViewById(R.id.tvbatdauxoa);
         tvketthuc=convertView.findViewById(R.id.tvketthucxoa);
         tvghichu=convertView.findViewById(R.id.tvnoidungxoa);
-        tvtieude.setText(objects.get(position).getTieude()+"");
-        tvbatdau.setText(objects.get(position).getBatdau()+"");
-        tvketthuc.setText(objects.get(position).getKetthuc()+"");
-        tvghichu.setText(objects.get(position).getGhichu()+"");
         return convertView;
     }
 }

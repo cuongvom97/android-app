@@ -3,6 +3,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,19 +12,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.testapp.Control.QLCongViec;
 import com.example.testapp.Custome.CustomeXemDanhSachCV;
 import com.example.testapp.KetNoiMang.ConnectionReceiver;
 import com.example.testapp.Model.CongViec;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +36,27 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private List<CongViec> list;
+    private ListView lsvDS;
     private TextView tvemailnav;
     public static String EMAILNAV="email";
     public static final int RESULT_CODE1=115;
     public static final int REQUEST_CODE=113;
     private String MainEmail="";
+    private DatabaseReference databaseReference;
+    private CustomeXemDanhSachCV adapterrr;
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+        //Lấy thể hiện
+        lsvDS=findViewById(R.id.lsv_main_dsCongViec);
+        //Đổ dữ liệu vào listview
+        list=new ArrayList<>();
+        adapterrr=new CustomeXemDanhSachCV(this,R.layout.mycustome_danhsachcongviec,list);
+        lsvDS.setAdapter(adapterrr);
+        /////////
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,8 +71,44 @@ public class MainActivity extends AppCompatActivity
         //Lấy header của navigation
         View view=navigationView.getHeaderView(0);
         tvemailnav= view.findViewById(R.id.tvemail_nav);
-        setTexTexView();
+        //setTexTexView();
+        loadDataListView();
+    }
+    //Đưa dữ liệu vào listview hiển thị ở màng hình chính
+    private void loadDataListView()
+    {
+        Query query=databaseReference.child("CongViec").orderByChild("email");
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getEmail().equals("cuongvo077@gmail.com"))
+                {
+                list.add(cv);
+                adapterrr.notifyDataSetChanged();}
 
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     //get Intent từ Google_sign_in
     private void setTexTexView()

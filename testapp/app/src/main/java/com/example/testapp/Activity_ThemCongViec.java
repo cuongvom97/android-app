@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.testapp.Model.CongViec;
 import com.example.testapp.Model.Nhan;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

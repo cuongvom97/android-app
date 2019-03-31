@@ -1,24 +1,29 @@
 package com.example.testapp.Model;
 
 public class CongViec {
-    private String id,tieude,batdau,ketthuc,ghichu;
+    private String tieude,ghichu,email, ngaybatdau,ngayhoanthanh,giobatdau,gioketthuc,tennhan,trangthai;
+
     public CongViec() {
     }
 
-    public CongViec(String id, String tieude, String batdau, String ketthuc, String ghichu) {
-        this.id = id;
+    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String ngayhoanthanh, String giobatdau, String gioketthuc, String tennhan, String trangthai) {
         this.tieude = tieude;
-        this.batdau = batdau;
-        this.ketthuc = ketthuc;
         this.ghichu = ghichu;
+        this.email = email;
+        this.ngaybatdau = ngaybatdau;
+        this.ngayhoanthanh = ngayhoanthanh;
+        this.giobatdau = giobatdau;
+        this.gioketthuc = gioketthuc;
+        this.tennhan = tennhan;
+        this.trangthai = trangthai;
     }
 
-    public String getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTieude() {
@@ -29,27 +34,59 @@ public class CongViec {
         this.tieude = tieude;
     }
 
-    public String getBatdau() {
-        return batdau;
-    }
-
-    public void setBatdau(String batdau) {
-        this.batdau = batdau;
-    }
-
-    public String getKetthuc() {
-        return ketthuc;
-    }
-
-    public void setKetthuc(String ketthuc) {
-        this.ketthuc = ketthuc;
-    }
-
     public String getGhichu() {
         return ghichu;
     }
 
     public void setGhichu(String ghichu) {
         this.ghichu = ghichu;
+    }
+
+    public String getNgaybatdau() {
+        return ngaybatdau;
+    }
+
+    public void setNgaybatdau(String ngaybatdau) {
+        this.ngaybatdau = ngaybatdau;
+    }
+
+    public String getNgayhoanthanh() {
+        return ngayhoanthanh;
+    }
+
+    public void setNgayhoanthanh(String ngayhoanthanh) {
+        this.ngayhoanthanh = ngayhoanthanh;
+    }
+
+    public String getGiobatdau() {
+        return giobatdau;
+    }
+
+    public void setGiobatdau(String giobatdau) {
+        this.giobatdau = giobatdau;
+    }
+
+    public String getGioketthuc() {
+        return gioketthuc;
+    }
+
+    public void setGioketthuc(String gioketthuc) {
+        this.gioketthuc = gioketthuc;
+    }
+
+    public String getTennhan() {
+        return tennhan;
+    }
+
+    public void setTennhan(String tennhan) {
+        this.tennhan = tennhan;
+    }
+
+    public String getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
     }
 }
