@@ -29,18 +29,29 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Activity_XoaCongViec extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
+public class Activity_XoaCongViec extends AppCompatActivity implements  AdapterView.OnItemClickListener {
     private List<CongViec> list;
     private ListView lsvDs;
     private DatabaseReference md;
+    private CustomeXoaCongViec customeXoaCongViec;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__xoa_cong_viec);
         lsvDs=findViewById(R.id.lsvDS);
         list=new ArrayList<>();
-        final CustomeXoaCongViec customeXoaCongViec=new CustomeXoaCongViec(this,R.layout.custome_layout_xoacongviec,list);
+        customeXoaCongViec=new CustomeXoaCongViec(this,R.layout.custome_layout_xoacongviec,list);
         lsvDs.setAdapter(customeXoaCongViec);
+        loadListView();
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        lsvDs.setOnItemClickListener(this);
+        //Dăng ký contextmenu
+        registerForContextMenu(lsvDs);
+    }
+
+    private void loadListView() {
         //kết nối firebase
         md= FirebaseDatabase.getInstance().getReference();
         md.child("CongViec").addChildEventListener(new ChildEventListener() {
@@ -71,23 +82,8 @@ public class Activity_XoaCongViec extends AppCompatActivity implements Navigatio
 
             }
         });
-        Toolbar toolbar=findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        lsvDs.setOnItemClickListener(this);
-        //Dăng ký contextmenu
-        registerForContextMenu(lsvDs);
     }
+
     //Tạo menu trái
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,53 +107,10 @@ public class Activity_XoaCongViec extends AppCompatActivity implements Navigatio
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
-            //Ấn trang chủ
-            case R.id.menu_trangchu:
-                combackHome();
-                break;
-            //Ấn quản lý công việc
-            case R.id.menu_quanlycv:
-                combackActivityQlCongViec();
-                break;
-            //Ấn quản lý nhãn
-            case R.id.menu_quanlynhan:break;
-            //Ấn thống kê
-            case R.id.menu_thongke:break;
-            //Ấn cài đặt
-            case R.id.menu_caidat:
-                Toast.makeText(this, "Cài đặt", Toast.LENGTH_SHORT).show();
-                break;
-            //Ấn giới thiệu
-            case R.id.menu_goithieu:
-                Toast.makeText(this, "Giới thiệu", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void combackHome() {
-        Intent intent=new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private void combackActivityQlCongViec() {
-        Intent intent=new Intent(this,ActivityQLCongViec.class);
-        startActivity(intent);
+        Intent intent=getIntent();
+        setResult(ActivityQLCongViec.REQUEST_CODE1,intent);
+        finish();
     }
 
     @Override

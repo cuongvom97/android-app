@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.testapp.Custome.CustomeXemDanhSachCV;
 import com.example.testapp.Model.CongViec;
 import com.google.firebase.FirebaseApp;
@@ -41,6 +42,11 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
     private List<CongViec> list;
     private ListView lsvDs;
     private DatabaseReference mDatabase;
+    private CustomeXemDanhSachCV customeXemDanhSachCV;
+    private TextView tvemailnav;
+    public static final int REQUEST_CODE1=113;
+    public static final int REQUEST_CODE2=114;
+    public static final int RESULT_CODE=115;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +54,42 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         //Listview
         lsvDs=findViewById(R.id.lsvDS);
         list=new ArrayList<>();
-        final CustomeXemDanhSachCV customeXemDanhSachCV=new CustomeXemDanhSachCV(this,R.layout.mycustome_danhsachcongviec,list);
+        customeXemDanhSachCV=new CustomeXemDanhSachCV(this,R.layout.mycustome_danhsachcongviec,list);
         lsvDs.setAdapter(customeXemDanhSachCV);
-        // Write a message to the database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        loadListView();
+        //menu
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View v=navigationView.getHeaderView(0);
+        tvemailnav=v.findViewById(R.id.tvemail_nav);
+        setTexTexView();
+        lsvDs.setOnItemClickListener(this);
+        //Dăng ký contextmenu
+        registerForContextMenu(lsvDs);
+    }
+    private void setTexTexView()
+    {
+        Intent intent=getIntent();
+        tvemailnav.setText(intent.getStringExtra(MainActivity.EMAILNAV).toString());
+    }
+    //Lấy danh sách cong việc từ firebase vào listview
+    private void loadListView() {
+        mDatabase= FirebaseDatabase.getInstance().getReference();
         mDatabase.child("CongViec").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 CongViec cv=dataSnapshot.getValue(CongViec.class);
                 list.add(cv);
                 customeXemDanhSachCV.notifyDataSetChanged();
+
             }
 
             @Override
@@ -80,24 +112,8 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
 
             }
         });
-
-        //menu
-        Toolbar toolbar=findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        lsvDs.setOnItemClickListener(this);
-        //Dăng ký contextmenu
-        registerForContextMenu(lsvDs);
     }
+
     //Xử lý sự kiện ấn giữ lâu 1 item trong listview
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -130,7 +146,7 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         {
             case R.id.menu_qlcongviec_thoat:
                 //Gọi hàm quay về trang chủ
-                combackHome();
+                sendToMain(MainActivity.RESULT_CODE1);
                 break;
             case R.id.menu_qlcongviec_them_congviec:
                 loadActivityThemCV();
@@ -145,22 +161,38 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
     private void loadActivityThemCV()
     {
         Intent intent=new Intent(this,Activity_ThemCongViec.class);
-        startActivity(intent);
-    }
-    //Quay về trang chủ
-    private void combackHome() {
-        Intent intent=new Intent(this,MainActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_CODE1);
     }
     //Load activity ActivityXoaCongViec
     private void loadActivityXoaCV()
     {
         Intent intent=new Intent(this,Activity_XoaCongViec.class);
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_CODE2);
     }
-    public void KhoiTao()
-    {
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE1)
+        {
+            switch (resultCode)
+            {
+                case RESULT_CODE:
+                    ReloadActivity();
+                    break;
+
+            }
+        }
+        if(requestCode==REQUEST_CODE2)
+        {
+            switch (resultCode)
+            {
+                case RESULT_CODE:
+                    ReloadActivity();
+                    break;
+
+            }
+        }
     }
     //Sự kiện click vào 1 item trong listview
     @Override
@@ -201,7 +233,7 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         {
             //Ấn trang chủ
             case R.id.menu_trangchu:
-                combackHome();
+                sendToMain(MainActivity.RESULT_CODE1);
                 break;
             //Ấn quản lý công việc
             case R.id.menu_quanlycv:
@@ -239,5 +271,11 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         Intent intent=getIntent();
         finish();
         startActivity(intent);
+    }
+    public void sendToMain(int resultcode)
+    {
+        Intent intent=getIntent();
+        setResult(resultcode, intent);
+        finish();
     }
 }

@@ -1,20 +1,16 @@
 package com.example.testapp.Model;
 
 public class CongViec {
-    private String id;
-    private String tieude;
-    private String ghichu;
-    private String batdau;
-
+    private String id,tieude,batdau,ketthuc,ghichu;
     public CongViec() {
     }
 
-    public CongViec(String id, String tieude, String ghichu, String batdau, String ketthuc) {
+    public CongViec(String id, String tieude, String batdau, String ketthuc, String ghichu) {
         this.id = id;
         this.tieude = tieude;
-        this.ghichu = ghichu;
         this.batdau = batdau;
         this.ketthuc = ketthuc;
+        this.ghichu = ghichu;
     }
 
     public String getId() {
@@ -33,14 +29,6 @@ public class CongViec {
         this.tieude = tieude;
     }
 
-    public String getGhichu() {
-        return ghichu;
-    }
-
-    public void setGhichu(String ghichu) {
-        this.ghichu = ghichu;
-    }
-
     public String getBatdau() {
         return batdau;
     }
@@ -57,5 +45,11 @@ public class CongViec {
         this.ketthuc = ketthuc;
     }
 
-    private String ketthuc;
+    public String getGhichu() {
+        return ghichu;
+    }
+
+    public void setGhichu(String ghichu) {
+        this.ghichu = ghichu;
+    }
 }

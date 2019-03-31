@@ -34,25 +34,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3"
-            android:gravity="center">
+            android:gravity="center"
+            android:weightSum="3">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nhãn:"
                 android:textSize="13dp"
-                android:layout_weight="1"/>
-            <Spinner
+                android:layout_weight="2"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pinner_themcv_nhan"
-                android:layout_weight="1"></Spinner>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_themcv_themnhan"
-                android:text="Add"
-                android:layout_weight="1"/>
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:weightSum="5"
+                android:gravity="center">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/pinner_themcv_nhan"
+                    android:layout_weight="1"></Spinner>
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_them"
+                    android:id="@+id/btn_themcv_themnhan"
+                    android:layout_weight="4"/>
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
