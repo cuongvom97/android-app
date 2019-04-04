@@ -17,4 +17,9 @@ public class Nhan {
     public void setTennhan(String tennhan) {
         this.tennhan = tennhan;
     }
+
+    @Override
+    public String toString() {
+        return this.getTennhan();
+    }
 }

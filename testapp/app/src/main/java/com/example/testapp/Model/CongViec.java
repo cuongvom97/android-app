@@ -1,6 +1,13 @@
 package com.example.testapp.Model;
 
-public class CongViec {
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+public class CongViec implements Serializable {
     private String tieude,ghichu,email, ngaybatdau,ngayhoanthanh,giobatdau,gioketthuc,tennhan,trangthai;
 
     public CongViec() {
@@ -89,4 +96,41 @@ public class CongViec {
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
     }
+    /**
+     * lấy định dạng ngày
+     * @param d
+     * @return
+     */
+    public String getDateFormat(Date d)
+    {
+        SimpleDateFormat dft=new
+                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return dft.format(d);
+    }
+    /**
+     * lấy định dạng giờ phút
+     * @param d
+     * @return
+     */
+    public String getHourFormat(Date d)
+    {
+        SimpleDateFormat dft=new
+                SimpleDateFormat("hh:mm a", Locale.getDefault());
+        return dft.format(d);
+    }
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("tieude", tieude);
+        result.put("ghichu", ghichu);
+        result.put("email", email);
+        result.put("ngaybatdau", ngaybatdau);
+        result.put("ngayhoanthanh", ngayhoanthanh);
+        result.put("giobatdau", giobatdau);
+        result.put("gioketthuc", gioketthuc);
+        result.put("tennhan", tennhan);
+        result.put("trangthai", trangthai);
+        return result;
+    }
+
+
 }

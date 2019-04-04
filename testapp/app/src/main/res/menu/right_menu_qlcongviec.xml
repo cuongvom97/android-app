@@ -2,35 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
     <group android:checkableBehavior="single">
         <item android:title="Trang chủ"
-            android:id="@+id/menu_trangchu"
+            android:id="@+id/menu_trangchu_qlcongviec"
             android:icon="@mipmap/iconfinder_home_430102"/>
-        <item android:title="Quản lý công việc"
-            android:id="@+id/menu_quanlycv"
+        <item android:title="Danh sách công việc"
+            android:id="@+id/menu_dscongviec_qlcongviec"
             android:icon="@mipmap/icon_listcv"/>
-        <item android:title="Quản lý nhãn"
-            android:id="@+id/menu_quanlynhan"
-            android:icon="@mipmap/icon_nhan"/>
-        <item android:title="Thống kê"
-            android:icon="@mipmap/icon_thongke"
-            android:id="@+id/menu_thongke"/>
+        <item android:title="Đánh dấu công việc hoàn thành"
+            android:id="@+id/menu_danhdau_qlcongviec"
+            android:icon="@mipmap/ic_check"/>
     </group>
     <group android:checkableBehavior="single">
         <item android:title="Tiện ích">
             <menu>
                 <item
-                    android:id="@+id/menu_caidat"
+                    android:id="@+id/menu_caidat_qlcongviec"
                     android:icon="@mipmap/icon_setting"
                     android:title="Cài đặt" />
                 <item
-                    android:id="@+id/menu_goithieu"
+                    android:id="@+id/menu_goithieu_qlcongviec"
                     android:icon="@mipmap/icon_gioithieu"
                     android:title="Giới thiệu" />
             </menu>
         </item>
 
     </group>
-
 </menu>

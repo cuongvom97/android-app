@@ -85,15 +85,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btn_dangnhap_dangky"
-            android:text="Đăng ký"
+            android:id="@+id/btn_dangnhap_dangnhap"
+            android:text="Đăng nhập"
             android:theme="@style/ThemeOverlay.MyDarkButton"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btn_dangnhap_dangnhap"
-            android:text="Đăng nhập"
+            android:id="@+id/btn_dangnhap_thoat"
+            android:text="Thoát"
             android:theme="@style/ThemeOverlay.MyDarkButton"/>
     </LinearLayout>
 

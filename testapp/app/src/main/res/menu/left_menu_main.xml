@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Thêm"
+        android:id="@+id/them_leftmenu_main"
+        android:icon="@mipmap/icon_them"
+        app:showAsAction="always"/>
     <item android:title="@string/leftmenu_tailai"
-        android:id="@+id/tailai_leftmenu"
-        android:icon="@mipmap/icon_refresh"/>
+        android:id="@+id/tailai_leftmenu_main"
+        android:icon="@mipmap/icon_refresh2"/>
+
 </menu>

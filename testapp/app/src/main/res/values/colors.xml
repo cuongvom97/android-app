@@ -8,4 +8,9 @@
     <color name="blue_grey_700">#455A64</color>
     <color name="blue_grey_800">#37474F</color>
     <color name="blue_grey_900">#263238</color>
+    <color name="tieude">#DA70D6</color>
+    <color name="ghichu">#EE82EE</color>
+    <color name="thoigianbatdau">#DDA0DD</color>
+    <color name="thoigianketthuc">#D8BFD8</color>
+    <color name="trangthai">#E6E6FA	</color>
 </resources>

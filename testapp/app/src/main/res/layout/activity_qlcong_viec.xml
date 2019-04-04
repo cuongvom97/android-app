@@ -20,6 +20,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/right_menu_main"
-        app:menu="@menu/right_menu_main" />
+        app:menu="@menu/right_menu_qlcongviec" />
 
 </android.support.v4.widget.DrawerLayout>

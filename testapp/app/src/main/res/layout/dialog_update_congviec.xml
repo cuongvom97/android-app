@@ -4,22 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingLeft="8dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints"
-        android:gravity="center">
+        android:background="@drawable/gradient_bg">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3"
             android:orientation="horizontal"
-            android:gravity="center"
+            android:weightSum="3"
             android:background="@color/tieude">
             <TextView
                 android:layout_width="match_parent"
@@ -27,35 +24,45 @@
                 android:text="Tiêu đề:"
                 android:textSize="23dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:textStyle="bold"/>
-            <TextView
+                android:layout_weight="2"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"/>
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvtieude_chitiet"
+                android:id="@+id/ed_updatecv_tieude"
                 android:textSize="23dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_weight="1"
-                android:paddingLeft="10dp"
                 android:textStyle="bold"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvnhan_chitiet"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:text="Nhãn"
-                android:paddingLeft="10dp"
-                android:gravity="center"/>
+                android:paddingLeft="10dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3"
             android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="3"
             android:background="@color/ghichu">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nhãn:"
+                android:textSize="13dp"
+                android:layout_weight="2"
+                android:paddingLeft="10dp"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pinner_updatecv_nhan"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:background="@color/thoigianbatdau">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,105 +70,102 @@
                 android:textSize="13dp"
                 android:layout_weight="2"
                 android:paddingLeft="10dp"/>
-            <TextView
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvghichu_chitiet"
-                android:textSize="13dp"
+                android:layout_height="100dp"
+                android:id="@+id/ed_updatecv_ghichu"
                 android:layout_weight="1"
+                android:textSize="13dp"
                 android:paddingLeft="10dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="4"
             android:orientation="horizontal"
-            android:background="@color/thoigianbatdau">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ngày bắt đầu:"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvngaybatdau_chitiet"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Giờ bắt đầu:"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvgiobatdau_chitiet"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4"
-            android:orientation="horizontal"
-            android:background="@color/thoigianketthuc">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ngày hoàn thành:"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvngayhoanthanh_chitiet"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Giờ hoàn thành:"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvgiohoanthanh_chitiet"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:weightSum="3"
-            android:orientation="horizontal"
-            android:background="@color/trangthai">
+            android:background="@color/thoigianketthuc"
+            android:gravity="center">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Trạng thái:"
-                android:textSize="13dp"
-                android:layout_weight="2"
-                android:paddingLeft="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvtrangthai_chitiet"
+                android:text="Thời gian bắt đầu:"
                 android:textSize="13dp"
                 android:layout_weight="1"
-                android:paddingLeft="10dp"
+                android:paddingLeft="10dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dd/MM/yyyy"
+                android:id="@+id/btn_updatecv_ngaybatdau"
+                android:layout_weight="1"
+                android:background="@color/thoigianketthuc"
+                android:textStyle="italic"
+                android:gravity="center"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hh:mm a"
+                android:id="@+id/btn_updatecv_giobatdau"
+                android:layout_weight="1"
+                android:background="@color/thoigianketthuc"
+                android:textStyle="italic"
                 android:gravity="center"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:background="@color/trangthai"
+            android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian hoàn thành:"
+                android:textSize="13dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dd/MM/yyyy"
+                android:id="@+id/btn_updatecv_ngayhoanthanh"
+                android:layout_weight="1"
+                android:background="@color/trangthai"
+                android:textStyle="italic"
+                android:gravity="center"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hh:mm a"
+                android:id="@+id/btn_updatecv_giohoanthanh"
+                android:layout_weight="1"
+                android:background="@color/trangthai"
+                android:textStyle="italic"
+                android:gravity="center"/>
+        </LinearLayout>
+        <TableRow android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp">
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_updatecv_update"
+                android:textSize="13dp"
+                android:text="Cập nhật"
+                android:background="@color/colorPrimary"/>
+            <TextView android:layout_width="10dp"/>
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_updatecv_huy"
+                android:textSize="13dp"
+                android:text="Hủy"
+                android:background="@color/colorPrimary"
+                android:paddingRight="10dp"/>
+        </TableRow>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

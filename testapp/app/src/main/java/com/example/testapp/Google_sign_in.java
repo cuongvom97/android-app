@@ -52,7 +52,7 @@ public class Google_sign_in extends AppCompatActivity implements View.OnClickLis
         taikhoan=findViewById(R.id.ed_dangnhap_email);
         matkhau=findViewById(R.id.ed_dangnhap_matkhau);
         dangnhap=findViewById(R.id.btn_dangnhap_dangnhap);
-        dangky=findViewById(R.id.btn_dangnhap_dangky);
+        dangky=findViewById(R.id.btn_dangnhap_thoat);
         //Kiểm tra mạng
         check();
         dangnhap.setOnClickListener(this);
@@ -153,7 +153,7 @@ public class Google_sign_in extends AppCompatActivity implements View.OnClickLis
         Intent  intent=new Intent(  Google_sign_in.this,MainActivity.class);
         intent.putExtra(EMAIL_SIGN,email);
         startActivity(intent);
-        fileList();
+        finish();
     }
     @Override
     public void onClick(View v) {
@@ -162,11 +162,33 @@ public class Google_sign_in extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_dangnhap_dangnhap:
                 dangNhapTK();
                 break;
-            case R.id.btn_dangnhap_dangky:
-                dangKyTK();
+            case R.id.btn_dangnhap_thoat:
+                thoatLogin();
                 break;
         }
     }
+
+    private void thoatLogin() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn có muốn thoát ?");
+        builder.setIcon(R.mipmap.ic_hoi);
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        AlertDialog alertDialog=builder.create();
+        alertDialog.show();
+    }
+
     //Kiểm tra input
     private boolean checkInput(String email,String mk)
     {

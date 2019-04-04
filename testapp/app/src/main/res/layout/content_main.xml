@@ -12,5 +12,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lsv_main_dsCongViec"></ListView>
+        android:id="@+id/lsv_main_dsCongViec"
+        android:listSelector="@drawable/gradient_bg_select"></ListView>
 </LinearLayout>

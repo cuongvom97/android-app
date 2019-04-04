@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#DDA0DD	"
+            android:background="#DDA0DD"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="Trang chủ"/>
 

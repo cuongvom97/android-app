@@ -13,8 +13,7 @@
     android:paddingRight="10dp"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:background="#F0F8FF">
+    android:paddingBottom="10dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,13 +35,15 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_weight="1"
                 android:background="#DDA0DD"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:textStyle="bold"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:background="#D8BFD8">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,7 +51,6 @@
                     android:text="23/03/2019"
                     android:textSize="13dp"
                     android:layout_weight="1"
-                    android:background="#D8BFD8"
                     android:paddingLeft="10dp"/>
                 <TextView
                     android:layout_width="match_parent"
@@ -59,7 +59,6 @@
                     android:text="09:30 AM"
                     android:textSize="13dp"
                     android:layout_weight="1"
-                    android:background="#D8BFD8"
                     android:paddingLeft="10dp"/>
             </LinearLayout>
             <LinearLayout
@@ -67,7 +66,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:background="#E6E6FA">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +75,6 @@
                     android:text="30/04/2019"
                     android:textSize="13dp"
                     android:layout_weight="1"
-                    android:background="#E6E6FA"
                     android:paddingLeft="10dp"/>
                 <TextView
                     android:layout_width="match_parent"
@@ -84,7 +83,6 @@
                     android:text="09:30 PM"
                     android:textSize="13dp"
                     android:layout_weight="1"
-                    android:background="#E6E6FA"
                     android:paddingLeft="10dp"/>
             </LinearLayout>
         </LinearLayout>

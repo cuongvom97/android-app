@@ -15,18 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Google_sign_in">
+        <activity android:name=".Testfirebase">
 
         </activity>
-        <activity android:name=".Activity_ThemCongViec" />
-        <activity android:name=".Activity_XoaCongViec" />
-        <activity android:name=".ActivityQLCongViec" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".Google_sign_in">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Activity_ThemCongViec">
+
+        </activity>
+        <activity android:name=".Activity_XoaCongViec" />
+        <activity android:name=".ActivityQLCongViec" >
+
+        </activity>
+        <activity android:name=".MainActivity">
+
         </activity>
 
         <receiver

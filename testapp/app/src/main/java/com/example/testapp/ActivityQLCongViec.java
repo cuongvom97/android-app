@@ -48,12 +48,19 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qlcong_viec);
-        //Listview
-        lsvDs=findViewById(R.id.lsvDS);
-        list=new ArrayList<>();
-        customeXemDanhSachCV=new CustomeXemDanhSachCV(this,R.layout.mycustome_danhsachcongviec,list);
-        lsvDs.setAdapter(customeXemDanhSachCV);
-        loadListView();
+        layTheHien();
+        loadUI();
+        sukien();
+
+    }
+    private void sukien()
+    {
+        lsvDs.setOnItemClickListener(this);
+        //Dăng ký contextmenu
+        registerForContextMenu(lsvDs);
+    }
+    private void loadUI()
+    {
         //menu
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,9 +75,11 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         View v=navigationView.getHeaderView(0);
         tvemailnav=v.findViewById(R.id.tvemail_nav);
         setTexTexView();
-        lsvDs.setOnItemClickListener(this);
-        //Dăng ký contextmenu
-        registerForContextMenu(lsvDs);
+    }
+    private void layTheHien()
+    {
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+        lsvDs=findViewById(R.id.lsvDS);
     }
     private void setTexTexView()
     {
@@ -79,7 +88,6 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
     }
     //Lấy danh sách cong việc từ firebase vào listview
     private void loadListView() {
-        mDatabase= FirebaseDatabase.getInstance().getReference();
         mDatabase.child("CongViec").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -126,6 +134,8 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
             case R.id.contextmenu_qlcongviec_sua:
                 Toast.makeText(this, "Sửa đi", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.contextmenu_qlcongviec_xoa:
+                break;
         }
         return super.onContextItemSelected(item);
     }
@@ -145,20 +155,11 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
                 //Gọi hàm quay về trang chủ
                 sendToMain(MainActivity.RESULT_CODE1);
                 break;
-            case R.id.menu_qlcongviec_them_congviec:
-                loadActivityThemCV();
-                break;
             case R.id.menu_qlcongviec_xoa_congviec:
                 loadActivityXoaCV();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-    //Load activuty Activity_ThemCongViec
-    private void loadActivityThemCV()
-    {
-        Intent intent=new Intent(this,Activity_ThemCongViec.class);
-        startActivityForResult(intent,REQUEST_CODE1);
     }
     //Load activity ActivityXoaCongViec
     private void loadActivityXoaCV()
@@ -221,23 +222,21 @@ public class ActivityQLCongViec extends AppCompatActivity implements AdapterView
         switch (item.getItemId())
         {
             //Ấn trang chủ
-            case R.id.menu_trangchu:
+            case R.id.menu_trangchu_qlcongviec:
                 sendToMain(MainActivity.RESULT_CODE1);
                 break;
             //Ấn quản lý công việc
-            case R.id.menu_quanlycv:
+            case R.id.menu_danhdau_qlcongviec:
                 ReloadActivity();
                 break;
-            //Ấn quản lý nhãn
-            case R.id.menu_quanlynhan:break;
-            //Ấn thống kê
-            case R.id.menu_thongke:break;
+            //Ấn xem danh sách công việc
+            case R.id.menu_dscongviec_qlcongviec:break;
             //Ấn cài đặt
-            case R.id.menu_caidat:
+            case R.id.menu_caidat_qlcongviec:
                 Toast.makeText(this, "Cài đặt", Toast.LENGTH_SHORT).show();
                 break;
             //Ấn giới thiệu
-            case R.id.menu_goithieu:
+            case R.id.menu_goithieu_qlcongviec:
                 Toast.makeText(this, "Giới thiệu", Toast.LENGTH_SHORT).show();
                 break;
         }
