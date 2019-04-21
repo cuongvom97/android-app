@@ -1,25 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_ThemCongViec">
+    tools:context=".Activity.Activity_ThemCongViec"
+    android:orientation="vertical">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar_themcv"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#DDA0DD"
+            android:background="@color/blue_grey_700"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Thêm công việc"/>
+            app:title="Thêm công việc"
+            app:titleTextColor="@color/colorWhite"/>
 
     </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="23dp"
+                android:text="Tiêu đề"
+                android:textColor="@color/colortieude"
+                android:layout_weight="1"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/themcv_tieude"
+                android:textSize="23dp"
+                android:textColor="@color/colortieude"
+                android:layout_weight="1"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/themcv_spinner_nhan"
+                android:layout_weight="1"></Spinner>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:gravity="center"
+            android:paddingTop="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:text="Ghi chú"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="3"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:id="@+id/themcv_ghichu"
+                android:textSize="13dp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:gravity="center"
+            android:paddingTop="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue_grey_800"
+                android:textSize="13dp"
+                android:text="Thời gian bắt đầu"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_themcv_ngaybatdau"
+                android:text="@string/ngaycv"
+                android:textSize="13dp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_themcv_giobatdau"
+                android:text="@string/giocv"
+                android:textSize="13dp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="1"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:gravity="center"
+            android:paddingTop="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue_grey_800"
+                android:textSize="13dp"
+                android:text="Thời gian hoàn thành"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_themcv_ngayht"
+                android:text="@string/ngaycv"
+                android:textSize="13dp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_themcv_gioht"
+                android:text="@string/giocv"
+                android:textSize="13dp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_weight="1"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:paddingTop="3dp"
+            android:gravity="center">
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lặp"
+                android:textSize="13dp"
+                android:layout_weight="3"
+                android:textColor="@color/blue_grey_800"
+                android:id="@+id/themcv_lap"/>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:weightSum="3"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:text="Ngày"
+                    android:id="@+id/themcv_lap_ngay"
+                    android:layout_weight="1"
+                    android:textColor="@color/blue_grey_800"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:text="Tuần"
+                    android:id="@+id/themcv_lap_tuan"
+                    android:layout_weight="1"
+                    android:textColor="@color/blue_grey_800"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:text="Tháng"
+                    android:id="@+id/themcv_lap_thang"
+                    android:layout_weight="1"
+                    android:textColor="@color/blue_grey_800"/>
+            </RadioGroup>
+        </LinearLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:id="@+id/themcv_btnthongbao"
+            android:paddingTop="3dp"
+            android:src="@drawable/dongho35dp"
+            android:paddingLeft="7dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_weight="1">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/themcv_btnthem"
+                    android:text="Thêm"
+                    android:background="@drawable/shape_button"
+                    android:textColor="@color/blue_grey_800"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/themcv_btnthoat"
+                    android:text="Thoát"
+                    android:background="@drawable/shape_button"
+                    android:textColor="@color/blue_grey_800"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
-    <include layout="@layout/content_layout_themcongviec"/>
+        </LinearLayout>
+    </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

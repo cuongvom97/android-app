@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.testapp.Model.CongViec;
@@ -28,20 +29,23 @@ public class CustomeXemDanhSachCV extends ArrayAdapter<CongViec>{
     @Override
     public View getView(int position, View convertView,ViewGroup parent) {
         convertView=LayoutInflater.from(context).inflate(R.layout.mycustome_danhsachcongviec,parent,false);
-        TextView tvtieude,tvngaybd,tvngaykt,tvtrangthai,tvgiobd,tvgiokt;
-        tvtieude=convertView.findViewById(R.id.tvmain_tieude);
-        tvtrangthai=convertView.findViewById(R.id.tvmain_trangthai);
-        tvngaybd=convertView.findViewById(R.id.tvmain_ngaybatdau);
-        tvgiobd=convertView.findViewById(R.id.tvmain_giobatdau);
-        tvngaykt=convertView.findViewById(R.id.tvmain_ngayketthuc);
-        tvgiokt=convertView.findViewById(R.id.tvmain_gioketthuc);
+        TextView tvtieude,bd,kt,tvtrangthai,ghichu;
+        LinearLayout trangthai;
+        tvtieude=convertView.findViewById(R.id.custom_dscv_tieude);
+        trangthai=convertView.findViewById(R.id.layout_dscongviec);
+        bd=convertView.findViewById(R.id.custom_dscv_thoigianbd);
+        kt=convertView.findViewById(R.id.custom_dscv_thoigianht);
+        ghichu=convertView.findViewById(R.id.custome_dscv_ghichu);
 
         tvtieude.setText(objects.get(position).getTieude()+"");
-        tvngaybd.setText(objects.get(position).getNgaybatdau()+"");
-        tvgiobd.setText(objects.get(position).getGiobatdau()+"");
-        tvngaykt.setText(objects.get(position).getNgayhoanthanh()+"");
-        tvgiokt.setText(objects.get(position).getGioketthuc()+"");
-        tvtrangthai.setText(objects.get(position).getTrangthai()+"");
+        bd.setText("Bắt đầu: "+objects.get(position).getNgaybatdau()+"  "+objects.get(position).getGiobatdau());
+        kt.setText("Hoàn thành: "+objects.get(position).getNgayhoanthanh()+"  "+objects.get(position).getGioketthuc());
+        ghichu.setText(objects.get(position).getGhichu()+"");
+        String tt=objects.get(position).getTrangthai()+"";
+        if(tt.equals("Chưa hoàn thành"))
+            trangthai.setBackgroundColor(255246143);
+        else
+            trangthai.setBackgroundColor(1182380);
         return convertView;
     }
 

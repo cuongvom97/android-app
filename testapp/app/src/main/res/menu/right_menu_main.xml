@@ -7,19 +7,28 @@
         <item android:title="Trang chủ"
             android:id="@+id/menu_trangchu"
             android:icon="@mipmap/iconfinder_home_430102"/>
-        <item android:title="Quản lý công việc"
-            android:id="@+id/menu_quanlycv"
+        <item android:title="Ngày"
+            android:id="@+id/menu_ngay"
+            android:icon="@mipmap/day"/>
+        <item android:title="Tuần"
+            android:id="@+id/menu_tuan"
+            android:icon="@mipmap/month"/>
+        <item android:title="Tháng"
+            android:id="@+id/menu_thang"
             android:icon="@mipmap/icon_listcv"/>
-        <item android:title="Quản lý nhãn"
-            android:id="@+id/menu_quanlynhan"
-            android:icon="@mipmap/icon_nhan"/>
-        <item android:title="Thống kê"
-            android:icon="@mipmap/icon_thongke"
-            android:id="@+id/menu_thongke"/>
     </group>
     <group android:checkableBehavior="single">
         <item android:title="Tiện ích">
             <menu>
+                <item android:title="Quản lý công việc"
+                    android:id="@+id/menu_quanlycv"
+                    android:icon="@mipmap/icon_listcv"/>
+                <item android:title="Quản lý nhãn"
+                    android:id="@+id/menu_quanlynhan"
+                    android:icon="@mipmap/icon_nhan"/>
+                <item android:title="Thống kê"
+                    android:icon="@mipmap/icon_thongke"
+                    android:id="@+id/menu_thongke"/>
                 <item
                     android:id="@+id/menu_caidat"
                     android:icon="@mipmap/icon_setting"
@@ -30,7 +39,6 @@
                     android:title="Giới thiệu" />
             </menu>
         </item>
-
     </group>
 
 </menu>

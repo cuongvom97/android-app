@@ -13,4 +13,8 @@
     <color name="thoigianbatdau">#DDA0DD</color>
     <color name="thoigianketthuc">#D8BFD8</color>
     <color name="trangthai">#E6E6FA	</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colortieude">#FF0000</color>
+    <color name="hoanthanh">#76EE00</color>
+    <color name="chuahoanthanh">#FFF68F</color>
 </resources>

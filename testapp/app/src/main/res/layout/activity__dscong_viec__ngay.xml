@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Activity_DSCongViec_Ngay"
+    android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/toolbar_ngay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_dsngay"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/blue_grey_700"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Ngày"
+            app:titleTextColor="@color/colorWhite"/>
+
+    </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:text="Ngày hiện tại"
+        android:textSize="23dp"
+        android:gravity="center"
+        android:background="@color/blue_grey_500"
+        android:id="@+id/ngay_ngayhientai"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dscongviec_ngay"></ListView>
+</LinearLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tieu de"
+        android:textSize="13dp"
+        android:id="@+id/chitiet_tieude_thang"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ngay"
+        android:textSize="13dp"
+        android:id="@+id/chitiet_ngaybd_thang"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ghi chu"
+        android:textSize="13dp"
+        android:id="@+id/chitiet_ghichu_thang"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhan"
+        android:textSize="13dp"
+        android:id="@+id/chitiet_nhan_thang"/>
+
+
+</LinearLayout>
