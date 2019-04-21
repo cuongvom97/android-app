@@ -17,20 +17,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.CapNhatCV"></activity>
-        <activity
-            android:name=".Activity.MainActivity"
-            android:launchMode="singleInstance">
+        <activity android:name=".Activity.CapNhatCV"
+            android:parentActivityName=".Activity.Activity_DSCongViec_Ngay"></activity>
+        <activity android:name=".Activity.MainActivity">
 
         </activity>
-        <activity android:name=".Activity.Activity_DSCongViec_Ngay" />
-        <activity android:name=".Activity.Google_sign_in"></activity>
-        <activity android:name=".Activity.Activity_ThemCongViec" >
+        <activity android:name=".Activity.Activity_DSCongViec_Ngay"
+            android:parentActivityName=".Activity.MainActivity"/>
+        <activity android:name=".Activity.Google_sign_in">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Activity.Activity_ThemCongViec"
+            android:parentActivityName=".Activity.Activity_DSCongViec_Ngay">
+
         </activity>
 
         <receiver
@@ -40,6 +43,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".ReceiverManager.BaoReceiver"/>
+        <service android:name=".ReceiverManager.BaoNhac"/>
     </application>
 
 </manifest>

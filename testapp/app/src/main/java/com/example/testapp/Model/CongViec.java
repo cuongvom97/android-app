@@ -8,17 +8,16 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CongViec implements Serializable {
-    private String tieude,ghichu,email, ngaybatdau,ngayhoanthanh,giobatdau,gioketthuc,tennhan,trangthai;
+    private String tieude,ghichu,email, ngaybatdau,giobatdau,gioketthuc,tennhan,trangthai;
 
     public CongViec() {
     }
 
-    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String ngayhoanthanh, String giobatdau, String gioketthuc, String tennhan, String trangthai) {
+    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String giobatdau, String gioketthuc, String tennhan, String trangthai) {
         this.tieude = tieude;
         this.ghichu = ghichu;
         this.email = email;
         this.ngaybatdau = ngaybatdau;
-        this.ngayhoanthanh = ngayhoanthanh;
         this.giobatdau = giobatdau;
         this.gioketthuc = gioketthuc;
         this.tennhan = tennhan;
@@ -55,14 +54,6 @@ public class CongViec implements Serializable {
 
     public void setNgaybatdau(String ngaybatdau) {
         this.ngaybatdau = ngaybatdau;
-    }
-
-    public String getNgayhoanthanh() {
-        return ngayhoanthanh;
-    }
-
-    public void setNgayhoanthanh(String ngayhoanthanh) {
-        this.ngayhoanthanh = ngayhoanthanh;
     }
 
     public String getGiobatdau() {
@@ -124,7 +115,6 @@ public class CongViec implements Serializable {
         result.put("ghichu", ghichu);
         result.put("email", email);
         result.put("ngaybatdau", ngaybatdau);
-        result.put("ngayhoanthanh", ngayhoanthanh);
         result.put("giobatdau", giobatdau);
         result.put("gioketthuc", gioketthuc);
         result.put("tennhan", tennhan);

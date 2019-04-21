@@ -11,5 +11,6 @@
         android:id="@+id/tv_spinner_nhan"
         android:text="XXX"
         android:textSize="13dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textColor="@color/colortieude"/>
 </android.support.constraint.ConstraintLayout>

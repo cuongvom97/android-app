@@ -20,12 +20,6 @@
     <group android:checkableBehavior="single">
         <item android:title="Tiện ích">
             <menu>
-                <item android:title="Quản lý công việc"
-                    android:id="@+id/menu_quanlycv"
-                    android:icon="@mipmap/icon_listcv"/>
-                <item android:title="Quản lý nhãn"
-                    android:id="@+id/menu_quanlynhan"
-                    android:icon="@mipmap/icon_nhan"/>
                 <item android:title="Thống kê"
                     android:icon="@mipmap/icon_thongke"
                     android:id="@+id/menu_thongke"/>

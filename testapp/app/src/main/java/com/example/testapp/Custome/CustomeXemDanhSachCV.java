@@ -29,18 +29,20 @@ public class CustomeXemDanhSachCV extends ArrayAdapter<CongViec>{
     @Override
     public View getView(int position, View convertView,ViewGroup parent) {
         convertView=LayoutInflater.from(context).inflate(R.layout.mycustome_danhsachcongviec,parent,false);
-        TextView tvtieude,bd,kt,tvtrangthai,ghichu;
+        TextView tvtieude,bd,kt,ghichu,ngay;
         LinearLayout trangthai;
         tvtieude=convertView.findViewById(R.id.custom_dscv_tieude);
         trangthai=convertView.findViewById(R.id.layout_dscongviec);
         bd=convertView.findViewById(R.id.custom_dscv_thoigianbd);
-        kt=convertView.findViewById(R.id.custom_dscv_thoigianht);
         ghichu=convertView.findViewById(R.id.custome_dscv_ghichu);
+        ngay=convertView.findViewById(R.id.custom_dscv_ngay);
+        kt=convertView.findViewById(R.id.custom_dscv_thoigianht);
 
-        tvtieude.setText(objects.get(position).getTieude()+"");
-        bd.setText("Bắt đầu: "+objects.get(position).getNgaybatdau()+"  "+objects.get(position).getGiobatdau());
-        kt.setText("Hoàn thành: "+objects.get(position).getNgayhoanthanh()+"  "+objects.get(position).getGioketthuc());
+        bd.setText(objects.get(position).getGiobatdau()+"");
+        kt.setText(objects.get(position).getGioketthuc()+"");
+        ngay.setText(objects.get(position).getNgaybatdau()+"");
         ghichu.setText(objects.get(position).getGhichu()+"");
+        tvtieude.setText(objects.get(position).getTieude()+"");
         String tt=objects.get(position).getTrangthai()+"";
         if(tt.equals("Chưa hoàn thành"))
             trangthai.setBackgroundColor(255246143);

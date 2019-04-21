@@ -28,8 +28,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private DatabaseReference reference;
@@ -40,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private GridView gridview;
     private String _emaim_signin="";
     private String _ngay_hientai="";
-    public static final String NGAYBD_THEMCV="";
-    public   static final String EMAIL_THEMCV="";
-    private final static int REQUEST_CODE_NGAY=5000;
-    private final static int RESULT_CODE_NGAY=5001;
+    public static final String NGAYBD_THEMCV="ngay_ngay";
+    public   static final String EMAIL_THEMCV="email_email";
+    public final static int REQUEST_CODE_NGAY=5000;
+    public final static int RESULT_CODE_NGAY=5001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //layEmail();
+        layEmail();
         View view=navigationView.getHeaderView(0);
         tiltile_email=view.findViewById(R.id.tvemail_nav);
         tiltile_email.setText(_emaim_signin);
@@ -77,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
         gridview.setAdapter(hwAdapter);
         loadSuKienTrenLich();
+        Calendar calendar=Calendar.getInstance();
+        SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        _ngay_hientai=df.format(calendar.getTime());
     }
     private void layTheHien()
     {
@@ -180,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (resultCode)
             {
                 case RESULT_CODE_NGAY:
+                    refreshCalendar();
                     loadSuKienTrenLich();
                     break;
             }
@@ -215,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 CongViec cv=dataSnapshot.getValue(CongViec.class);
-                if(cv.getEmail().equalsIgnoreCase("vmccuong1997@gmail.com")&&cv.getTrangthai().equalsIgnoreCase("Chưa hoàn thành"))
+                if(cv.getEmail().equalsIgnoreCase(_emaim_signin)&&cv.getTrangthai().equalsIgnoreCase("Chưa hoàn thành"))
                 {
                     LuaChonTrongLich.luaChonTrongLichArrayList.add(new LuaChonTrongLich(cv.getTieude()+"",cv.getTennhan()+"",cv.getNgaybatdau()+"",cv.getGhichu()+""));
                     hwAdapter.notifyDataSetChanged();

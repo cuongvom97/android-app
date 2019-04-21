@@ -42,9 +42,10 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     public static  final int RESULT_CODETHEM=4001;
     public static  final int RESULT_CODECAPNHAT=4002;
     public static String EMAIL_THEMCV_NGAY="emailthemcv";
-    public static String NGAYBD_THEMCV_NGAY="ngaybd";
+    public static String NGAYBD_THEMCV_NGAY="ngaybdd";
+    public static String KEYCAPNHAT="keycapnhat";
     private String _ngay="",_email="";
-    private static String _tieude="";
+    private static String _tieude="",_key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dsngay);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         arrayList=new ArrayList<>();
         arrayAdapter=new CustomeXemDanhSachCV(this,R.layout.activity__dscong_viec__ngay,arrayList);
         dscongviec.setAdapter(arrayAdapter);
@@ -93,6 +95,11 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             case R.id.menu_ngay_right_them:
                 themCV();
                 break;
+            case R.id.home:
+                Intent intent=getIntent();
+                setResult(MainActivity.RESULT_CODE_NGAY);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -104,7 +111,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     CongViec cv=dataSnapshot.getValue(CongViec.class);
-                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay))
+                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
                     {
                         arrayList.add(cv);
                         arrayAdapter.notifyDataSetChanged();
@@ -184,7 +191,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 if(cv.getTieude().equalsIgnoreCase(_tieude))
                 {
                     String key=dataSnapshot.getKey();
-                    CongViec congViec=new CongViec(null,null,null,null,null,null,null,null,null);
+                    CongViec congViec=new CongViec(null,null,null,null,null,null,null,null);
                     Map<String,Object> values=congViec.toMap();
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/CongViec/"+key,values);
@@ -224,7 +231,14 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         loadActivityThemCV(_email,_ngay);
     }
     private void suaCV(){
+        ladCapNhatCV();
 
+    }
+    private void ladCapNhatCV()
+    {
+        Intent intent=new Intent(this,CapNhatCV.class);
+        intent.putExtra(KEYCAPNHAT,_key);
+        startActivityForResult(intent,REQUEST_CODE);
     }
     //Load activuty Activity_ThemCongViec
     private void loadActivityThemCV(String email,String ngaybd)
@@ -267,6 +281,36 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         CongViec congViec=arrayList.get(position);
         _tieude=congViec.getTieude();
+        reference.child("CongViec").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getTieude().equalsIgnoreCase(_tieude))
+                {
+                    _key=dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         return false;
     }
 }

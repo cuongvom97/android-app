@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/grthongbao">
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10 phút"
+            android:textSize="13dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao10p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="30 phút"
+            android:textSize="13dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao30p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="60 phút"
+            android:textSize="13dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao1h"
+            android:paddingTop="3dp"/>
+    </RadioGroup>
+</LinearLayout>
