@@ -25,15 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:padding="3dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="3"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,12 +46,28 @@
                 android:id="@+id/capnhatcv_tieude"
                 android:textSize="23dp"
                 android:textColor="@color/colortieude"
-                android:layout_weight="1"/>
-            <Spinner
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/capnhatcv_spinner_nhan"
-                android:layout_weight="1"></Spinner>
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/capnhatcv_spinner_nhan"></Spinner>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Trạng thái"
+                    android:textColor="@color/blue_grey_900"
+                    android:textSize="13dp"
+                    android:padding="3dp"
+                    android:gravity="center"
+                    android:id="@+id/tv_capnhatcv_trangthai"/>
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

@@ -43,6 +43,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -89,6 +91,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
     }
     private void loadUI()
     {
+        Toolbar toolbar=findViewById(R.id.toolbar_themcv);
+        setSupportActionBar(toolbar);
         list=new ArrayList<>();
         stringArrayAdapterpinner=new CustomeSpinner(this,R.layout.custome_layout_spinner,list);
         stringArrayAdapterpinner.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
@@ -103,21 +107,11 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         getDefaultInfor();
         layEmailTuMain();
         alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_themcv);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.home:
-                onBackPressed();
-                return true;
-                default:
-                break;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -240,7 +234,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 {
                     AlertDialog.Builder builder=new AlertDialog.Builder(this);
                     builder.setTitle("Thông báo");
-                    builder.setMessage("Thời gian hoàn thành phải sau thời gian bắt đầu.");
+                    builder.setMessage("Giờ không hợp lệ");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -256,14 +250,11 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                     {
                         //Lặp theo tuần
                         if(_cheklaplai==1){
-                            Intent intent=new Intent(this,BaoReceiver.class);
-                            pendingIntent=PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                            Calendar calendar=Calendar.getInstance();
-                            calendar.setTime(hourStart);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
+                            setchuongBao();
                             themCVCSDL();
                         }
+                        setchuongBao();
+                        themCVCSDL();
                     }
                     else
                     {
@@ -277,20 +268,35 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
             Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void setchuongBao() {
+        Intent intent=new Intent(this,BaoReceiver.class);
+        pendingIntent=PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(hourStart);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+    }
+
     //Thêm công việc vào csdl
     private void themCVCSDL()
     {
-        String td,gc,nbt,gbt,ght,n,email;
-        td=tieude.getText()+"";
-        gc=ghichu.getText()+"";
-        nbt=ngaybatdau.getText()+"";
-        gbt=giobatdau.getText()+"";
-        ght=giohoanthanh.getText()+"";
-        n=_nhan;
-        CongViec cv=new CongViec(td,gc,_email,nbt,gbt,ght,n,"Chưa hoàn thành");
-        databaseReference.child("CongViec").push().setValue(cv);
-        Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-        resetForm();
+        try {
+            String td,gc,nbt,gbt,ght,n;
+            td=tieude.getText()+"";
+            gc=ghichu.getText()+"";
+            nbt=ngaybatdau.getText()+"";
+            gbt=giobatdau.getText()+"";
+            ght=giohoanthanh.getText()+"";
+            n=_nhan;
+            CongViec cv=new CongViec(td,gc,_email,nbt,gbt,ght,n,"Chưa hoàn thành");
+            databaseReference.child("CongViec").push().setValue(cv);
+            Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            resetForm();
+        }catch (Exception ex)
+        {
+            Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void resetForm() {
         tieude.setText("");
@@ -310,22 +316,27 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         //Định dạng ngày / tháng /năm
         dft=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String strDate=dft.format(cal.getTime());
+        dateStart=cal.getTime();
         //hiển thị lên giao diện
         ngaybatdau.setText(strDate);
         //Định dạng giờ phút am/pm
         dft=new SimpleDateFormat("hh:mm a",Locale.getDefault());
+        cal.add(Calendar.MINUTE,60);
         String strTime=dft.format(cal.getTime());
+        hourStart=cal.getTime();
         //đưa lên giao diện
         giobatdau.setText(strTime);
+        cal.roll(Calendar.HOUR,1);
+        hourFinish=cal.getTime();
+        strTime=dft.format(cal.getTime());
         giohoanthanh.setText(strTime);
         //lấy giờ theo 24 để lập trình theo Tag
         dft=new SimpleDateFormat("HH:mm",Locale.getDefault());
         giobatdau.setTag(dft.format(cal.getTime()));
         giohoanthanh.setTag(dft.format(cal.getTime()));
         //gán cal.getTime() cho ngày hoàn thành và giờ hoàn thành
-        hourFinish=cal.getTime();
-        dateStart=cal.getTime();
-        hourStart=cal.getTime();
+
+
     }
     /**
      * Hàm hiển thị DatePicker dialog

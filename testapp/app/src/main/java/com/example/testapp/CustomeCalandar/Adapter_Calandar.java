@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -162,10 +163,7 @@ public class Adapter_Calandar extends BaseAdapter {
         } else {
             v.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-
-
         dayView.setText(gridvalue);
-
         // create date string for comparison
         String date = day_string.get(position);
 
@@ -203,63 +201,5 @@ public class Adapter_Calandar extends BaseAdapter {
 
                 }
             }}
-    }
-    public void getPositionList(String date,final Activity act){
-
-        int len= LuaChonTrongLich.luaChonTrongLichArrayList.size();
-        JSONArray jbarrays=new JSONArray();
-        for (int j=0; j<len; j++){
-            if (LuaChonTrongLich.luaChonTrongLichArrayList.get(j).ngaybd.equals(date)){
-                HashMap<String, String> maplist = new HashMap<String, String>();
-                maplist.put("htieude",LuaChonTrongLich.luaChonTrongLichArrayList.get(j).tieude);
-                maplist.put("hghichu",LuaChonTrongLich.luaChonTrongLichArrayList.get(j).ghichu);
-                maplist.put("hngay",LuaChonTrongLich.luaChonTrongLichArrayList.get(j).ngaybd);
-                maplist.put("hnhan",LuaChonTrongLich.luaChonTrongLichArrayList.get(j).nhan);
-                JSONObject json1 = new JSONObject(maplist);
-                jbarrays.put(json1);
-            }
-        }
-        if (jbarrays.length()!=0) {
-            final Dialog dialogs = new Dialog(context);
-            dialogs.setContentView(R.layout.dialog_chitietcv_thang);
-            listTeachers = (ListView) dialogs.findViewById(R.id.list_teachers);
-            ImageView imgCross = (ImageView) dialogs.findViewById(R.id.img_cross);
-            listTeachers.setAdapter(new Custome_ChiTietCV_Thang(context, getMatchList(jbarrays + "")));
-            imgCross.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogs.dismiss();
-                }
-            });
-            dialogs.show();
-
-        }
-
-    }
-
-    private ArrayList<CongViec> getMatchList(String detail) {
-        try {
-            JSONArray jsonArray = new JSONArray(detail);
-            alCustom = new ArrayList<CongViec>();
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject jsonObject = jsonArray.optJSONObject(i);
-
-                CongViec pojo = new CongViec();
-
-                pojo.setTennhan(jsonObject.optString("hnhan"));
-                pojo.setTieude(jsonObject.optString("htieude"));
-                pojo.setNgaybatdau(jsonObject.optString("hngaybd"));
-                pojo.setGhichu(jsonObject.optString("ghichu"));
-
-                alCustom.add(pojo);
-
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return alCustom;
     }
 }

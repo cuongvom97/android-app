@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_ngay:
                 guiDSCongViec_Ngay(_emaim_signin);
                 break;
+            case R.id.menu_tuan:
+                Intent intent=new Intent(this, Activity_Tuan.class);
+                startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -186,8 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (resultCode)
             {
                 case RESULT_CODE_NGAY:
-                    refreshCalendar();
-                    loadSuKienTrenLich();
+                    loadIU();
                     break;
             }
         }
@@ -224,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CongViec cv=dataSnapshot.getValue(CongViec.class);
                 if(cv.getEmail().equalsIgnoreCase(_emaim_signin)&&cv.getTrangthai().equalsIgnoreCase("Chưa hoàn thành"))
                 {
-                    LuaChonTrongLich.luaChonTrongLichArrayList.add(new LuaChonTrongLich(cv.getTieude()+"",cv.getTennhan()+"",cv.getNgaybatdau()+"",cv.getGhichu()+""));
+                    LuaChonTrongLich.luaChonTrongLichArrayList.add(new LuaChonTrongLich(cv.getNgaybatdau()+""));
                     hwAdapter.notifyDataSetChanged();
 
                 }
@@ -232,12 +234,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                loadSuKienTrenLich();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                loadSuKienTrenLich();
             }
 
             @Override

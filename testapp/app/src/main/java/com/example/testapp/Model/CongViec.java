@@ -8,7 +8,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CongViec implements Serializable {
-    private String tieude,ghichu,email, ngaybatdau,giobatdau,gioketthuc,tennhan,trangthai;
+    private String tieude;
+    private String ghichu;
+    private String email;
+    private String ngaybatdau;
+    private String giobatdau;
+    private String gioketthuc;
+    private String tennhan;
+    private String trangthai;
 
     public CongViec() {
     }
@@ -87,6 +94,8 @@ public class CongViec implements Serializable {
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
     }
+
+
     /**
      * lấy định dạng ngày
      * @param d

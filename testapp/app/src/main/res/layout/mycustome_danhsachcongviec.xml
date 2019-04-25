@@ -3,17 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:weightSum="3"
     android:id="@+id/layout_dscongviec"
     android:gravity="center">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:paddingLeft="3dp"
-        android:paddingTop="3dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,15 +26,6 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:gravity="center">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Ngày"
-                android:textSize="13dp"
-                android:textColor="@color/blue_grey_800"
-                android:id="@+id/custom_dscv_ngay"
-                android:gravity="center"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,17 +52,15 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/blue_grey_800"
+                android:textSize="16dp"
+                android:text="Ghi chú"
+                android:id="@+id/custome_dscv_ghichu"
+                android:gravity="center"/>
             </LinearLayout>
-        </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textColor="@color/blue_grey_800"
-        android:textSize="16dp"
-        android:text="Ghi chú"
-        android:id="@+id/custome_dscv_ghichu"
-        android:gravity="center"/>
 
 </LinearLayout>
