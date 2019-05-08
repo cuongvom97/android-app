@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,17 +35,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Activity_DSCongViec_Ngay extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class Activity_DSCongViec_Ngay extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ListView dscongviec;
+    private Spinner dsloc;
     private TextView ngay;
     private ImageButton next,pre;
     private ArrayAdapter<CongViec> arrayAdapter;
     private ArrayList<CongViec> arrayList;
+    private ArrayList<CongViec> listsapxep;
+    private String[] arrsapxep;
     private DatabaseReference reference;
     public static final int REQUEST_CODE=4000;
     public static  final int RESULT_CODETHEM=4001;
@@ -57,6 +62,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private String _ngay="",_email="";
     private static String _tieude="",_key="";
     private static CongViec _cv=null;
+    private String[] arrdsloc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +71,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         layTheHien();
         loadUI();
         sukien();
-        loadDataListView();
     }
     private void layTheHien()
     {
@@ -73,7 +78,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         ngay=findViewById(R.id.ngay_ngayhientai);
         next=findViewById(R.id.ib_next_ngay);
         pre=findViewById(R.id.ib_prev_ngay);
-
+        dsloc=findViewById(R.id.dscongviec_locspinner);
     }
 
     private void loadUI()
@@ -83,10 +88,21 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         arrayList=new ArrayList<>();
         arrayAdapter=new CustomeXemDanhSachCV(this,R.layout.activity__dscong_viec__ngay,arrayList);
         dscongviec.setAdapter(arrayAdapter);
+        //Nhận ngay và email từ main;
         Intent intent=getIntent();
         _ngay=intent.getStringExtra(MainActivity.NGAYBD_THEMCV);
         _email=intent.getStringExtra(MainActivity.EMAIL_THEMCV);
         ngay.setText(_ngay);
+        //Đưa dữ liệu vào spinner lọc
+        arrdsloc=getResources().getStringArray(R.array.dsloc);
+        ArrayAdapter arrayAdapterloc=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,arrdsloc);
+        arrayAdapterloc.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        dsloc.setAdapter(arrayAdapterloc);
+        dsloc.setSelection(0);
+
+        listsapxep=new ArrayList<>();
+        loadDS();
+        loadDataListView();
     }
     private void sukien()
     {
@@ -95,6 +111,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         dscongviec.setOnItemLongClickListener(this);
         next.setOnClickListener(this);
         pre.setOnClickListener(this);
+        dsloc.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -118,17 +135,16 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     {
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
-        Query query=reference.child("CongViec").orderByChild("giobatdau");
+        Query query=reference.child("CongViec").orderByChild("ngaybatdau");
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    CongViec cv=dataSnapshot.getValue(CongViec.class);
-                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
-                    {
-                        arrayList.add(cv);
-                        arrayAdapter.notifyDataSetChanged();
-
-                    }
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
+                {
+                    arrayList.add(cv);
+                    arrayAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -184,7 +200,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 String key=dataSnapshot.getKey();
                 if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
                 {
-                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),"Hoàn thành");
+                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),"Hoàn thành",cv.getNhacnho());
                     Map<String,Object> values=congViec.toMap();
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/CongViec/"+key,values);
@@ -246,7 +262,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                     String key=dataSnapshot.getKey();
                 if(cv.getTieude().equalsIgnoreCase(_tieude)&&key.equals(_key))
                 {
-                    CongViec congViec=new CongViec(null,null,null,null,null,null,null,null);
+                    CongViec congViec=new CongViec(null,null,null,null,null,null,null,null,null);
                     Map<String,Object> values=congViec.toMap();
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/CongViec/"+key,values);
@@ -345,7 +361,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     CongViec cv=dataSnapshot.getValue(CongViec.class);
-                    if(cv.getTieude().equals(_tieude))
+                    if(cv.getTieude().equals(_tieude)&&cv.getNgaybatdau().equals(_cv.getNgaybatdau()))
                     {
                         _key=dataSnapshot.getKey();
                     }
@@ -421,5 +437,55 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         _ngay=dateFormat.format(calendar.getTime());
         ngay.setText(_ngay);
         loadDataListView();
+    }
+    private void loadDS()
+    {
+        listsapxep.clear();
+        reference.child("CongViec").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
+                {
+                    listsapxep.add(cv);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getItemAtPosition(position).toString().equals("Giờ bắt đầu"))
+        {
+            //loadDataListView();
+        }
+        if (parent.getItemAtPosition(position).toString().equals("Giờ kết thúc"))
+        {
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

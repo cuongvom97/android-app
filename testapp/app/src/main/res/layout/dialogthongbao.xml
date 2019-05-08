@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,8 +12,24 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Không có"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao0"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5 phút"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao5p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="10 phút"
-            android:textSize="13dp"
+            android:textSize="16dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_thongbao10p"
             android:paddingTop="3dp"/>
@@ -20,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="30 phút"
-            android:textSize="13dp"
+            android:textSize="16dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_thongbao30p"
             android:paddingTop="3dp"/>
@@ -28,9 +45,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="60 phút"
-            android:textSize="13dp"
+            android:textSize="16dp"
             android:textColor="@color/blue_grey_800"
-            android:id="@+id/themcv_thongbao1h"
+            android:id="@+id/themcv_thongbao60p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="90 phút"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao90p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="120 phút"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbao120p"
+            android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Khác"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_thongbaokhac"
             android:paddingTop="3dp"/>
     </RadioGroup>
 </LinearLayout>

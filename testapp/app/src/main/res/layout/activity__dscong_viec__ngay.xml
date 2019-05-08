@@ -72,6 +72,27 @@
                     android:background="@drawable/righ_arrow" />
             </FrameLayout>
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textColor="@color/blue_grey_800"
+            android:text="Sắp xếp"
+            android:layout_weight="3"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dscongviec_locspinner"
+            android:padding="3dp"
+            android:layout_weight="1"></Spinner>
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

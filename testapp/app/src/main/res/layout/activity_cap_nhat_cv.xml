@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:text="Trạng thái"
                     android:textColor="@color/blue_grey_900"
-                    android:textSize="13dp"
+                    android:textSize="16dp"
                     android:padding="3dp"
                     android:gravity="center"
                     android:id="@+id/tv_capnhatcv_trangthai"/>
@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
+                android:textSize="18dp"
                 android:text="Ghi chú"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="3"/>
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:id="@+id/capnhatcv_ghichu"
-                android:textSize="13dp"
+                android:textSize="18dp"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_800"
-                android:textSize="13dp"
+                android:textSize="18dp"
                 android:text="Chọn thời gian:"
                 android:layout_weight="1"/>
             <TextView
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_capnhatcv_ngaybatdau"
                 android:text="@string/ngaycv"
-                android:textSize="13dp"
+                android:textSize="18dp"
                 android:textColor="@color/blue_grey_800"
                 android:gravity="center"
                 android:layout_weight="1"/>
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_capnhatcv_giobatdau"
                     android:text="@string/giocv"
-                    android:textSize="13dp"
+                    android:textSize="18dp"
                     android:textColor="@color/blue_grey_800"
                     android:gravity="center"/>
                 <TextView
@@ -133,96 +133,26 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_capnhatcv_gioht"
                     android:text="@string/giocv"
-                    android:textSize="13dp"
+                    android:textSize="18dp"
                     android:textColor="@color/blue_grey_800"
                     android:layout_weight="1"
                     android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="5"
-            android:paddingTop="5dp"
-            android:gravity="center">
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lặp"
-                android:textSize="13dp"
-                android:layout_weight="3"
-                android:textColor="@color/blue_grey_800"
-                android:id="@+id/capnhatcv_lap"/>
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:weightSum="3"
-                android:orientation="horizontal">
-                <RadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="Ngày"
-                    android:id="@+id/capnhatcv_lap_ngay"
-                    android:layout_weight="1"
-                    android:textColor="@color/blue_grey_800"/>
-                <RadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="Tuần"
-                    android:id="@+id/capnhatcv_lap_tuan"
-                    android:layout_weight="1"
-                    android:textColor="@color/blue_grey_800"/>
-                <RadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="Tháng"
-                    android:id="@+id/capnhatcv_lap_thang"
-                    android:layout_weight="1"
-                    android:textColor="@color/blue_grey_800"/>
-            </RadioGroup>
-        </LinearLayout>
-        <LinearLayout
+            android:text="Thông báo"
+            android:textColor="@color/blue_grey_800"
+            android:textSize="18dp"/>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="5dp">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:id="@+id/capnhatcv_btnthongbao"
-                android:paddingTop="3dp"
-                android:src="@drawable/dongho35dp"
-                android:paddingLeft="7dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10 phút"
-                android:textSize="13dp"
-                android:textColor="@color/blue_grey_800"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:id="@+id/tv_capnhatcv_tgthongbao"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/capnhatcv_checkthongbao"
-                android:paddingLeft="10dp"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/blue_grey_800"
-                android:textSize="13dp"
-                android:text="Chưa hoàn thành"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"/>
-        </LinearLayout>
+            android:textSize="16dp"
+            android:padding="7dp"
+            android:textColor="@color/blue_grey_800"
+            android:text="Không có"
+            android:id="@+id/capnhatcv_tvthongbao"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

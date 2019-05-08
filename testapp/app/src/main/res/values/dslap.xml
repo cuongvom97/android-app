@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dslap_cv">
+        <item>Không có</item>
+        <item>Hàng ngày</item>
+        <item>Hàng tuần</item>
+        <item>2 tuần một lần</item>
+        <item>Hàng tháng</item>
+    </string-array>
+    <string-array name="dsthongbao_cv">
+        <item>Không có</item>
+        <item>5 phút</item>
+        <item>10 phút</item>
+        <item>30 phút</item>
+        <item>60 phút</item>
+        <item>90 phút</item>
+        <item>120 phút</item>
+    </string-array>
+    <string-array name="dsloc">
+        <item>Giờ bắt đầu</item>
+        <item>Giờ kết thúc</item>
+    </string-array>
+</resources>

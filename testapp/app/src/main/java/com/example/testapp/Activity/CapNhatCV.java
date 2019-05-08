@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,22 +47,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CapNhatCV extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private TextView ngaybatdau,giobatdau,giohoanthanh,tgthongbao,trangthai;
+    private TextView ngaybatdau,giobatdau,giohoanthanh,trangthai,thongbao;
     private EditText tieude,ghichu;
-    private ImageButton thongbao;
     private Spinner nhanspinner;
     private Button capnhatcv,thoat;
-    private CheckBox chklap,chkthongbao;
-    private RadioButton radngay,radthang,radtuan;
-    private int _thongbao,_cheklaplai;
-    private static String _key="",_nhan="",_email="";
+    private int _vitrithongbao;
+    private String[] arrthongbao;
+    private static String _key="",_nhan="",_email="",_ngayktlap="";
     private DatabaseReference databaseReference;
     private ArrayAdapter<Nhan> stringArrayAdapterpinner;
     private List<Nhan> list;
-    Calendar cal,calnow;
-    Date dateStart,hourStart,hourFinish;
+    Calendar cal,calnow,callap,calthongbao,_calgiobd,_calgioht;
+    Date dateStart,hourStart,hourFinish,hourthongbao,datefinish;
     Date datenow,hournow;
     //Báo thức
     private AlarmManager alarmManager;
@@ -84,15 +84,9 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         giohoanthanh=findViewById(R.id.tv_capnhatcv_gioht);
         thoat=findViewById(R.id.capnhatcv_btnthoat);
         capnhatcv=findViewById(R.id.capnhatcv_btncapnhat);
-        chklap=findViewById(R.id.capnhatcv_lap);
-        radngay=findViewById(R.id.capnhatcv_lap_ngay);
-        radthang=findViewById(R.id.capnhatcv_lap_thang);
-        radtuan=findViewById(R.id.capnhatcv_lap_tuan);
-        thongbao=findViewById(R.id.capnhatcv_btnthongbao);
-        tgthongbao=findViewById(R.id.tv_capnhatcv_tgthongbao);
         nhanspinner=findViewById(R.id.capnhatcv_spinner_nhan);
-        chkthongbao=findViewById(R.id.capnhatcv_checkthongbao);
         trangthai=findViewById(R.id.tv_capnhatcv_trangthai);
+        thongbao=findViewById(R.id.capnhatcv_tvthongbao);
     }
     private void loadUI(){
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_capnhatcv);
@@ -104,12 +98,11 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         calnow= Calendar.getInstance();
         datenow=calnow.getTime();
         hournow=calnow.getTime();
-        radngay.setEnabled(false);
-        radtuan.setEnabled(false);
-        radthang.setEnabled(false);
+        arrthongbao=getResources().getStringArray(R.array.dsthongbao_cv);
         loadDataSpinner();
-        getDefaultInfor();
         layKeyCapNhat();
+        getDefaultInfor();
+        alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 
     private void loadDataSpinner() {
@@ -140,7 +133,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
-        })    ;
+        });
     }
 
     private void sukien(){
@@ -150,13 +143,8 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         ngaybatdau.setOnClickListener(this);
         giobatdau.setOnClickListener(this);
         giohoanthanh.setOnClickListener(this);
-        chklap.setOnClickListener(this);
-        radngay.setOnClickListener(this);
-        radtuan.setOnClickListener(this);
-        radthang.setOnClickListener(this);
-        thongbao.setOnClickListener(this);
-        chkthongbao.setOnClickListener(this);
         trangthai.setOnClickListener(this);
+        thongbao.setOnClickListener(this);
     }
     private void layKeyCapNhat()
     {
@@ -171,15 +159,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             ngaybatdau.setText(cv.getNgaybatdau()+"");
             giobatdau.setText(cv.getGiobatdau()+"");
             giohoanthanh.setText(cv.getGioketthuc()+"");
-            DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy hh:mm a");
-            Date date=dateFormat.parse(ngaybatdau.getText()+" "+giobatdau.getText());
-            cal.setTime(date);
-            dateStart=cal.getTime();
-            hourStart=cal.getTime();
-            Date date1=dateFormat.parse(ngaybatdau.getText()+" "+giohoanthanh.getText());
-            cal.setTime(date1);
-            hourFinish=cal.getTime();
-
+            thongbao.setText(cv.getNhacnho());
         }
         catch (Exception ex)
         {
@@ -213,53 +193,104 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             case R.id.capnhatcv_btncapnhat:
                 capnhatCV();
                 break;
+            case R.id.capnhatcv_tvthongbao:
+                showDialogThongBao();
+                break;
             case R.id.capnhatcv_btnthoat:
                 finish();
                 break;
         }
-        if(chklap.isChecked())
-        {
-            checkCheckBox();
-
-        }
-        else
-        {
-            radngay.setEnabled(false);
-            radtuan.setEnabled(false);
-            radthang.setEnabled(false);
-            radngay.setChecked(false);
-            radtuan.setChecked(false);
-            radthang.setChecked(false);
-        }
-        if(chkthongbao.isChecked())
-            _thongbao=1;
-        else
-            _thongbao=0;
-        if(radngay.isChecked())
-            _cheklaplai=0;
-        else
-            _cheklaplai=-1;
-        if(radtuan.isChecked())
-            _cheklaplai=1;
-        else
-            _cheklaplai=-1;
-        if(radthang.isChecked())
-            _cheklaplai=2;
-        else
-            _cheklaplai=-1;
-
 
     }
 
-    private void checkCheckBox() {
-        radngay.setEnabled(true);
-        radtuan.setEnabled(true);
-        radthang.setEnabled(true);
-    }
+    private void showDialogThongBao() {
+        LayoutInflater inflater=getLayoutInflater();
+        View view=inflater.inflate(R.layout.dialogthongbao,null);
+        final RadioButton s1,s2,s3,s4,s5,s6,s7,s8;
+        s1=view.findViewById(R.id.themcv_thongbao0);
+        s1.setChecked(true);
+        s2=view.findViewById(R.id.themcv_thongbao5p);
+        s3=view.findViewById(R.id.themcv_thongbao10p);
+        s4=view.findViewById(R.id.themcv_thongbao30p);
+        s5=view.findViewById(R.id.themcv_thongbao60p);
+        s6=view.findViewById(R.id.themcv_thongbao90p);
+        s7=view.findViewById(R.id.themcv_thongbao120p);
+        s8=view.findViewById(R.id.themcv_thongbaokhac);
 
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setView(view);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(s1.isChecked())
+                {
+                    thongbao.setText(arrthongbao[0]);
+                    calthongbao.setTime(hourStart);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=0;
+                }
+                if(s2.isChecked())
+                {
+                    thongbao.setText(arrthongbao[1]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-5);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=1;
+                }
+                if(s3.isChecked())
+                {
+                    thongbao.setText(arrthongbao[2]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-10);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=2;
+                }
+                if(s4.isChecked())
+                {
+                    thongbao.setText(arrthongbao[3]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-30);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=3;
+                }
+                if(s5.isChecked())
+                {
+                    thongbao.setText(arrthongbao[4]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-60);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=4;
+                }
+                if(s6.isChecked())
+                {
+                    thongbao.setText(arrthongbao[5]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-90);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=5;
+                }
+                if(s7.isChecked())
+                {
+                    thongbao.setText(arrthongbao[6]);
+                    calthongbao.setTime(hourStart);
+                    calthongbao.add(Calendar.MINUTE,-120);
+                    hourthongbao=calthongbao.getTime();
+                    _vitrithongbao=6;
+                }
+                if(s8.isChecked())
+                {
+                    calthongbao.setTime(hourStart);
+                    showTimePickerDialogThongbao();
+                    _vitrithongbao=7;
+                }
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
     private void capnhatCV() {
-        try {
-
+        try{
             if(checkThoiGianHT()==false)
             {
                 AlertDialog.Builder builder=new AlertDialog.Builder(this);
@@ -276,52 +307,47 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             }
             else
             {
-                if(_thongbao==1)
+                if(_vitrithongbao!=0)
                 {
-                    //Lặp theo tuần
-                    if(_cheklaplai==1){
-                        setchuongBao();
-                        capnhatCVCSDL();
-                    }
-                    setchuongBao();
-                    capnhatCVCSDL();
+                    capnhatCVCSDL(dateStart);
+                    setchuongBao(hourthongbao);
+                    finish();
                 }
                 else
                 {
-                    capnhatCVCSDL();
+                    capnhatCVCSDL(dateStart);
+                    finish();
                 }
-
             }
-
-        }catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
         }
     }
-    private void setchuongBao() {
+    private void setchuongBao(Date tb) {
         Intent intent=new Intent(this,BaoReceiver.class);
         pendingIntent=PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         Calendar calendar=Calendar.getInstance();
-        calendar.setTime(hourStart);
+        calendar.setTime(tb);
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
     }
-    private void capnhatCVCSDL() {
+    private void capnhatCVCSDL(Date n) {
         final String td,gc,nbd,gbd,ght,tt;
+        SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+        nbd=df.format(n);
         td=tieude.getText()+"";
         gc=ghichu.getText()+"";
-        nbd=ngaybatdau.getText()+"";
         gbd=giobatdau.getText()+"";
         ght=giohoanthanh.getText()+"";
         tt=trangthai.getText()+"";
         databaseReference.child("CongViec").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                try
-                {
                     CongViec cv=dataSnapshot.getValue(CongViec.class);
                     String key=dataSnapshot.getKey();
                     if(key.equals(_key)){
-                        CongViec congViec=new CongViec(td,gc,_email,nbd,gbd,ght,_nhan,tt);
+                        CongViec congViec=new CongViec(td,gc,_email,nbd,gbd,ght,_nhan,tt,arrthongbao[_vitrithongbao]);
                         Map<String,Object> values=congViec.toMap();
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
@@ -329,10 +355,6 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                         Toast.makeText(CapNhatCV.this, "Thành công.", Toast.LENGTH_SHORT).show();
                     }
 
-                }catch (Exception ex)
-                {
-                    Toast.makeText(CapNhatCV.this, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override
@@ -356,7 +378,6 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             }
         });
         setResult(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
-        finish();
     }
 
     @Override
@@ -370,20 +391,51 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     {
         //lấy ngày hiện tại của hệ thống
         cal=Calendar.getInstance();
+        callap=Calendar.getInstance();
+        calthongbao=Calendar.getInstance();
+        _calgioht=Calendar.getInstance();
+        _calgiobd=Calendar.getInstance();
+        String s=ngaybatdau.getText()+"";
+        String strr[]=s.split("/");
+        int d=Integer.parseInt(strr[0]);
+        int m=Integer.parseInt(strr[1])-1;
+        int y=Integer.parseInt(strr[2]);
         SimpleDateFormat dft=null;
         //Định dạng ngày / tháng /năm
         dft=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String strDate=dft.format(cal.getTime());
-        dateStart=cal.getTime();
-        //hiển thị lên giao diện
-        ngaybatdau.setText(strDate);
         //Định dạng giờ phút am/pm
         dft=new SimpleDateFormat("hh:mm a",Locale.getDefault());
-        String strTime=dft.format(cal.getTime());
-        hourStart=cal.getTime();
-        hourFinish=cal.getTime();
-        //đưa lên giao diện
+        String strgiobd=giobatdau.getText()+"";
+        String strrgiobd[]=strgiobd.split(":");
+        int hbd=Integer.parseInt(strrgiobd[0]);
+        String tach=strrgiobd[1];
+        String ppbd[]=tach.split(" ");
+        int pbd=Integer.parseInt(ppbd[0]);
+        cal.set(y,m,d,hbd,pbd);
+        _calgiobd.setTime(cal.getTime());
+        String muigiobd=ppbd[1];
+        if(muigiobd.equals("PM"))
+            hbd=hbd+12;
+        _calgiobd.set(y,m,d,hbd,pbd);
+        String strTime=dft.format(_calgiobd.getTime());
         giobatdau.setText(strTime);
+        dateStart=_calgiobd.getTime();
+        hourStart=_calgiobd.getTime();
+        String strgioht=giohoanthanh.getText()+"";
+        String strrgioht[]=strgioht.split(":");
+        int hht=Integer.parseInt(strrgioht[0]);
+        String tach1=strrgioht[1];
+        String ppbd1[]=tach1.split(" ");
+        int pht=Integer.parseInt(ppbd1[0]);
+        cal.set(y,m,d,hht,pht);
+        _calgioht.setTime(cal.getTime());
+        String muigioht=ppbd1[1];
+        if(muigioht.equals("PM"))
+            hht=hht+12;
+        _calgioht.set(y,m,d,hht,pht);
+        hourFinish=_calgioht.getTime();
+        strTime=dft.format(_calgioht.getTime());
         giohoanthanh.setText(strTime);
         //lấy giờ theo 24 để lập trình theo Tag
         dft=new SimpleDateFormat("HH:mm",Locale.getDefault());
@@ -397,6 +449,37 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     /**
      * Hàm hiển thị DatePicker dialog
      */
+    public void showDatePickerDialogLap()
+    {
+        DatePickerDialog.OnDateSetListener callback=new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear,
+                                  int dayOfMonth) {
+                //Mỗi lần thay đổi ngày tháng năm thì cập nhật lại TextView Date
+                String thang=(monthOfYear+1)+"";
+                if(thang.length()<=1)
+                {
+                    thang="0"+thang;
+                }
+                _ngayktlap=dayOfMonth+"/"+monthOfYear+"/"+year;
+                //Lưu vết lại biến ngày hoàn thành
+                callap.set(year, monthOfYear, dayOfMonth);
+                datefinish=cal.getTime();
+            }
+        };
+        //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
+        //sẽ giống với trên TextView khi mở nó lên
+        String s=_ngayktlap;
+        String strArrtmp[]=s.split("/");
+        int ngay=Integer.parseInt(strArrtmp[0]);
+        int thang=Integer.parseInt(strArrtmp[1])-1;
+        int nam=Integer.parseInt(strArrtmp[2]);
+        DatePickerDialog pic=new DatePickerDialog(
+                CapNhatCV.this,
+                callback, nam, thang, ngay);
+        pic.setTitle("Chọn ngày kết thúc");
+        pic.show();
+    }
     public void showDatePickerDialogStart()
     {
         DatePickerDialog.OnDateSetListener callback=new DatePickerDialog.OnDateSetListener() {
@@ -432,6 +515,44 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     /**
      * Hàm hiển thị TimePickerDialog
      */
+    public void showTimePickerDialogThongbao()
+    {
+        TimePickerDialog.OnTimeSetListener callback=new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view,
+                                  int hourOfDay, int minute) {
+                //Xử lý lưu giờ và AM,PM
+                String s=hourOfDay +":"+minute;
+                int hourTam=hourOfDay;
+                if(hourTam>12)
+                    hourTam=hourTam-12;
+                String giotam=hourTam+"";
+                if(giotam.length()<=1)
+                    giotam="0"+giotam;
+                String phutam=minute+"";
+                if(phutam.length()<=1)
+                    phutam="0"+phutam;
+                thongbao.setText
+                        (giotam +":"+minute +(hourOfDay>12?" PM":" AM"));
+                //lưu giờ thực vào tag
+                thongbao.setTag(s);
+                //lưu vết lại giờ vào hourFinish
+                calthongbao.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calthongbao.set(Calendar.MINUTE, minute);
+                hourthongbao=cal.getTime();
+            }
+        };
+        //các lệnh dưới này xử lý ngày giờ trong TimePickerDialog
+        //sẽ giống với trên TextView khi mở nó lên
+        String s=giobatdau.getTag()+"";
+        String strArr[]=s.split(":");
+        int gio=Integer.parseInt(strArr[0]);
+        int phut=Integer.parseInt(strArr[1]);
+        TimePickerDialog time=new TimePickerDialog(
+                CapNhatCV.this,
+                callback, gio, phut, true);
+        time.setTitle("Chọn giờ bắt đầu");
+        time.show();
+    }
     public void showTimePickerDialogStart()
     {
         TimePickerDialog.OnTimeSetListener callback=new TimePickerDialog.OnTimeSetListener() {
@@ -442,14 +563,21 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 int hourTam=hourOfDay;
                 if(hourTam>12)
                     hourTam=hourTam-12;
+                String giotam=hourTam+"";
+                if(giotam.length()<=1)
+                    giotam="0"+giotam;
+                String phutam=minute+"";
+                if(phutam.length()<=1)
+                    phutam="0"+phutam;
                 giobatdau.setText
-                        (hourTam +":"+minute +(hourOfDay>12?" PM":" AM"));
+                        (giotam +":"+phutam +(hourOfDay>12?" PM":" AM"));
                 //lưu giờ thực vào tag
                 giobatdau.setTag(s);
                 //lưu vết lại giờ vào hourFinish
-                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                cal.set(Calendar.MINUTE, minute);
-                hourStart=cal.getTime();
+                _calgiobd.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                _calgiobd.set(Calendar.MINUTE, minute);
+                hourStart=_calgiobd.getTime();
+                dateStart=_calgiobd.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong TimePickerDialog
@@ -474,14 +602,20 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 int hourTam=hourOfDay;
                 if(hourTam>12)
                     hourTam=hourTam-12;
+                String giotam=hourTam+"";
+                if(giotam.length()<=1)
+                    giotam="0"+giotam;
+                String phutam=minute+"";
+                if(phutam.length()<=1)
+                    phutam="0"+phutam;
                 giohoanthanh.setText
-                        (hourTam +":"+minute +(hourOfDay>12?" PM":" AM"));
+                        (giotam +":"+phutam +(hourOfDay>12?" PM":" AM"));
                 //lưu giờ thực vào tag
                 giohoanthanh.setTag(s);
                 //lưu vết lại giờ vào hourFinish
-                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                cal.set(Calendar.MINUTE, minute);
-                hourFinish=cal.getTime();
+                _calgioht.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                _calgioht.set(Calendar.MINUTE, minute);
+                hourFinish=_calgioht.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong TimePickerDialog

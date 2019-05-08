@@ -59,8 +59,7 @@
                 android:textColor="@color/blue_grey_800"
                 android:textSize="16dp"
                 android:text="Ghi chú"
-                android:id="@+id/custome_dscv_ghichu"
-                android:gravity="center"/>
+                android:id="@+id/custome_dscv_ghichu"/>
             </LinearLayout>
 
 </LinearLayout>

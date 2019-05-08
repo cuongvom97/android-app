@@ -2,12 +2,13 @@ package com.example.testapp.Model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CongViec implements Serializable {
+public class CongViec implements Serializable,Comparable<CongViec> {
     private String tieude;
     private String ghichu;
     private String email;
@@ -16,11 +17,13 @@ public class CongViec implements Serializable {
     private String gioketthuc;
     private String tennhan;
     private String trangthai;
-
+    private String nhacnho;
+    private Calendar cal;
+    private Date a,b;
     public CongViec() {
     }
 
-    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String giobatdau, String gioketthuc, String tennhan, String trangthai) {
+    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String giobatdau, String gioketthuc, String tennhan, String trangthai,String nhacnho) {
         this.tieude = tieude;
         this.ghichu = ghichu;
         this.email = email;
@@ -29,6 +32,7 @@ public class CongViec implements Serializable {
         this.gioketthuc = gioketthuc;
         this.tennhan = tennhan;
         this.trangthai = trangthai;
+        this.nhacnho=nhacnho;
     }
 
     public String getEmail() {
@@ -95,6 +99,13 @@ public class CongViec implements Serializable {
         this.trangthai = trangthai;
     }
 
+    public String getNhacnho() {
+        return nhacnho;
+    }
+
+    public void setNhacnho(String nhacnho) {
+        this.nhacnho = nhacnho;
+    }
 
     /**
      * lấy định dạng ngày
@@ -128,8 +139,54 @@ public class CongViec implements Serializable {
         result.put("gioketthuc", gioketthuc);
         result.put("tennhan", tennhan);
         result.put("trangthai", trangthai);
+        result.put("nhacnho",nhacnho);
         return result;
     }
 
 
+    private void setCalander()
+    {
+        String strrngay[]=this.ngaybatdau.split("/");
+        int d=Integer.parseInt(strrngay[0]);
+        int m=Integer.parseInt(strrngay[0])-1;
+        int y=Integer.parseInt(strrngay[0]);
+        String strrgiobd[]=this.giobatdau.split(":");
+        int giobd=Integer.parseInt(strrgiobd[0]);
+        String strgiobd=strrgiobd[1];
+        String strrphutbd []=strgiobd.split(" ");
+        String muigio=strrphutbd[1];
+        int phutbd=Integer.parseInt(strrphutbd[0]);
+        if(muigio.equals("PM"))
+            phutbd=phutbd+12;
+        cal.set(y,m,d,giobd,phutbd);
+        a=cal.getTime();
+    }
+
+    @Override
+    public int compareTo(CongViec o) {
+        cal=Calendar.getInstance();
+        setCalander();
+        String strrngay[]=o.getNgaybatdau().split("/");
+        int d=Integer.parseInt(strrngay[0]);
+        int m=Integer.parseInt(strrngay[0])-1;
+        int y=Integer.parseInt(strrngay[0]);
+        String strrgiobd[]=o.getGiobatdau().split(":");
+        int giobd=Integer.parseInt(strrgiobd[0]);
+        String strgiobd=strrgiobd[1];
+        String strrphutbd []=strgiobd.split(" ");
+        String muigio=strrphutbd[1];
+        int phutbd=Integer.parseInt(strrphutbd[0]);
+        if(muigio.equals("PM"))
+            phutbd=phutbd+12;
+        cal.set(y,m,d,giobd,phutbd);
+        b=cal.getTime();
+        int result=a.compareTo(b);
+        if(result<0)
+            return -1;
+        else
+            if (result>0)
+                return 1;
+            else
+                return 0;
+    }
 }
