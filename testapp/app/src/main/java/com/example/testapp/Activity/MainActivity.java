@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.testapp.Activity_GioiThieu;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
@@ -107,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_tuan:
                 Intent intent=new Intent(this, Activity_Tuan.class);
                 startActivity(intent);
+            case R.id.menu_goithieu:
+                Intent intent1=new Intent(this, Activity_GioiThieu.class);
+                startActivity(intent1);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

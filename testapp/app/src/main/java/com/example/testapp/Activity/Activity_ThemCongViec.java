@@ -588,6 +588,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
                 datefinish=cal.getTime();
+                hourStart=cal.getTime();
+                hourFinish=cal.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog

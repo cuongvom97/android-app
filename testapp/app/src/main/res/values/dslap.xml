@@ -17,7 +17,8 @@
         <item>120 phút</item>
     </string-array>
     <string-array name="dsloc">
-        <item>Giờ bắt đầu</item>
-        <item>Giờ kết thúc</item>
+        <item>Công việc chưa hoàn thành</item>
+        <item>Công việc đã hoàn thành</item>
+        <item>Tất cả công việc</item>
     </string-array>
 </resources>

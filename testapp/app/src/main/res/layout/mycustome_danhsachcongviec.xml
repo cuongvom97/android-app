@@ -7,17 +7,35 @@
     android:weightSum="3"
     android:id="@+id/layout_dscongviec"
     android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:gravity="center">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/custom_dscv_tieude"
             android:text="Tiêu đề 1"
             android:textSize="23dp"
-            android:textColor="@color/colortieude"
+            android:textColor="@color/blue_grey_900"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:textStyle="bold"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nhãn"
+            android:textColor="@color/colortieude"
+            android:textSize="23dp"
+            android:layout_weight="3"
+            android:id="@+id/custom_dscv_nhan"/>
+    </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

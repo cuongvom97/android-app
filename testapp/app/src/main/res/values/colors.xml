@@ -9,7 +9,7 @@
     <color name="blue_grey_800">#37474F</color>
     <color name="blue_grey_900">#263238</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colortieude">#FF0000</color>
-    <color name="hoanthanh">#76EE00</color>
-    <color name="chuahoanthanh">#FFF68F</color>
+    <color name="colortieude">#263238</color>
+    <color name="hoanthanh">#ccff99</color>
+    <color name="chuahoanthanh">#ffffcc</color>
 </resources>

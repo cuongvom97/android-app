@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/blue_grey_700"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Trang chủ"/>
+            app:title="Tháng"/>
 
     </android.support.design.widget.AppBarLayout>
 

@@ -49,7 +49,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private ArrayAdapter<CongViec> arrayAdapter;
     private ArrayList<CongViec> arrayList;
     private ArrayList<CongViec> listsapxep;
-    private String[] arrsapxep;
     private DatabaseReference reference;
     public static final int REQUEST_CODE=4000;
     public static  final int RESULT_CODETHEM=4001;
@@ -59,7 +58,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     public static String NGAYBD_THEMCV_NGAY="ngaybdd";
     public  static String KEYCN="keycn";
     public static String CVCAPNHAT="capnhat";
-    private String _ngay="",_email="";
+    private String _ngay="",_email="",_tt="",_tts="";
     private static String _tieude="",_key="";
     private static CongViec _cv=null;
     private String[] arrdsloc;
@@ -99,10 +98,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         arrayAdapterloc.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         dsloc.setAdapter(arrayAdapterloc);
         dsloc.setSelection(0);
-
         listsapxep=new ArrayList<>();
-        loadDS();
-        loadDataListView();
     }
     private void sukien()
     {
@@ -131,42 +127,19 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadDataListView()
+    private void loadDataListView(String kieu)
     {
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
-        Query query=reference.child("CongViec").orderByChild("ngaybatdau");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CongViec cv=dataSnapshot.getValue(CongViec.class);
-                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
-                {
-                    arrayList.add(cv);
-                    arrayAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                loadDataListView();
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        if(kieu.equals("Công việc chưa hoàn thành"))
+        {
+            loadDSCVCHT();
+        }
+        else
+            if (kieu.equals("Công việc đã hoàn thành"))
+                loadDSCVHT();
+            else
+                loadDSCV();
     }
 
     @Override
@@ -200,7 +173,12 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 String key=dataSnapshot.getKey();
                 if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
                 {
-                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),"Hoàn thành",cv.getNhacnho());
+                    String state=_cv.getTrangthai()+"";
+                    if(state.equals("Chưa hoàn thành"))
+                        state="Hoàn thành";
+                    else
+                        state="Chưa hoàn thành";
+                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),state,cv.getNhacnho());
                     Map<String,Object> values=congViec.toMap();
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/CongViec/"+key,values);
@@ -211,12 +189,18 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                loadDataListView();
+                if(_tts.equals("Công việc chưa hoàn thành"))
+                    loadDSCVCHT();
+                else
+                    if (_tts.equals("Công việc đã hoàn thành"))
+                        loadDSCVHT();
+                    else
+                        loadDSCV();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                loadDataListView(_tts);
             }
 
             @Override
@@ -425,7 +409,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         calendar.add(Calendar.DAY_OF_MONTH,1);
         _ngay=dateFormat.format(calendar.getTime());
         ngay.setText(_ngay);
-        loadDataListView();
+        loadDataListView(_tts);
     }
     private void loadPreNgay() throws ParseException {
         Calendar calendar=Calendar.getInstance();
@@ -436,18 +420,94 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         calendar.add(Calendar.DAY_OF_MONTH,-1);
         _ngay=dateFormat.format(calendar.getTime());
         ngay.setText(_ngay);
-        loadDataListView();
+        loadDataListView(_tts);
     }
-    private void loadDS()
+    private void loadDSCVCHT()
     {
-        listsapxep.clear();
+        arrayList.clear();
+        arrayAdapter.notifyDataSetChanged();
+        Query q=reference.child("CongViec").orderByChild("trangthai").startAt("Chưa hoàn thành");
+        q.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Chưa hoàn thành"))
+                {
+                    arrayList.add(cv);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void loadDSCVHT()
+    {
+        arrayList.clear();
+        arrayAdapter.notifyDataSetChanged();
+        Query q=reference.child("CongViec").orderByChild("trangthai").startAt("Hoàn thành");
+        q.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                CongViec cv=dataSnapshot.getValue(CongViec.class);
+                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Hoàn thành"))
+                {
+                    arrayList.add(cv);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void loadDSCV()
+    {
+        arrayList.clear();
+        arrayAdapter.notifyDataSetChanged();
         reference.child("CongViec").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 CongViec cv=dataSnapshot.getValue(CongViec.class);
                 if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
                 {
-                    listsapxep.add(cv);
+                    arrayList.add(cv);
+                    arrayAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -474,14 +534,10 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getItemAtPosition(position).toString().equals("Giờ bắt đầu"))
-        {
-            //loadDataListView();
-        }
-        if (parent.getItemAtPosition(position).toString().equals("Giờ kết thúc"))
-        {
+        _tt=parent.getItemAtPosition(position).toString();
+        _tts=_tt;
+        loadDataListView(_tt);
 
-        }
     }
 
     @Override
