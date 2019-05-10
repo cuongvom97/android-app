@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public GregorianCalendar cal_month, cal_month_copy;
     private Adapter_Calandar hwAdapter;
     private TextView tv_month,tiltile_email;
-    private ImageButton previous,next;
+    private ImageButton previous,next,dangxuat;
     private GridView gridview;
     private String _emaim_signin="";
     private String _ngay_hientai="";
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layEmail();
         View view=navigationView.getHeaderView(0);
         tiltile_email=view.findViewById(R.id.tvemail_nav);
+        dangxuat=view.findViewById(R.id.imagebtndangxuat);
         tiltile_email.setText(_emaim_signin);
         //calendar
         LuaChonTrongLich.luaChonTrongLichArrayList=new ArrayList<>();
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         previous.setOnClickListener(this);
         next.setOnClickListener(this);
         gridview.setOnItemClickListener(this);
+        dangxuat.setOnClickListener(this);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -210,6 +212,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Ib_next:
                 setNextMonth();
                 refreshCalendar();
+                break;
+            case R.id.imagebtndangxuat:
+                Intent intent=new Intent(this,Google_sign_in.class);
+                startActivity(intent);
                 break;
         }
     }
