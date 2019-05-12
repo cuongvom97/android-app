@@ -93,8 +93,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         stringArrayAdapterpinner=new CustomeSpinner(this,R.layout.custome_layout_spinner,list);
         stringArrayAdapterpinner.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         nhanspinner.setAdapter(stringArrayAdapterpinner);
-        arrlap=getResources().getStringArray(R.array.dslap_cv);
-        arrthongbao=getResources().getStringArray(R.array.dsthongbao_cv);
+        arrlap=getResources().getStringArray(R.array.dslapcv);
+        arrthongbao=getResources().getStringArray(R.array.dsthongbaocv);
         calnow=Calendar.getInstance();
         datenow=calnow.getTime();
         hournow=calnow.getTime();
@@ -588,8 +588,6 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
                 datefinish=cal.getTime();
-                hourStart=cal.getTime();
-                hourFinish=cal.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog

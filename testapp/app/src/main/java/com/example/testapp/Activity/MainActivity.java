@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.testapp.Activity_GioiThieu;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
@@ -110,9 +112,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_tuan:
                 Intent intent=new Intent(this, Activity_Tuan.class);
                 startActivity(intent);
+                break;
             case R.id.menu_goithieu:
                 Intent intent1=new Intent(this, Activity_GioiThieu.class);
                 startActivity(intent1);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -263,4 +267,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
 }

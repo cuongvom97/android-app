@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quản lý thời gian và công việc</string>
     <string name="leftmenu_tailai">"Tải lại"</string>
@@ -19,4 +20,30 @@
     <string name="CN">CN</string>
     <string name="ngaycv">dd/MM/yyyy</string>
     <string name="giocv">hh/mm Am</string>
+    <string-array name="dslapcv">
+        <item>Không có</item>
+        <item>Hàng ngày</item>
+        <item>Hàng tuần</item>
+        <item>2 tuần một lần</item>
+        <item>Hàng tháng</item>
+    </string-array>
+    <string-array name="dsthongbaocv">
+        <item>Không có</item>
+        <item>5 phút</item>
+        <item>10 phút</item>
+        <item>30 phút</item>
+        <item>60 phút</item>
+        <item>90 phút</item>
+        <item>120 phút</item>
+    </string-array>
+    <string-array name="dsloc">
+        <item>Công việc chưa hoàn thành</item>
+        <item>Công việc đã hoàn thành</item>
+        <item>Tất cả công việc</item>
+    </string-array>
+    <string-array name="dsthongke">
+        <item>Ngày</item>
+        <item>Tuần</item>
+        <item>Tháng</item>
+    </string-array>
 </resources>

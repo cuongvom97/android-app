@@ -129,8 +129,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
     private void loadDataListView(String kieu)
     {
-        arrayList.clear();
-        arrayAdapter.notifyDataSetChanged();
         if(kieu.equals("Công việc chưa hoàn thành"))
         {
             loadDSCVCHT();
@@ -166,6 +164,8 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     }
 
     private void hoanthanhCV() {
+        arrayList.clear();
+        arrayAdapter.notifyDataSetChanged();
         reference.child("CongViec").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -189,18 +189,12 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(_tts.equals("Công việc chưa hoàn thành"))
-                    loadDSCVCHT();
-                else
-                    if (_tts.equals("Công việc đã hoàn thành"))
-                        loadDSCVHT();
-                    else
-                        loadDSCV();
+                loadUI();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                loadDataListView(_tts);
+
             }
 
             @Override
@@ -266,7 +260,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                loadDataListView(_tts);
             }
 
             @Override
@@ -286,18 +280,25 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         loadActivityThemCV(_email,_ngay);
     }
     private void suaCV(){
-        ladCapNhatCV();
+        loadCapNhatCV();
 
     }
-    private void ladCapNhatCV()
+    private void loadCapNhatCV()
     {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(CVCAPNHAT,_cv);
-        Intent intent=new Intent(this,CapNhatCV.class);
-        intent.putExtras(bundle);
-        intent.putExtra(EMAIL_CAPNHATCV_NGAY,_email);
-        intent.putExtra(KEYCN,_key);
-        startActivityForResult(intent,REQUEST_CODE);
+        if(_cv.getTrangthai().equals("Hoàn thành"))
+        {
+            Toast.makeText(this, "Công việc đã hoàn thành không thể cập nhật", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(CVCAPNHAT,_cv);
+            Intent intent=new Intent(this,CapNhatCV.class);
+            intent.putExtras(bundle);
+            intent.putExtra(EMAIL_CAPNHATCV_NGAY,_email);
+            intent.putExtra(KEYCN,_key);
+            startActivityForResult(intent,REQUEST_CODE);
+        }
     }
     //Load activuty Activity_ThemCongViec
     private void loadActivityThemCV(String email,String ngaybd)

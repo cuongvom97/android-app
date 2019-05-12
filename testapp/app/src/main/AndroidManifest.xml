@@ -17,19 +17,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity_GioiThieu"></activity>
-        <activity android:name=".Activity.Activity_Tuan"></activity>
-        <activity android:name=".Activity.CapNhatCV" />
-        <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.Activity_DSCongViec_Ngay"></activity>
-        <activity android:name=".Activity.Google_sign_in">
+        <activity android:name=".Activity_ThongKe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Activity_ThemCongViec"></activity>
+        <activity android:name=".Activity_GioiThieu" />
+        <activity android:name=".Activity.Activity_Tuan" />
+        <activity android:name=".Activity.CapNhatCV" />
+        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.Activity_DSCongViec_Ngay" />
+        <activity android:name=".Activity.Google_sign_in">
+
+        </activity>
+        <activity android:name=".Activity.Activity_ThemCongViec" />
 
         <receiver
             android:name=".KetNoiMang.ConnectionReceiver"
