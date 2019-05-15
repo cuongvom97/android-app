@@ -17,15 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity_ThongKe">
+        <activity android:name=".Activity.Activity_ThongKe">
+
+        </activity>
+        <activity android:name=".Activity.Activity_GioiThieu" />
+        <activity android:name=".Activity.Activity_Tuan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_GioiThieu" />
-        <activity android:name=".Activity.Activity_Tuan" />
         <activity android:name=".Activity.CapNhatCV" />
         <activity android:name=".Activity.MainActivity" />
         <activity android:name=".Activity.Activity_DSCongViec_Ngay" />

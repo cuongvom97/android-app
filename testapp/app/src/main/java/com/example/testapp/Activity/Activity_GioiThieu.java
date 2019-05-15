@@ -1,7 +1,9 @@
-package com.example.testapp;
+package com.example.testapp.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.testapp.R;
 
 public class Activity_GioiThieu extends AppCompatActivity {
 

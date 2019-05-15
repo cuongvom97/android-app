@@ -17,7 +17,7 @@
         android:padding="1dp">
 
         <TextView
-            android:id="@+id/date_tuan_ngay"
+            android:id="@+id/tieude_tuan_ngay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -27,6 +27,10 @@
             android:textSize="14dip"
             android:textStyle="bold"
             android:text="Tieu de"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dscv_tuan"></ListView>
 
     </LinearLayout>
 

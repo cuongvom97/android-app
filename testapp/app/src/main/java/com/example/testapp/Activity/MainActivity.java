@@ -1,5 +1,6 @@
 package com.example.testapp.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,9 +19,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.testapp.Activity_GioiThieu;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
@@ -34,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
@@ -84,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
         gridview.setAdapter(hwAdapter);
         loadSuKienTrenLich();
-        Calendar calendar=Calendar.getInstance();
-        SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        _ngay_hientai=df.format(calendar.getTime());
     }
     private void layTheHien()
     {
@@ -107,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId())
         {
             case R.id.menu_ngay:
+                Calendar calendar=Calendar.getInstance();
+                SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                _ngay_hientai=df.format(calendar.getTime());
                 guiDSCongViec_Ngay(_emaim_signin);
                 break;
             case R.id.menu_tuan:
@@ -117,11 +116,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent1=new Intent(this, Activity_GioiThieu.class);
                 startActivity(intent1);
                 break;
+            case R.id.menu_thongke:
+                loadThongKe();
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void loadThongKe() {
+        Intent intent=new Intent(this, Activity_ThongKe.class);
+        intent.putExtra(EMAIL_THEMCV,_emaim_signin);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -218,12 +227,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 refreshCalendar();
                 break;
             case R.id.imagebtndangxuat:
-                Intent intent=new Intent(this,Google_sign_in.class);
-                startActivity(intent);
+                showDialogHoi();
                 break;
         }
     }
-
+    private void loadGoogleSignin()
+    {
+        Intent intent=new Intent(this,Google_sign_in.class);
+        startActivity(intent);
+    }
+    private void showDialogHoi()
+    {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn có muốn đăng xuất");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                loadGoogleSignin();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String selectedGridDate = Adapter_Calandar.day_string.get(position);
