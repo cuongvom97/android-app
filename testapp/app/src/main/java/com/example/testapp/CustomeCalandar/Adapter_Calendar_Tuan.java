@@ -31,24 +31,17 @@ import java.util.Locale;
 public class Adapter_Calendar_Tuan extends BaseAdapter {
     private Activity context;
     private Calendar cal;
-    private String _email="";
-    private ArrayList<String> ngaytrongtuan;
+    private String _email;
+    public static ArrayList<String> ngaytrongtuan;
     private List<CongViec> viecList;
     private ArrayAdapter<CongViec> adapter;
     private DatabaseReference reference;
-    public Adapter_Calendar_Tuan(Activity context, Calendar cal, ArrayList<String> ngaytrongtuan,String email) {
+    private int _dem=0;
+    public Adapter_Calendar_Tuan(Activity context, ArrayList<String> ngaytrongtuan,String email) {
         this.context = context;
-        this.cal=cal;
         this.ngaytrongtuan=ngaytrongtuan;
         this._email=email;
-        reference=FirebaseDatabase.getInstance().getReference();
-        refreshDays();
     }
-
-    private void refreshDays() {
-
-    }
-
     @Override
     public int getCount() {
         return ngaytrongtuan.size();
@@ -61,42 +54,40 @@ public class Adapter_Calendar_Tuan extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        TextView dayView;
-        ListView dscv;
+        TextView dayView,tong;
+        //List<CongViec> listtam=new ArrayList<>();
         if (convertView == null) { // if it's not recycled, initialize some
             // attributes
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.item_calendar_tuan, null);
         }
         dayView=v.findViewById(R.id.tieude_tuan_ngay);
-        dscv=v.findViewById(R.id.dscv_tuan);
-        viecList=new ArrayList<>();
+        tong=v.findViewById(R.id.tongcv_ngay_tuan);
         dayView.setText(ngaytrongtuan.get(position).toString());
-        adapter=new CustomeXemDanhSachCV(context,R.layout.mycustome_danhsachcongviec,viecList);
-        dscv.setAdapter(adapter);
-        getAllCV(position);
+        getAllCV(position,tong);
         return v;
     }
-    private void getAllCV(final int vt)
+    private void getAllCV(final int vt, final TextView t)
     {
+        reference=FirebaseDatabase.getInstance().getReference();
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot data:dataSnapshot.getChildren())
                 {
                     CongViec cv=data.getValue(CongViec.class);
-                    if(cv.getEmail().equals(_email)&&cv.getNgaybatdau().equals(ngaytrongtuan.get(vt))){
-                        viecList.add(cv);
-                        adapter.notifyDataSetChanged();
+                    if(cv.getEmail().equals(_email)&&cv.getNgaybatdau().equals(ngaytrongtuan.get(vt).toString())){
+                        _dem++;
                     }
-
                 }
+                t.setText(_dem+"");
+                _dem=0;
             }
 
             @Override

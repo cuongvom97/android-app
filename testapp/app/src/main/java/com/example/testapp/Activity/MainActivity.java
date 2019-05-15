@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.testapp.Activity_CaiDat;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
@@ -109,8 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 guiDSCongViec_Ngay(_emaim_signin);
                 break;
             case R.id.menu_tuan:
-                Intent intent=new Intent(this, Activity_Tuan.class);
-                startActivity(intent);
+                loadTuan();
                 break;
             case R.id.menu_goithieu:
                 Intent intent1=new Intent(this, Activity_GioiThieu.class);
@@ -119,10 +119,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_thongke:
                 loadThongKe();
                 break;
+            case R.id.menu_caidat:
+                loadCaiDat();
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void loadCaiDat(){
+        Intent intent=new Intent(this, Activity_CaiDat.class);
+        startActivity(intent);
+    }
+    private void loadTuan() {
+        Intent intent=new Intent(this, Activity_Tuan.class);
+        intent.putExtra(EMAIL_THEMCV,_emaim_signin);
+        startActivity(intent);
     }
 
     private void loadThongKe() {

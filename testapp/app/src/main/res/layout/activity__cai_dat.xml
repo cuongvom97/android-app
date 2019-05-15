@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_CaiDat"
+    android:orientation="vertical"
+    android:id="@+id/layout_caidat">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:paddingBottom="5dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarcaidat"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/blue_grey_700"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Cài đặt"/>
+    </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Màu nền"
+        android:textSize="18dp"
+        android:textColor="@color/blue_grey_800"
+        android:padding="10dp"/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:id="@+id/caidat_radgroup_maunen"
+        android:paddingBottom="20dp">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="@color/blue_grey_700"
+            android:textSize="16dp"
+            android:text="Dark"
+            android:id="@+id/caidat_rad_dark"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="@color/blue_grey_700"
+            android:textSize="16dp"
+            android:text="Light"
+            android:id="@+id/caidat_rad_light"/>
+    </RadioGroup>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:gravity="right">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/caidat_btn_ok"
+            android:text="OK"
+            android:background="@drawable/shape_button"
+            android:textColor="@color/blue_grey_800"/>
+    </LinearLayout>
+
+</LinearLayout>
