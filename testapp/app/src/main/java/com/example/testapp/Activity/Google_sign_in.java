@@ -2,6 +2,7 @@ package com.example.testapp.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,23 +26,39 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Google_sign_in extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
     public static String EMAIL_SIGN ="email" ;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    public  String email=null;
     private static final String TAG = "Google_sign_in";
     private GoogleSignInClient mGoogleSignInClient;
     public static final int RC_SIGN_IN=9001;
-    private SignInButton sigin_in;
+    public static FirebaseAuth myAuth=FirebaseAuth.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_google_sign_in);
-        layTheHien();
-        scopeGoogleSignin();
-        sukien();
+        if(myAuth.getCurrentUser()!=null){
+            email=myAuth.getCurrentUser().getEmail();
+            System.out.println("-------------------"+email);
+        }
+        if(email!=null){
+            System.out.println("co current user"+myAuth.getCurrentUser());
+            Intent intent=new Intent(this, MainActivity.class);
+            intent.putExtra(EMAIL_SIGN,email);
+            startActivity(intent);
+            System.out.println("hien tai co user la "+email);
+            finish();
+        }
+        else{
+            System.out.println("User khong duoc luu : "+email);
+            setContentView(R.layout.activity_google_sign_in);
+            scopeGoogleSignin();
+            signIn();
+        }
+
     }
     //Lấy phạm vi kết nối
     private void scopeGoogleSignin()
@@ -54,21 +71,14 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
-    private void layTheHien()
-    {
-        sigin_in=findViewById(R.id.sign_in_button);
-    }
-    private void sukien()
-    {
-        sigin_in.setOnClickListener(this);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        sendToMain(account);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        account = GoogleSignIn.getLastSignedInAccount(this);
+//        email=account.getEmail().toString();
+//        sendToMain(email);
+//    }
 
     @Override
     protected void onStop() {
@@ -80,6 +90,9 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+
+
     //Kiêm rtra kết nối mạng
     public void check() {
         boolean ret = ConnectionReceiver.isConnected();
@@ -141,7 +154,21 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            sendToMain(account);
+            email = account.getEmail().toString();
+            String fireemail= email.trim();
+            String firepass= email.trim();
+//            myAuth.signInWithEmailAndPassword(fireemail,firepass);
+//            System.out.println("dang nhap thanh cong");
+            if(myAuth.signInWithEmailAndPassword(fireemail,firepass).isSuccessful()){
+                sendToMain(email);
+                System.out.println("dang nhap thanh cong");
+            }
+            else{
+                System.out.println("khongt hanh cong");
+                myAuth.createUserWithEmailAndPassword(firepass,firepass);
+                sendToMain(email);
+            }
+            //sendToMain(email);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -150,14 +177,16 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
         }
     }
     //gửi email cho ActivityMain
-    private void sendToMain(GoogleSignInAccount account)
+    private void sendToMain(String email)
     {
-        if(account!=null)
+        if(email!=null)
         {
-            String email=account.getEmail().toString();
-            Intent intent=new Intent(this, MainActivity.class);
+            //email=account.getEmail().toString();
+            Intent intent=new Intent(Google_sign_in.this, MainActivity.class);
             intent.putExtra(EMAIL_SIGN,email);
             startActivity(intent);
+            //myAuth.getCurrentUser()=x;
+            //System.out.println("hien tai co user la "+email);
             finish();
         }
 

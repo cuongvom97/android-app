@@ -1,5 +1,4 @@
-package com.example.testapp.Activity;
-
+﻿package com.example.testapp.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,10 +22,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.testapp.Activity_CaiDat;
+import com.example.testapp.Activity.Google_sign_in;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
 import com.example.testapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,9 +53,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public   static final String EMAIL_THEMCV="email_email";
     public final static int REQUEST_CODE_NGAY=5000;
     public final static int RESULT_CODE_NGAY=5001;
+    //FirebaseAuth myAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Google_sign_in.myAuth =FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         reference= FirebaseDatabase.getInstance().getReference();
         layTheHien();
@@ -262,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Google_sign_in.myAuth.signOut();
                 loadGoogleSignin();
             }
         });
