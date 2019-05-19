@@ -93,6 +93,39 @@
             android:padding="3dp"
             android:layout_weight="1"></Spinner>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="15dp"
+            android:background="@color/hoanthanh"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hoàn thành"
+            android:textSize="18sp"
+            android:textColor="@color/blue_grey_800"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="15dp"
+            android:background="@color/chuahoanthanh"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chưa hoàn thành"
+            android:textSize="18sp"
+            android:textColor="@color/blue_grey_800"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

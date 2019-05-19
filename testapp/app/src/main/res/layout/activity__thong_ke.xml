@@ -65,12 +65,13 @@
                 android:background="@drawable/left_arrow" />
         </FrameLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,8 +79,17 @@
                 android:textSize="23dp"
                 android:gravity="center"
                 android:id="@+id/ngay_ngayhientai_thongke" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chọn một ngày để xem công việc cần làm"
+                android:layout_centerHorizontal="true"
+                android:textColor="#4b4a4a"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:id="@+id/ngaybdkt_thongke"/>
 
-        </RelativeLayout>
+        </LinearLayout>
         <FrameLayout
             android:layout_width="45dp"
             android:layout_height="45dp" >
@@ -115,11 +125,44 @@
             android:text="Tổng công việc"
             android:id="@+id/thongke_loikhen"
             android:paddingLeft="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:background="@color/hoanthanh"
+                android:layout_gravity="center"
+                android:layout_marginLeft="3dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hoàn thành"
+                android:textSize="18sp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:background="@color/chuahoanthanh"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa hoàn thành"
+                android:textSize="18sp"
+                android:textColor="@color/blue_grey_800"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:padding="3dp"/>
     </LinearLayout>
     <LinearLayout

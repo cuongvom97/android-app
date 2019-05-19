@@ -1,5 +1,6 @@
 package com.example.testapp.Activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         next.setOnClickListener(this);
         gridview.setOnItemClickListener(this);
         dangxuat.setOnClickListener(this);
+        tv_month.setOnClickListener(this);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -241,6 +244,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.imagebtndangxuat:
                 showDialogHoi();
                 break;
+            case R.id.tv_month:
+                showDatePickerDialog();
+                break;
         }
     }
     private void loadGoogleSignin()
@@ -311,5 +317,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
+    public void showDatePickerDialog()
+    {
+        DatePickerDialog.OnDateSetListener callback=new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear,
+                                  int dayOfMonth) {
+                cal_month.set(year, monthOfYear, dayOfMonth);
+                refreshCalendar();
+            }
+        };
+        //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
+        //sẽ giống với trên TextView khi mở nó lên
+        SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+        String s=df.format(cal_month.getTime());
+        String strArrtmp[]=s.split("/");
+        int ngay=Integer.parseInt(strArrtmp[0]);
+        int thang=Integer.parseInt(strArrtmp[1])-1;
+        int nam=Integer.parseInt(strArrtmp[2]);
+        DatePickerDialog pic=new DatePickerDialog(
+                MainActivity.this,
+                callback, nam, thang, ngay);
+        pic.setTitle("Chọn ngày bạn muốn");
+        pic.show();
+    }
 }

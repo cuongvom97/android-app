@@ -1,5 +1,6 @@
 package com.example.testapp.Activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -30,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,6 +65,8 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private static String _tieude="",_key="";
     private static CongViec _cv=null;
     private String[] arrdsloc;
+    private Calendar calendar;
+    private Date date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +104,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         dsloc.setAdapter(arrayAdapterloc);
         dsloc.setSelection(0);
         listsapxep=new ArrayList<>();
+        loadDefaulInfo();
     }
     private void sukien()
     {
@@ -108,6 +114,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         next.setOnClickListener(this);
         pre.setOnClickListener(this);
         dsloc.setOnItemSelectedListener(this);
+        ngay.setOnClickListener(this);
     }
 
     @Override
@@ -166,40 +173,28 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private void hoanthanhCV() {
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
-        reference.child("CongViec").addChildEventListener(new ChildEventListener() {
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CongViec cv=dataSnapshot.getValue(CongViec.class);
-                String key=dataSnapshot.getKey();
-                if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    String state=_cv.getTrangthai()+"";
-                    if(state.equals("Chưa hoàn thành"))
-                        state="Hoàn thành";
-                    else
-                        state="Chưa hoàn thành";
-                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),state,cv.getNhacnho());
-                    Map<String,Object> values=congViec.toMap();
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/CongViec/"+key,values);
-                    reference.updateChildren(childUpdates);
+                    CongViec cv=data.getValue(CongViec.class);
+                    String key=data.getKey();
+                    if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
+                    {
+                        String state=_cv.getTrangthai()+"";
+                        if(state.equals("Chưa hoàn thành"))
+                            state="Hoàn thành";
+                        else
+                            state="Chưa hoàn thành";
+                        CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),state,cv.getNhacnho());
+                        Map<String,Object> values=congViec.toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put("/CongViec/"+key,values);
+                        reference.updateChildren(childUpdates);
+                    }
                 }
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                loadUI();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                loadDataListView(_tts);
             }
 
             @Override
@@ -251,6 +246,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 {
                     Toast.makeText(Activity_DSCongViec_Ngay.this, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
                 }
+                loadDataListView(_tts);
             }
 
             @Override
@@ -260,7 +256,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                loadDataListView(_tts);
             }
 
             @Override
@@ -398,12 +393,15 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                     e.printStackTrace();
                 }
                 break;
+            case R.id.ngay_ngayhientai:
+                showDatePickerDialog();
+                break;
         }
     }
-
+    private void loadDefaulInfo(){
+        calendar=Calendar.getInstance();
+    }
     private void loadNextNgay() throws ParseException {
-        Calendar calendar=Calendar.getInstance();
-        Date date=new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         date=dateFormat.parse(_ngay);
         calendar.setTime(date);
@@ -413,8 +411,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         loadDataListView(_tts);
     }
     private void loadPreNgay() throws ParseException {
-        Calendar calendar=Calendar.getInstance();
-        Date date=new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         date=dateFormat.parse(_ngay);
         calendar.setTime(date);
@@ -428,30 +424,21 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
         Query q=reference.child("CongViec").orderByChild("trangthai").startAt("Chưa hoàn thành");
-        q.addChildEventListener(new ChildEventListener() {
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CongViec cv=dataSnapshot.getValue(CongViec.class);
-                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Chưa hoàn thành"))
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    arrayList.add(cv);
-                    arrayAdapter.notifyDataSetChanged();
+                    CongViec cv=data.getValue(CongViec.class);
+                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Chưa hoàn thành"))
+                    {
+                        arrayList.add(cv);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
+
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Collections.sort(arrayList);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -465,30 +452,21 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
         Query q=reference.child("CongViec").orderByChild("trangthai").startAt("Hoàn thành");
-        q.addChildEventListener(new ChildEventListener() {
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CongViec cv=dataSnapshot.getValue(CongViec.class);
-                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Hoàn thành"))
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    arrayList.add(cv);
-                    arrayAdapter.notifyDataSetChanged();
+                    CongViec cv=data.getValue(CongViec.class);
+                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email)&&cv.getTrangthai().equals("Hoàn thành"))
+                    {
+                        arrayList.add(cv);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
+
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Collections.sort(arrayList);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -501,30 +479,20 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     {
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
-        reference.child("CongViec").addChildEventListener(new ChildEventListener() {
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CongViec cv=dataSnapshot.getValue(CongViec.class);
-                if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    arrayList.add(cv);
-                    arrayAdapter.notifyDataSetChanged();
+                    CongViec cv=data.getValue(CongViec.class);
+                    if(cv.getNgaybatdau().equalsIgnoreCase(_ngay)&&cv.getEmail().equals(_email))
+                    {
+                        arrayList.add(cv);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Collections.sort(arrayList);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -532,6 +500,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             }
         });
+
     }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -544,5 +513,45 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+    public void showDatePickerDialog()
+    {
+        DatePickerDialog.OnDateSetListener callback=new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear,
+                                  int dayOfMonth) {
+                //Mỗi lần thay đổi ngày tháng năm thì cập nhật lại TextView Date
+                String thang=(monthOfYear+1)+"";
+                if(thang.length()<=1)
+                {
+                    thang="0"+thang;
+                }
+                String n=dayOfMonth+"";
+                if(n.length()<=1)
+                {
+                    n="0"+n;
+                }
+                ngay.setText(
+                        n+"/"+thang+"/"+year);
+                //Lưu vết lại biến ngày hoàn thành
+                calendar.set(year, monthOfYear, dayOfMonth);
+                date=calendar.getTime();
+                SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+                _ngay=df.format(calendar.getTime());
+                loadDataListView(_tts);
+            }
+        };
+        //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
+        //sẽ giống với trên TextView khi mở nó lên
+        String s=ngay.getText()+"";
+        String strArrtmp[]=s.split("/");
+        int ngay=Integer.parseInt(strArrtmp[0]);
+        int thang=Integer.parseInt(strArrtmp[1])-1;
+        int nam=Integer.parseInt(strArrtmp[2]);
+        DatePickerDialog pic=new DatePickerDialog(
+                Activity_DSCongViec_Ngay.this,
+                callback, nam, thang, ngay);
+        pic.setTitle("Chọn ngày bạn muốn");
+        pic.show();
     }
 }

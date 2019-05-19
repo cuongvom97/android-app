@@ -254,13 +254,14 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
     private void showDialogLap() {
         LayoutInflater inflater=getLayoutInflater();
         View view=inflater.inflate(R.layout.dialog_laplai,null);
-        final RadioButton s1,s2,s3,s4,s5;
+        final RadioButton s1,s2,s3,s4,s5,s6;
         s1=view.findViewById(R.id.themcv_laplai0);
         s1.setChecked(true);
         s2=view.findViewById(R.id.themcv_laplaingay);
         s3=view.findViewById(R.id.themcv_laplaituan);
         s4=view.findViewById(R.id.themcv_laplai2tuan1lan);
         s5=view.findViewById(R.id.themcv_laplaithang);
+        s6=view.findViewById(R.id.themcv_lap_lai_moi_nam);
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setView(view);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -289,6 +290,12 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                     laplai.setText(arrlap[4]);
                     showDatePickerDialogLap();
                     _vitrilap=4;
+                }
+                if (s6.isChecked())
+                {
+                    laplai.setText(arrlap[5]);
+                    showDatePickerDialogLap();
+                    _vitrilap=5;
                 }
                 dialog.cancel();
             }
@@ -462,6 +469,41 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                 }
                             }
                         }
+                        if(_vitrilap==5)
+                        {
+                            long khoangcach=datefinish.getTime()-dateStart.getTime();
+                            long kc=khoangcach/(12*4*7*24*60*60*1000);
+                            if (kc<0)
+                            {
+                                Toast.makeText(this, "Tháng được chọn phải sau tháng hiện tại", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                if (_vitrithongbao!=0)
+                                {
+                                    while (kc>=0)
+                                    {
+                                        themCVCSDL(dateStart);
+                                        setchuongBao(hourthongbao);
+                                        callap.add(Calendar.YEAR,1);
+                                        dateStart=callap.getTime();
+                                        calthongbao.add(Calendar.YEAR,1);
+                                        hourthongbao=calthongbao.getTime();
+                                        kc--;
+                                    }
+                                }
+                                else
+                                {
+                                    while (kc>=0)
+                                    {
+                                        themCVCSDL(dateStart);
+                                        callap.add(Calendar.YEAR,1);
+                                        dateStart=callap.getTime();
+                                        kc--;
+                                    }
+                                }
+                            }
+                        }
 
                     }
                     else
@@ -477,6 +519,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         }
                     }
                 }
+            Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
 
         }catch (Exception ex)
         {
@@ -514,7 +557,6 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
             }
             CongViec cv=new CongViec(td,gc,_email,nbd,gbt,ght,n,"Chưa hoàn thành",arrthongbao[_vitrithongbao]);
             databaseReference.child("CongViec").push().setValue(cv);
-            Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
         }catch (Exception ex)
         {
             Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
@@ -623,6 +665,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
                 dateStart=cal.getTime();
+                hourStart=cal.getTime();
+                hourFinish=cal.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog

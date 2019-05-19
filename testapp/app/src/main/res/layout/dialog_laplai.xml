@@ -47,6 +47,14 @@
         android:textColor="@color/blue_grey_800"
         android:id="@+id/themcv_laplaithang"
         android:paddingTop="3dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mỗi năm 1 lần"
+            android:textSize="16dp"
+            android:textColor="@color/blue_grey_800"
+            android:id="@+id/themcv_lap_lai_moi_nam"
+            android:paddingTop="3dp"/>
     </RadioGroup>
 
 </LinearLayout>

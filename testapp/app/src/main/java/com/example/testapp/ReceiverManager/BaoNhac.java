@@ -30,7 +30,7 @@ public class BaoNhac extends Service {
         Notification.Builder builder=new Notification.Builder(this);
         builder.setContentTitle("Quản lý thời giam và công việc");
         builder.setContentText("Bạn sắp có công việc cần làm.");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_notifications_active_black_24dp);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
         notificationManager.notify(1,builder.build());

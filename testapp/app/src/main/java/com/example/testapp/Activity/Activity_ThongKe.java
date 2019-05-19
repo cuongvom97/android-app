@@ -50,7 +50,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class Activity_ThongKe extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, OnChartValueSelectedListener {
     private PieChart pieChart;
     private LineChartView lineChart;
-    private TextView tieude,tongcv,loikhen;
+    private TextView tieude,tongcv,loikhen,ngay;
     private ImageButton next,pre;
     private Spinner spinner;
     private static String arrthongke[];
@@ -89,6 +89,7 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         piechart=findViewById(R.id.layout_thongke_ngay);
         pieChart = (PieChart) findViewById(R.id.piechart);
         lineChart=findViewById(R.id.thongke_linechart);
+        ngay=findViewById(R.id.ngaybdkt_thongke);
     }
     private void loadUI()
     {
@@ -102,15 +103,9 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         spinner.setAdapter(arrayAdapter);
         spinner.setSelection(0);
         //Piechart
-        pieChart.setRotationEnabled(true);
-        pieChart.setHoleRadius(35f);
-        pieChart.setDescription(new Description());
-        pieChart.setTransparentCircleAlpha(0);
-        pieChart.setCenterText("% Công việc");
-        pieChart.setCenterTextSize(10);
-        pieChart.setDrawEntryLabels(true);
+        pieChart.setUsePercentValues(true);
+        pieChart.setDrawHoleEnabled(false);
         //Linechart
-
         setDefaultInfor();
         getdayStartEndinWeek();
         layemail();
@@ -121,6 +116,7 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         next.setOnClickListener(this);
         pre.setOnClickListener(this);
         pieChart.setOnChartValueSelectedListener(this);
+        tieude.setOnClickListener(this);
     }
     private void setDefaultInfor()
     {
@@ -144,6 +140,7 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         _selectedspinner=parent.getItemAtPosition(position).toString();
         if(_selectedspinner.equals(arrthongke[0]))
         {
+            ngay.setVisibility(View.GONE);
             linechart.setVisibility(View.GONE);
             piechart.setVisibility(View.VISIBLE);
             tieude.setText(_dateselected);
@@ -152,6 +149,7 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         else
             if(_selectedspinner.equals(arrthongke[2]))
             {
+                ngay.setVisibility(View.GONE);
                 linechart.setVisibility(View.VISIBLE);
                 piechart.setVisibility(View.GONE);
                 tieude.setText(_month+"/"+_year);
@@ -159,9 +157,11 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
             }
             else
             {
+                ngay.setVisibility(View.VISIBLE);
                 linechart.setVisibility(View.GONE);
                 piechart.setVisibility(View.VISIBLE);
-                tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
+                tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_YEAR)+" năm "+_year);
+                ngay.setText(_ngaybatdautuan+" - "+_ngaketthuctuan);
                 getListCV();
             }
     }
@@ -275,6 +275,19 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
                 _date=cal.getTime();
+                if(_selectedspinner.equals(arrthongke[0]))
+                {
+                    refreshNgay();
+                }
+                else
+                if(_selectedspinner.equals(arrthongke[2]))
+                {
+                    refreshThang();
+                }
+                else
+                {
+                    refreshTuan();
+                }
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
@@ -301,6 +314,9 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
             case R.id.ib_prev_thongke:
                 clickPre();
                 break;
+            case R.id.ngay_ngayhientai_thongke:
+                showDatePickerDialog();
+                break;
 
         }
     }
@@ -309,25 +325,18 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         if(_selectedspinner.equals(arrthongke[0]))
         {
             cal.add(Calendar.DATE,1);
-            setValuesfromcalendar();
-            tieude.setText(_dateselected);
-            getListCV();
+            refreshNgay();
         }
         else
             if(_selectedspinner.equals(arrthongke[2]))
             {
                 cal.add(Calendar.MONTH,1);
-                setValuesfromcalendar();
-                tieude.setText(_month+"/"+_year);
-                getListCV();
+                refreshThang();
             }
             else
             {
                 cal.add(Calendar.WEEK_OF_MONTH,1);
-                setValuesfromcalendar();
-                getdayStartEndinWeek();
-                tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
-                getListCV();
+                refreshTuan();
 
             }
     }
@@ -336,26 +345,39 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
         if(_selectedspinner.equals(arrthongke[0]))
         {
             cal.add(Calendar.DATE,-1);
-            setValuesfromcalendar();
-            tieude.setText(_dateselected);
-            getListCV();
+            refreshNgay();
         }
         else
         if(_selectedspinner.equals(arrthongke[2]))
         {
             cal.add(Calendar.MONTH,-1);
-            setValuesfromcalendar();
-            tieude.setText(_month+"/"+_year);
-            getListCV();
+            refreshThang();
         }
         else
         {
             cal.add(Calendar.WEEK_OF_MONTH,-1);
-            setValuesfromcalendar();
-            getdayStartEndinWeek();
-            tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
-            getListCV();
+            refreshTuan();
         }
+    }
+    private void refreshNgay()
+    {
+        setValuesfromcalendar();
+        tieude.setText(_dateselected);
+        getListCV();
+    }
+    private void refreshTuan()
+    {
+        setValuesfromcalendar();
+        getdayStartEndinWeek();
+        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_YEAR)+" năm "+_year);
+        ngay.setText(_ngaybatdautuan+" - "+_ngaketthuctuan);
+        getListCV();
+    }
+    private void refreshThang()
+    {
+        setValuesfromcalendar();
+        tieude.setText(_month+"/"+_year);
+        getListCV();
     }
     private void setValuesfromcalendar()
     {
@@ -373,7 +395,6 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
     }
     private void addDataSetPiechart(PieChart pieChart) {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        ArrayList<String> xEntrys = new ArrayList<>();
         float[] yData = { 100, 0 };
         if(_selectedspinner.equals(arrthongke[0])){
             int tong=listcvngay.size();
@@ -423,28 +444,22 @@ public class Activity_ThongKe extends AppCompatActivity implements AdapterView.O
             }
         }
 
-        String[] xData = { "Hoàn thành","Chưa hoàn thành" };
-
         for (int i = 0; i < yData.length;i++){
             yEntrys.add(new PieEntry(yData[i],i));
         }
-        for (int i = 0; i < xData.length;i++){
-            xEntrys.add(xData[i]);
-        }
 
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Trạng thái công việc");
-        pieDataSet.setSliceSpace(2);
+        PieDataSet pieDataSet=new PieDataSet(yEntrys,"");
         pieDataSet.setValueTextSize(12);
 
         ArrayList<Integer> colors=new ArrayList<>();
         colors.add(Color.parseColor("#ccff99"));
         colors.add(Color.parseColor("#ffffcc"));
         pieDataSet.setColors(colors);
-
+        /*
         Legend legend=pieChart.getLegend();
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-
+        */
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();

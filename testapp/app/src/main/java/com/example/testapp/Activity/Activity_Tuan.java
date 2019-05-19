@@ -1,5 +1,6 @@
 package com.example.testapp.Activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -85,7 +87,7 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         adapter_calendar_tuan=new Adapter_Calendar_Tuan(this,dsngaytrongtuan,_email);
         gridView.setAdapter(adapter_calendar_tuan);
         setListNgaytrongtuan();
-        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
+        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_YEAR)+" năm "+_year);
         ngay_start_end.setText(_ngaybatdautuan+"-"+_ngaketthuctuan);
     }
     private void layEmailtuMain()
@@ -97,7 +99,7 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         gridView.setOnItemClickListener(this);
         next.setOnClickListener(this);
         pre.setOnClickListener(this);
-
+        tieude.setOnClickListener(this);
     }
     private void getdayStartEndinWeek()
     {
@@ -199,6 +201,9 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
             case R.id.Ib_next_tuan:
                 clickNext();
                 break;
+            case R.id.tv_tuan:
+                showDatePickerDialog();
+                break;
         }
     }
 
@@ -211,20 +216,19 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
     {
         dsngaytrongtuan.clear();
         cal.add(Calendar.WEEK_OF_MONTH,1);
-        setValuesfromcalendar();
-        getdayStartEndinWeek();
-        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
-        ngay_start_end.setText(_ngaybatdautuan+"-"+_ngaketthuctuan);
-        setListNgaytrongtuan();
-        adapter_calendar_tuan.notifyDataSetChanged();
+        refreshUI();
     }
     private void clickPre()
     {
         dsngaytrongtuan.clear();
         cal.add(Calendar.WEEK_OF_MONTH,-1);
+        refreshUI();
+    }
+    private void refreshUI()
+    {
         setValuesfromcalendar();
         getdayStartEndinWeek();
-        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_MONTH)+" Tháng "+_month+"/"+_year);
+        tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_YEAR)+" năm "+_year);
         ngay_start_end.setText(_ngaybatdautuan+"-"+_ngaketthuctuan);
         setListNgaytrongtuan();
         adapter_calendar_tuan.notifyDataSetChanged();
@@ -285,5 +289,42 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
 
             }
         });
+    }
+    public void showDatePickerDialog()
+    {
+        DatePickerDialog.OnDateSetListener callback=new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear,
+                                  int dayOfMonth) {
+                //Mỗi lần thay đổi ngày tháng năm thì cập nhật lại TextView Date
+                String thang=(monthOfYear+1)+"";
+                if(thang.length()<=1)
+                {
+                    thang="0"+thang;
+                }
+                String n=dayOfMonth+"";
+                if(n.length()<=1)
+                {
+                    n="0"+n;
+                }
+                _dateselected=n+"/"+thang+"/"+year;
+                //Lưu vết lại biến ngày hoàn thành
+                cal.set(year, monthOfYear, dayOfMonth);
+                dsngaytrongtuan.clear();
+                refreshUI();
+            }
+        };
+        //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
+        //sẽ giống với trên TextView khi mở nó lên
+        String s=_dateselected;
+        String strArrtmp[]=s.split("/");
+        int ngay=Integer.parseInt(strArrtmp[0]);
+        int thang=Integer.parseInt(strArrtmp[1])-1;
+        int nam=Integer.parseInt(strArrtmp[2]);
+        DatePickerDialog pic=new DatePickerDialog(
+                Activity_Tuan.this,
+                callback, nam, thang, ngay);
+        pic.setTitle("Chọn thời gian");
+        pic.show();
     }
 }

@@ -26,6 +26,7 @@
         <item>Hàng tuần</item>
         <item>2 tuần một lần</item>
         <item>Hàng tháng</item>
+        <item>Mỗi năm 1 lần</item>
     </string-array>
     <string-array name="dsthongbaocv">
         <item>Không có</item>
