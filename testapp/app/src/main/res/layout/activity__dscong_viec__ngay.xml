@@ -54,8 +54,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ngày hiện tại"
-                    android:textSize="23dp"
+                    android:textSize="23sp"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:id="@+id/ngay_ngayhientai" />
 
             </RelativeLayout>
@@ -82,7 +83,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="22sp"
             android:textColor="@color/blue_grey_800"
             android:text="Lọc"
             android:layout_weight="3"/>

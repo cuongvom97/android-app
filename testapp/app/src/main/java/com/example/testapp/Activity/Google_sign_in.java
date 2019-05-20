@@ -32,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Google_sign_in extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
     public static String EMAIL_SIGN ="email" ;
-    public  String email=null;
+    public  String email="";
     private static final String TAG = "Google_sign_in";
     private GoogleSignInClient mGoogleSignInClient;
     public static final int RC_SIGN_IN=9001;
@@ -44,7 +44,7 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
             email=myAuth.getCurrentUser().getEmail();
             System.out.println("-------------------"+email);
         }
-        if(email!=null){
+        else if(email!=null){
             System.out.println("co current user"+myAuth.getCurrentUser());
             Intent intent=new Intent(this, MainActivity.class);
             intent.putExtra(EMAIL_SIGN,email);
@@ -116,15 +116,12 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
     }
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.sign_in_button:signIn();break;
-        }
+
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        
+
     }
 
     @Override
@@ -134,7 +131,7 @@ public class Google_sign_in extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

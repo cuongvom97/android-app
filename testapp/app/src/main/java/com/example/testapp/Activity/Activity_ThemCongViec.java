@@ -373,8 +373,10 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         {
                             long khoangcach=datefinish.getTime()-dateStart.getTime();
                             long kc=khoangcach/(7*24*60*60*1000);
-                            if(kc<0)
+                            if(kc<0){
                                 Toast.makeText(this, "Tuần được chọn phải sau tuần hiện tại", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             else{
                                 if (_vitrithongbao!=0)
                                 {
@@ -405,8 +407,10 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         {
                             long khoangcach=datefinish.getTime()-dateStart.getTime();
                             long kc=khoangcach/(7*24*60*60*1000);
-                            if(kc<0)
+                            if(kc<0) {
                                 Toast.makeText(this, "Tuần được chọn phải sau tuần hiện tại", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             else
                             {
                                 if (_vitrithongbao!=0)
@@ -441,6 +445,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                             if (kc<0)
                             {
                                 Toast.makeText(this, "Tháng được chọn phải sau tháng hiện tại", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             else
                             {
@@ -475,7 +480,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                             long kc=khoangcach/(12*4*7*24*60*60*1000);
                             if (kc<0)
                             {
-                                Toast.makeText(this, "Tháng được chọn phải sau tháng hiện tại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Năm được chọn phải sau tháng hiện tại", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             else
                             {
@@ -519,7 +525,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         }
                     }
                 }
-            Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+
 
         }catch (Exception ex)
         {
@@ -650,6 +656,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
      */
     public void showDatePickerDialogStart()
     {
+
         OnDateSetListener callback=new OnDateSetListener() {
             public void onDateSet(DatePicker view, int year,
                                   int monthOfYear,
@@ -665,8 +672,13 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
                 dateStart=cal.getTime();
+                cal.add(Calendar.MINUTE,10);
                 hourStart=cal.getTime();
+                SimpleDateFormat df=new SimpleDateFormat("hh:mm a",Locale.getDefault());
+                giobatdau.setText(df.format(cal.getTime())+"");
+                cal.add(Calendar.MINUTE,15);
                 hourFinish=cal.getTime();
+                giohoanthanh.setText(df.format(cal.getTime())+"");
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
@@ -844,6 +856,8 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
     private void guiActivity_DSCongViec_Ngay(int resultcode)
     {
         Intent intent=getIntent();
+        String ngay=ngaybatdau.getText()+"";
+        intent.putExtra("ngay_duoc_them",ngay);
         setResult(resultcode,intent);
         finish();
     }

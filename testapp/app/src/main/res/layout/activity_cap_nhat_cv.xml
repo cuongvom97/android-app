@@ -36,15 +36,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="23dp"
-                android:text="Tiêu đề"
+                android:textSize="23sp"
+                android:text="Tiêu đề*"
                 android:textColor="@color/colortieude"
                 android:layout_weight="1"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/capnhatcv_tieude"
-                android:textSize="23dp"
+                android:textSize="23sp"
                 android:textColor="@color/colortieude"
                 android:layout_weight="1"
                 android:gravity="center"/>
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:text="Trạng thái"
                     android:textColor="@color/blue_grey_900"
-                    android:textSize="16dp"
+                    android:textSize="18sp"
                     android:padding="3dp"
                     android:gravity="center"
                     android:id="@+id/tv_capnhatcv_trangthai"/>
@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
+                android:textSize="22sp"
                 android:text="Ghi chú"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="3"/>
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:id="@+id/capnhatcv_ghichu"
-                android:textSize="18dp"
+                android:textSize="20sp"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_800"
-                android:textSize="18dp"
+                android:textSize="22sp"
                 android:text="Chọn thời gian:"
                 android:layout_weight="1"/>
             <TextView
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_capnhatcv_ngaybatdau"
                 android:text="@string/ngaycv"
-                android:textSize="18dp"
+                android:textSize="20sp"
                 android:textColor="@color/blue_grey_800"
                 android:gravity="center"
                 android:layout_weight="1"/>
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_capnhatcv_giobatdau"
                     android:text="@string/giocv"
-                    android:textSize="18dp"
+                    android:textSize="20sp"
                     android:textColor="@color/blue_grey_800"
                     android:gravity="center"/>
                 <TextView
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_capnhatcv_gioht"
                     android:text="@string/giocv"
-                    android:textSize="18dp"
+                    android:textSize="20sp"
                     android:textColor="@color/blue_grey_800"
                     android:layout_weight="1"
                     android:gravity="center"/>
@@ -144,11 +144,11 @@
             android:layout_height="wrap_content"
             android:text="Thông báo"
             android:textColor="@color/blue_grey_800"
-            android:textSize="18dp"/>
+            android:textSize="22sp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:textSize="20sp"
             android:padding="7dp"
             android:textColor="@color/blue_grey_800"
             android:text="Không có"

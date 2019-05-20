@@ -1,4 +1,4 @@
-﻿package com.example.testapp.Activity;
+package com.example.testapp.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,18 +11,30 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.testapp.Activity_CaiDat;
-import com.example.testapp.Activity.Google_sign_in;
+import com.example.testapp.Custome.Custom_DS_CongViec_CHT;
+import com.example.testapp.Custome.CustomeXemDanhSachCV;
+import com.example.testapp.Custome.Custome_RecyclerView;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
@@ -33,12 +45,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
+
+import lecho.lib.hellocharts.model.AxisValue;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private DatabaseReference reference;
@@ -53,6 +72,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public   static final String EMAIL_THEMCV="email_email";
     public final static int REQUEST_CODE_NGAY=5000;
     public final static int RESULT_CODE_NGAY=5001;
+    private RecyclerView dscv;
+    private List<CongViec> congViecList;
+    private Custome_RecyclerView arrayAdapter;
+    private LinearLayout layout_main;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayAdapter<CongViec> adapter;
     //FirebaseAuth myAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +114,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
         gridview.setAdapter(hwAdapter);
         loadSuKienTrenLich();
+        //Recyclerview
+        congViecList=new ArrayList<>();
+
+        //loadDSSearch();
+        dscv.setHasFixedSize(true);
+        layoutManager= new LinearLayoutManager(MainActivity.this);
+        arrayAdapter = new Custome_RecyclerView(congViecList);
+        dscv.setLayoutManager(layoutManager);
+        dscv.setAdapter(arrayAdapter);
+        //layout_main.setVisibility(View.GONE);
+
+        dscv.setVisibility(View.GONE);
+        //Hiện coongvieecj chưa hoàn thành
+        get_danh_sach_cv_chua_hoan_thanh();
     }
     private void layTheHien()
     {
@@ -96,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         previous = (ImageButton) findViewById(R.id.ib_prev);
         next = (ImageButton) findViewById(R.id.Ib_next);
         gridview = (GridView) findViewById(R.id.gv_calendar);
+        dscv=findViewById(R.id.recyclerview_main);
+        layout_main=findViewById(R.id.layout_main);
     }
     private void sukien()
     {
@@ -160,8 +201,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.left_menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.left_menu_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_left_menu_main);
+        SearchView searchView= (SearchView) searchItem.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                layout_main.setVisibility(View.VISIBLE);
+                dscv.setVisibility(View.GONE);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                arrayAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -171,6 +230,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             case R.id.tailai_leftmenu_main:
                 reloadUI();
+                break;
+            case R.id.search_left_menu_main:
+                dscv.setVisibility(View.VISIBLE);
+                layout_main.setVisibility(View.GONE);
+                loadDSSearch();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -208,7 +272,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void layEmail()
     {
         Intent intent=getIntent();
-        _emaim_signin=intent.getStringExtra(Google_sign_in.EMAIL_SIGN)+"";
+        //_emaim_signin=intent.getStringExtra(Google_sign_in.EMAIL_SIGN)+"";
+        _emaim_signin="cuongvo077@gmail.com";
     }
     //Gửi sang activity Activity_DSCongViec_Ngay
     private void guiDSCongViec_Ngay(String mail){
@@ -327,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDateSet(DatePicker view, int year,
                                   int monthOfYear,
                                   int dayOfMonth) {
-                cal_month.set(year, monthOfYear, dayOfMonth);
+                cal_month.set(GregorianCalendar.MONTH,monthOfYear);
                 refreshCalendar();
             }
         };
@@ -344,5 +409,92 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 callback, nam, thang, ngay);
         pic.setTitle("Chọn ngày bạn muốn");
         pic.show();
+    }
+    private void loadDSSearch()
+    {
+        congViecList.clear();
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
+                {
+                    CongViec cv=data.getValue(CongViec.class);
+                    if(cv.getEmail().equals(_emaim_signin))
+                    {
+                        congViecList.add(cv);
+                    }
+                }
+                Collections.sort(congViecList);
+                arrayAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void get_danh_sach_cv_chua_hoan_thanh()
+    {
+        congViecList.clear();
+        final Calendar calendar=Calendar.getInstance();
+        final Date datenow=calendar.getTime();
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
+                {
+                    CongViec cv=data.getValue(CongViec.class);
+
+                    if(cv.getEmail().equals(_emaim_signin))
+                    {
+                        String str[]=cv.getNgaybatdau().split("/");
+                        int day=Integer.parseInt(str[0]);
+                        int month=Integer.parseInt(str[1])-1;
+                        int year=Integer.parseInt(str[2]);
+                        calendar.set(year,month,day);
+                        Date date=calendar.getTime();
+                        int result=date.compareTo(datenow);
+                        if(result<0&&cv.getTrangthai().equals("Chưa hoàn thành"))
+                        {
+                            congViecList.add(cv);
+                        }
+                    }
+                }
+                Collections.sort(congViecList);
+                show_danh_sach_cv_chua_hoan_thanh();
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void show_danh_sach_cv_chua_hoan_thanh(){
+        if(congViecList.size()!=0){
+            LayoutInflater inflater=getLayoutInflater();
+            View view=inflater.inflate(R.layout.danh_sach_cong_viec_chua_hoan_thanh,null);
+            ListView listViewcht=view.findViewById(R.id.ds_cong_viec_cht_list);
+            listViewcht.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    CongViec cv=congViecList.get(position);
+                    _ngay_hientai=cv.getNgaybatdau()+"";
+                    guiDSCongViec_Ngay(_emaim_signin);
+                }
+            });
+            adapter=new Custom_DS_CongViec_CHT(this,R.layout.custom_ds_cong_viec_cht,congViecList);
+            listViewcht.setAdapter(adapter);
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setView(view);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog=builder.create();
+            dialog.show();
+        }
     }
 }

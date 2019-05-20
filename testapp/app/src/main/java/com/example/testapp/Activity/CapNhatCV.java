@@ -322,12 +322,12 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 {
                     capnhatCVCSDL(dateStart);
                     setchuongBao(hourthongbao);
-                    finish();
+                    send_to_Activity_DSCongViec(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
                 }
                 else
                 {
                     capnhatCVCSDL(dateStart);
-                    finish();
+                    send_to_Activity_DSCongViec(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
                 }
             }
         }
@@ -335,6 +335,13 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         {
             Toast.makeText(this, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void send_to_Activity_DSCongViec(int code){
+        Intent intent=getIntent();
+        String ngay=ngaybatdau.getText()+"";
+        intent.putExtra("ngay_duoc_cap_nhat",ngay);
+        setResult(code,intent);
+        finish();
     }
     private void setchuongBao(Date tb) {
         Intent intent=new Intent(this,BaoReceiver.class);

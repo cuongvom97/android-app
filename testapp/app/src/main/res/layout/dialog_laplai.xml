@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Không có"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_laplai0"
             android:paddingTop="3dp"/>
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hàng ngày"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_laplaingay"
             android:paddingTop="3dp"/>
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hàng tuần"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_laplaituan"
             android:paddingTop="3dp"/>
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2 tuần 1 lần"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_laplai2tuan1lan"
             android:paddingTop="3dp"/>
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hàng tháng"
-        android:textSize="16dp"
+        android:textSize="20dp"
         android:textColor="@color/blue_grey_800"
         android:id="@+id/themcv_laplaithang"
         android:paddingTop="3dp"/>
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mỗi năm 1 lần"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textColor="@color/blue_grey_800"
             android:id="@+id/themcv_lap_lai_moi_nam"
             android:paddingTop="3dp"/>

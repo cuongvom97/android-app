@@ -10,7 +10,7 @@
         tools:ignore="MissingConstraints"
         android:id="@+id/tv_spinner_nhan"
         android:text="XXX"
-        android:textSize="13dp"
+        android:textSize="20sp"
         android:gravity="center"
         android:textColor="@color/colortieude"/>
 </android.support.constraint.ConstraintLayout>

@@ -39,15 +39,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="23dp"
-                android:text="Tiêu đề"
+                android:textSize="23sp"
+                android:text="Tiêu đề *"
                 android:textColor="@color/colortieude"
                 android:layout_weight="1"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/themcv_tieude"
-                android:textSize="23dp"
+                android:textSize="23sp"
                 android:textColor="@color/colortieude"
                 android:layout_weight="1"/>
             <Spinner
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
+                android:textSize="22sp"
                 android:text="Ghi chú"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="3"/>
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:id="@+id/themcv_ghichu"
-                android:textSize="18dp"
+                android:textSize="20sp"
                 android:textColor="@color/blue_grey_800"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -84,13 +84,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="3"
-            android:gravity="center"
-           android:padding="5dp">
+            android:gravity="center">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue_grey_800"
-                android:textSize="18dp"
+                android:textSize="22sp"
                 android:text="Chọn thời gian:"
                 android:layout_weight="1"/>
             <TextView
@@ -98,10 +97,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_themcv_ngaybatdau"
                 android:text="@string/ngaycv"
-                android:textSize="18dp"
+                android:textSize="20sp"
                 android:textColor="@color/blue_grey_800"
-                android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:gravity="center"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_themcv_giobatdau"
                     android:text="@string/giocv"
-                    android:textSize="18dp"
+                    android:textSize="20sp"
                     android:textColor="@color/blue_grey_800"
                     android:gravity="center"/>
                 <TextView
@@ -121,13 +120,13 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_themcv_gioht"
                     android:text="@string/giocv"
-                    android:textSize="18dp"
+                    android:textSize="20sp"
                     android:textColor="@color/blue_grey_800"
                     android:layout_weight="1"
                     android:gravity="center"/>
             </LinearLayout>
-
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,7 +137,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
+                android:textSize="22sp"
                 android:textColor="@color/blue_grey_800"
                 android:text="Lặp lại"/>
             <TextView
@@ -147,7 +146,7 @@
                 android:padding="7dp"
                 android:text="Không có"
                 android:textColor="@color/blue_grey_800"
-                android:textSize="16dp"
+                android:textSize="20sp"
                 android:id="@+id/themcv_tvlap"/>
         </LinearLayout>
         <TextView
@@ -155,11 +154,11 @@
             android:layout_height="wrap_content"
             android:text="Thông báo"
             android:textColor="@color/blue_grey_800"
-            android:textSize="18dp"/>
+            android:textSize="22sp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:textSize="20sp"
             android:padding="7dp"
             android:textColor="@color/blue_grey_800"
             android:text="Không có"
@@ -201,7 +200,6 @@
                     android:textColor="@color/blue_grey_800"
                     android:layout_weight="1"/>
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 

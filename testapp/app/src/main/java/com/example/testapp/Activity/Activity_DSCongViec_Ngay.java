@@ -226,41 +226,24 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         alertDialog.show();
     }
     private void xoaCV() {
-        reference.child("CongViec").addChildEventListener(new ChildEventListener() {
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                try
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    CongViec cv=dataSnapshot.getValue(CongViec.class);
-                    String key=dataSnapshot.getKey();
-                if(cv.getTieude().equalsIgnoreCase(_tieude)&&key.equals(_key))
-                {
-                    CongViec congViec=new CongViec(null,null,null,null,null,null,null,null,null);
-                    Map<String,Object> values=congViec.toMap();
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/CongViec/"+key,values);
-                    reference.updateChildren(childUpdates);
-                    Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công.", Toast.LENGTH_SHORT).show();
-                }
-                }catch (Exception ex)
-                {
-                    Toast.makeText(Activity_DSCongViec_Ngay.this, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
+                    CongViec cv=data.getValue(CongViec.class);
+                    String key=data.getKey();
+                    if(cv.getTieude().equalsIgnoreCase(_tieude)&&key.equals(_key))
+                    {
+                        CongViec congViec=new CongViec(null,null,null,null,null,null,null,null,null);
+                        Map<String,Object> values=congViec.toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put("/CongViec/"+key,values);
+                        reference.updateChildren(childUpdates);
+                        Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 loadDataListView(_tts);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -268,6 +251,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
             }
         });
+
 
     }
 
@@ -311,10 +295,13 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             switch (resultCode)
             {
                 case RESULT_CODETHEM:
+                    _ngay=data.getStringExtra("ngay_duoc_chon");
                     reloadActivity();
+                    loadDataListView(_tts);
                     break;
                 case RESULT_CODECAPNHAT:
-                    reloadActivity();
+                    _ngay=data.getStringExtra("ngay_duoc_cap_nhat");
+                    loadDataListView(_tts);
                     break;
             }
         }

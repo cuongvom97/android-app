@@ -26,13 +26,13 @@
         android:layout_height="wrap_content" 
         android:text="Khóa luân tốt nghiệp"
         android:textColor="@color/blue_grey_800"
-        android:textSize="23dp"
+        android:textSize="26dp"
         android:gravity="center"
         android:padding="5dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
+        android:textSize="23dp"
         android:textColor="@color/blue_grey_800"
         android:text="XÂY DỰNG ỨNG DỤNG QUẢN LÝ THỜI GIAN VÀ CÔNG VIỆC TRÊN THIẾT BỊ DI ĐỘNG"
         android:gravity="center"
@@ -40,7 +40,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:textColor="@color/blue_grey_800"
         android:text="Giáo viên hướng dẫn: ThS. Châu Thị Bảo Hà"
         android:padding="5dp"
@@ -50,20 +50,20 @@
         android:layout_height="wrap_content"
         android:text="Sinh viên thực hiện:"
         android:textColor="@color/blue_grey_800"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:paddingLeft="5dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Lê Anh Huân-14065861"
         android:textColor="@color/blue_grey_800"
-        android:textSize="16dp"
+        android:textSize="18dp"
         android:paddingLeft="15dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Võ Minh Cường-15024691"
         android:textColor="@color/blue_grey_800"
-        android:textSize="16dp"
+        android:textSize="18dp"
         android:paddingLeft="15dp"/>
 </LinearLayout>
