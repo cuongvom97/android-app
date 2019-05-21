@@ -39,6 +39,7 @@ import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
 import com.example.testapp.R;
+import com.example.testapp.SQLiteManager.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -73,11 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final static int REQUEST_CODE_NGAY=5000;
     public final static int RESULT_CODE_NGAY=5001;
     private RecyclerView dscv;
-    private List<CongViec> congViecList;
+    private List<CongViec> congViecList,listsqlite;
     private Custome_RecyclerView arrayAdapter;
     private LinearLayout layout_main;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayAdapter<CongViec> adapter;
+    private SearchView searchView;
+    private DBManager db;
     //FirebaseAuth myAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Google_sign_in.myAuth =FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         reference= FirebaseDatabase.getInstance().getReference();
+        db=new DBManager(this);
         layTheHien();
-        loadIU();
+        loadUI();
         sukien();
+
     }
-    private void loadIU()
+    private void loadUI()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,19 +119,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
         gridview.setAdapter(hwAdapter);
         loadSuKienTrenLich();
-        //Recyclerview
         congViecList=new ArrayList<>();
+        listsqlite=new ArrayList<>();
 
         //loadDSSearch();
+        loadDSSearch();
+        listsqlite=db.getALLCV();
+        Collections.sort(listsqlite);
         dscv.setHasFixedSize(true);
         layoutManager= new LinearLayoutManager(MainActivity.this);
-        arrayAdapter = new Custome_RecyclerView(congViecList);
+        arrayAdapter = new Custome_RecyclerView(listsqlite);
         dscv.setLayoutManager(layoutManager);
         dscv.setAdapter(arrayAdapter);
-        //layout_main.setVisibility(View.GONE);
 
         dscv.setVisibility(View.GONE);
-        //Hiện coongvieecj chưa hoàn thành
+        //Hiện công việc chưa hoàn thành
         get_danh_sach_cv_chua_hoan_thanh();
     }
     private void layTheHien()
@@ -204,14 +211,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.left_menu_main, menu);
         MenuItem searchItem = menu.findItem(R.id.search_left_menu_main);
-        SearchView searchView= (SearchView) searchItem.getActionView();
+        searchView= (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
+        searchView.setQueryHint("Tìm kiếm...");
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                layout_main.setVisibility(View.VISIBLE);
+                dscv.setVisibility(View.GONE);
+                return true;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                layout_main.setVisibility(View.VISIBLE);
-                dscv.setVisibility(View.GONE);
                 return false;
             }
 
@@ -234,7 +247,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.search_left_menu_main:
                 dscv.setVisibility(View.VISIBLE);
                 layout_main.setVisibility(View.GONE);
-                loadDSSearch();
+                break;
+            case R.id.home:
+                dscv.setVisibility(View.GONE);
+                layout_main.setVisibility(View.VISIBLE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -272,8 +288,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void layEmail()
     {
         Intent intent=getIntent();
-        //_emaim_signin=intent.getStringExtra(Google_sign_in.EMAIL_SIGN)+"";
-        _emaim_signin="cuongvo077@gmail.com";
+        _emaim_signin=intent.getStringExtra(Google_sign_in.EMAIL_SIGN)+"";
+        //_emaim_signin="cuongvo077@gmail.com";
     }
     //Gửi sang activity Activity_DSCongViec_Ngay
     private void guiDSCongViec_Ngay(String mail){
@@ -291,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (resultCode)
             {
                 case RESULT_CODE_NGAY:
-                    loadIU();
+                    loadUI();
                     break;
             }
         }
@@ -327,14 +343,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("Thông báo");
         builder.setMessage("Bạn có muốn đăng xuất");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Google_sign_in.myAuth.signOut();
                 loadGoogleSignin();
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -413,6 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadDSSearch()
     {
         congViecList.clear();
+        final int[] i = {0};
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -421,11 +438,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     CongViec cv=data.getValue(CongViec.class);
                     if(cv.getEmail().equals(_emaim_signin))
                     {
-                        congViecList.add(cv);
+                        db.addCV(cv, i[0]);
                     }
+                    i[0]++;
                 }
-                Collections.sort(congViecList);
-                arrayAdapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -462,7 +478,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 Collections.sort(congViecList);
                 show_danh_sach_cv_chua_hoan_thanh();
-                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -485,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             adapter=new Custom_DS_CongViec_CHT(this,R.layout.custom_ds_cong_viec_cht,congViecList);
             listViewcht.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
             builder.setView(view);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

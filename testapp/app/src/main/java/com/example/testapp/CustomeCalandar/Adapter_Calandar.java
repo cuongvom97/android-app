@@ -38,11 +38,11 @@ public class Adapter_Calandar extends BaseAdapter {
      */
     public GregorianCalendar pmonthmaxset;
     private GregorianCalendar selectedDate;
-    int firstDay;
-    int maxWeeknumber;
-    int maxP;
-    int calMaxP;
-    int mnthlength;
+    private int firstDay;
+    private int maxWeeknumber;
+    private int maxP;
+    private int calMaxP;
+    private int mnthlength;
     String itemvalue, curentDateString;
     DateFormat df;
 

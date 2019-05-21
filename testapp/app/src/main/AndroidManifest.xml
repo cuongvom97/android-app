@@ -25,7 +25,8 @@
         <activity android:name=".Activity.Activity_GioiThieu" />
         <activity android:name=".Activity.Activity_Tuan" />
         <activity android:name=".Activity.CapNhatCV" />
-        <activity android:name=".Activity.MainActivity" >
+        <activity android:name=".Activity.MainActivity"
+            android:launchMode="singleTop">
 
         </activity>
         <activity android:name=".Activity.Activity_DSCongViec_Ngay" />

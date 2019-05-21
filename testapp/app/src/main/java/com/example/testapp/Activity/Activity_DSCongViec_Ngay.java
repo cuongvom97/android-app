@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -51,7 +52,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private ImageButton next,pre;
     private ArrayAdapter<CongViec> arrayAdapter;
     private ArrayList<CongViec> arrayList;
-    private ArrayList<CongViec> listsapxep;
     private DatabaseReference reference;
     public static final int REQUEST_CODE=4000;
     public static  final int RESULT_CODETHEM=4001;
@@ -103,7 +103,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         arrayAdapterloc.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         dsloc.setAdapter(arrayAdapterloc);
         dsloc.setSelection(0);
-        listsapxep=new ArrayList<>();
         loadDefaulInfo();
     }
     private void sukien()
@@ -169,7 +168,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         }
         return super.onContextItemSelected(item);
     }
-
     private void hoanthanhCV() {
         arrayList.clear();
         arrayAdapter.notifyDataSetChanged();
@@ -178,23 +176,46 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    CongViec cv=data.getValue(CongViec.class);
-                    String key=data.getKey();
+                    final CongViec cv=data.getValue(CongViec.class);
+                    final String key=data.getKey();
                     if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
                     {
-                        String state=_cv.getTrangthai()+"";
-                        if(state.equals("Chưa hoàn thành"))
-                            state="Hoàn thành";
+                        final String[] state = {_cv.getTrangthai() + ""};
+                        if(state[0].equals("Hoàn thành"))
+                        {
+                            Toast.makeText(Activity_DSCongViec_Ngay.this, "Công việc đã hoàn thành rồi.", Toast.LENGTH_SHORT).show();
+                            loadDataListView(_tts);
+                            return;
+                        }
                         else
-                            state="Chưa hoàn thành";
-                        CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(),state,cv.getNhacnho());
-                        Map<String,Object> values=congViec.toMap();
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put("/CongViec/"+key,values);
-                        reference.updateChildren(childUpdates);
+                        {
+                            AlertDialog.Builder builder=new AlertDialog.Builder(Activity_DSCongViec_Ngay.this);
+                            builder.setTitle("Thông báo");
+                            builder.setMessage("Bạn có chắc?");
+                            builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    state[0] ="Hoàn thành";
+                                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(), state[0],cv.getNhacnho());
+                                    Map<String,Object> values=congViec.toMap();
+                                    Map<String, Object> childUpdates = new HashMap<>();
+                                    childUpdates.put("/CongViec/"+key,values);
+                                    reference.updateChildren(childUpdates);
+                                    loadDataListView(_tts);
+                                }
+                            });
+                            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            AlertDialog dialog=builder.create();
+                            dialog.show();
+                        }
+
                     }
                 }
-                loadDataListView(_tts);
             }
 
             @Override
