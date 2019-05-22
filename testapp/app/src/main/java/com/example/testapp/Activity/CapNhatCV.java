@@ -337,7 +337,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         }
     }
     private void send_to_Activity_DSCongViec(int code){
-        Intent intent=getIntent();
+        Intent intent=new Intent();
         String ngay=ngaybatdau.getText()+"";
         intent.putExtra("ngay_duoc_cap_nhat",ngay);
         setResult(code,intent);
@@ -370,7 +370,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
                         databaseReference.updateChildren(childUpdates);
-                        Toast.makeText(CapNhatCV.this, "Thành công.", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
             }

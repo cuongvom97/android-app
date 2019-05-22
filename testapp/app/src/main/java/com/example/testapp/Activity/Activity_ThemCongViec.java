@@ -477,17 +477,18 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         if(_vitrilap==5)
                         {
                             long khoangcach=datefinish.getTime()-dateStart.getTime();
-                            long kc=khoangcach/(12*4*7*24*60*60*1000);
-                            if (kc<0)
+                            long kc=TimeUnit.MILLISECONDS.toDays(khoangcach);
+                            long lap=kc/365;
+                            if (kc<0||kc<365)
                             {
-                                Toast.makeText(this, "Năm được chọn phải sau tháng hiện tại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Năm được chọn phải sau năm hiện tại", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             else
                             {
                                 if (_vitrithongbao!=0)
                                 {
-                                    while (kc>=0)
+                                    while (lap>=0)
                                     {
                                         themCVCSDL(dateStart);
                                         setchuongBao(hourthongbao);
@@ -495,17 +496,17 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         dateStart=callap.getTime();
                                         calthongbao.add(Calendar.YEAR,1);
                                         hourthongbao=calthongbao.getTime();
-                                        kc--;
+                                        lap--;
                                     }
                                 }
                                 else
                                 {
-                                    while (kc>=0)
+                                    while (lap>=0)
                                     {
                                         themCVCSDL(dateStart);
                                         callap.add(Calendar.YEAR,1);
                                         dateStart=callap.getTime();
-                                        kc--;
+                                        lap--;
                                     }
                                 }
                             }
@@ -855,7 +856,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
     }
     private void guiActivity_DSCongViec_Ngay(int resultcode)
     {
-        Intent intent=getIntent();
+        Intent intent=new Intent();
         String ngay=ngaybatdau.getText()+"";
         intent.putExtra("ngay_duoc_them",ngay);
         setResult(resultcode,intent);

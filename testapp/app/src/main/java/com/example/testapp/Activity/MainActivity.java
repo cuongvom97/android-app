@@ -1,11 +1,14 @@
 package com.example.testapp.Activity;
 import android.app.DatePickerDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -59,6 +62,8 @@ import java.util.List;
 import java.util.Locale;
 
 import lecho.lib.hellocharts.model.AxisValue;
+
+import static android.support.v7.widget.SearchView.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private DatabaseReference reference;
@@ -116,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
         hwAdapter = new Adapter_Calandar(this, cal_month,LuaChonTrongLich.luaChonTrongLichArrayList);
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+        int thang=cal_month.get(GregorianCalendar.MONTH)+1;
+        tv_month.setText("Tháng "+thang+" năm "+cal_month.get(GregorianCalendar.YEAR));
         gridview.setAdapter(hwAdapter);
         loadSuKienTrenLich();
         congViecList=new ArrayList<>();
@@ -152,6 +158,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         gridview.setOnItemClickListener(this);
         dangxuat.setOnClickListener(this);
         tv_month.setOnClickListener(this);
+        arrayAdapter.setOnItemClickListener(new Custome_RecyclerView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                CongViec cv=listsqlite.get(position);
+                _ngay_hientai=cv.getNgaybatdau()+"";
+                guiDSCongViec_Ngay(_emaim_signin);
+            }
+        });
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -210,19 +224,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.left_menu_main, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.search_left_menu_main);
         searchView= (SearchView) searchItem.getActionView();
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Tìm kiếm...");
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        searchView.setIconifiedByDefault(true);
+        searchView.setIconified(false);
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
-            public boolean onClose() {
+            public boolean onMenuItemActionCollapse(MenuItem item) {
                 layout_main.setVisibility(View.VISIBLE);
                 dscv.setVisibility(View.GONE);
                 return true;
             }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
         });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnCloseListener(new OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -282,7 +313,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void refreshCalendar() {
         hwAdapter.refreshDays();
         hwAdapter.notifyDataSetChanged();
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+        int thang=cal_month.get(GregorianCalendar.MONTH)+1;
+        tv_month.setText("Tháng "+thang+" năm "+cal_month.get(GregorianCalendar.YEAR));
     }
     //Lấy email vừa đăng nhập
     private void layEmail()
@@ -409,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                   int monthOfYear,
                                   int dayOfMonth) {
                 cal_month.set(GregorianCalendar.MONTH,monthOfYear);
+                cal_month.set(GregorianCalendar.YEAR,year);
+                cal_month.set(GregorianCalendar.DATE,dayOfMonth);
                 refreshCalendar();
             }
         };

@@ -163,59 +163,60 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 showDialogHoi();
                 break;
             case R.id.contextmenu_hoanthanh:
-                hoanthanhCV();
+                showHoiHT();
                 break;
         }
         return super.onContextItemSelected(item);
     }
+    private void showHoiHT()
+    {
+        if(_cv.getTrangthai().equals("Hoàn thành"))
+        {
+            Toast.makeText(Activity_DSCongViec_Ngay.this, "Công việc đã hoàn thành rồi.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
+            AlertDialog.Builder builder=new AlertDialog.Builder(Activity_DSCongViec_Ngay.this);
+            builder.setTitle("Thông báo");
+            builder.setMessage("Bạn có chắc?");
+            builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    hoanthanhCV();
+                    Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog=builder.create();
+            dialog.show();
+        }
+
+    }
     private void hoanthanhCV() {
-        arrayList.clear();
-        arrayAdapter.notifyDataSetChanged();
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot data:dataSnapshot.getChildren())
                 {
-                    final CongViec cv=data.getValue(CongViec.class);
-                    final String key=data.getKey();
-                    if(cv.getTieude().equals(_cv.getTieude())&&key.equals(_key))
+                    CongViec cv=data.getValue(CongViec.class);
+                    String key=data.getKey();
+                    if(cv.getEmail().equals(_email)&&key.equals(_key))
                     {
-                        final String[] state = {_cv.getTrangthai() + ""};
-                        if(state[0].equals("Hoàn thành"))
-                        {
-                            Toast.makeText(Activity_DSCongViec_Ngay.this, "Công việc đã hoàn thành rồi.", Toast.LENGTH_SHORT).show();
-                            loadDataListView(_tts);
-                            return;
-                        }
-                        else
-                        {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(Activity_DSCongViec_Ngay.this);
-                            builder.setTitle("Thông báo");
-                            builder.setMessage("Bạn có chắc?");
-                            builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    state[0] ="Hoàn thành";
-                                    CongViec congViec=new CongViec(_cv.getTieude(),_cv.getGhichu(),_email,_cv.getNgaybatdau(),_cv.getGiobatdau(),_cv.getGioketthuc(),_cv.getTennhan(), state[0],cv.getNhacnho());
-                                    Map<String,Object> values=congViec.toMap();
-                                    Map<String, Object> childUpdates = new HashMap<>();
-                                    childUpdates.put("/CongViec/"+key,values);
-                                    reference.updateChildren(childUpdates);
-                                    loadDataListView(_tts);
-                                }
-                            });
-                            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            AlertDialog dialog=builder.create();
-                            dialog.show();
-                        }
-
+                        CongViec congViec=new CongViec(cv.getTieude(),cv.getGhichu(),_email,
+                                cv.getNgaybatdau(),cv.getGiobatdau(),cv.getGioketthuc(),cv.getTennhan(),"Hoàn thành",
+                                null);
+                        Map<String,Object> values=congViec.toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put("/CongViec/"+key,values);
+                        reference.updateChildren(childUpdates);
                     }
                 }
+                loadDataListView(_tts);
             }
 
             @Override
@@ -235,6 +236,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 xoaCV();
+                Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công.", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -256,12 +258,12 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                     String key=data.getKey();
                     if(cv.getTieude().equalsIgnoreCase(_tieude)&&key.equals(_key))
                     {
-                        CongViec congViec=new CongViec(null,null,null,null,null,null,null,null,null);
+                        CongViec congViec=new CongViec(null,null,null,null,
+                                null,null,null,null,null);
                         Map<String,Object> values=congViec.toMap();
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
                         reference.updateChildren(childUpdates);
-                        Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 loadDataListView(_tts);
@@ -318,11 +320,11 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 case RESULT_CODETHEM:
                     _ngay=data.getStringExtra("ngay_duoc_chon");
                     reloadActivity();
-                    loadDataListView(_tts);
                     break;
                 case RESULT_CODECAPNHAT:
                     _ngay=data.getStringExtra("ngay_duoc_cap_nhat");
-                    loadDataListView(_tts);
+                    reloadActivity();
+                    Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -332,6 +334,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         Intent intent=getIntent();
         finish();
         startActivity(intent);
+        loadDataListView(_tts);
 
     }
     @Override

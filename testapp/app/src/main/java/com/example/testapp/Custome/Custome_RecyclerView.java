@@ -21,12 +21,22 @@ import java.util.List;
 public class Custome_RecyclerView extends RecyclerView.Adapter<Custome_RecyclerView.RecyclerViewHolder> implements Filterable {
     private List<CongViec> list;
     private List<CongViec> listfull;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_recyclerview,viewGroup,false);
-        return new RecyclerViewHolder(v);
+        RecyclerViewHolder viewHolder=new RecyclerViewHolder(v,mListener);
+        return viewHolder;
     }
 
     @Override
@@ -83,10 +93,10 @@ public class Custome_RecyclerView extends RecyclerView.Adapter<Custome_RecyclerV
             notifyDataSetChanged();
         }
     };
-    class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
         TextView tieude,ghichu,nhan,gio,ngay;
         LinearLayout layout;
-        RecyclerViewHolder(View view)
+        public RecyclerViewHolder(View view, final OnItemClickListener listener)
         {
             super(view);
             tieude=view.findViewById(R.id.custom_recyclerview_tieude);
@@ -95,7 +105,17 @@ public class Custome_RecyclerView extends RecyclerView.Adapter<Custome_RecyclerV
             gio=view.findViewById(R.id.custom_recyclerview_gio);
             ngay=view.findViewById(R.id.custom_recyclerview_ngay);
             layout=view.findViewById(R.id.layout_recyclerview);
-
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
     public Custome_RecyclerView(List<CongViec> congViecList)
