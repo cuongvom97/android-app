@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.testapp.Custome.CustomeXemDanhSachCV;
 import com.example.testapp.Model.CongViec;
 import com.example.testapp.R;
+import com.example.testapp.SQLiteManager.DBManager;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,6 +68,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private String[] arrdsloc;
     private Calendar calendar;
     private Date date;
+    private DBManager db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         layTheHien();
         loadUI();
         sukien();
+        //db=new DBManager(this);
     }
     private void layTheHien()
     {
@@ -157,12 +160,15 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         switch (item.getItemId())
         {
             case R.id.contextmenu_sua:
+
                 suaCV();
                 break;
             case R.id.contextmenu_xoa:
+
                 showDialogHoi();
                 break;
             case R.id.contextmenu_hoanthanh:
+
                 showHoiHT();
                 break;
         }

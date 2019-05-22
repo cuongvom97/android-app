@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layTheHien();
         loadUI();
         sukien();
-
     }
     private void loadUI()
     {
@@ -127,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadSuKienTrenLich();
         congViecList=new ArrayList<>();
         listsqlite=new ArrayList<>();
-
         //loadDSSearch();
         loadDSSearch();
         listsqlite=db.getALLCV();
@@ -238,6 +236,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 layout_main.setVisibility(View.VISIBLE);
                 dscv.setVisibility(View.GONE);
+                deleteFile(_emaim_signin);
+                loadDSSearch();
                 return true;
             }
 
@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.home:
                 dscv.setVisibility(View.GONE);
                 layout_main.setVisibility(View.VISIBLE);
+                loadDSSearch();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -460,9 +461,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pic.setTitle("Chọn ngày bạn muốn");
         pic.show();
     }
-    private void loadDSSearch()
+    public  void loadDSSearch()
     {
-        congViecList.clear();
         final int[] i = {0};
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

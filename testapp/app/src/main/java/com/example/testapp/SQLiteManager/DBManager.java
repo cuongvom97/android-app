@@ -73,6 +73,22 @@ public class DBManager extends SQLiteOpenHelper {
 
         db.close();
     }
+    public void deleteTable(String email)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, new String[] { TIEUDE,
+                        GHICHU, EMAIL,NHAN,NGAYBATDAU,GIOKETTHUC,GIOBATDAU,TRANGTHAI,NHACNHO },null,
+                null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                db.delete(TABLE_NAME,ID + " = ?",
+                        new String[] { String.valueOf(1) });
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+    }
     //lấy danh sách
     public List<CongViec> getALLCV(){
         List<CongViec> list=new ArrayList<>();
