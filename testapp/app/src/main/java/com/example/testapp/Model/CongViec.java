@@ -177,7 +177,7 @@ public class CongViec implements Serializable,Comparable<CongViec> {
         String muigio=strrphutbd[1];
         int phutbd=Integer.parseInt(strrphutbd[0]);
         if(muigio.equals("PM"))
-            phutbd=phutbd+12;
+            giobd=giobd+12;
         cal.set(y,m,d,giobd,phutbd);
         b=cal.getTime();
         int result=a.compareTo(b);
