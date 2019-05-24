@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +33,7 @@ import com.example.testapp.Model.CongViec;
 import com.example.testapp.Model.Nhan;
 import com.example.testapp.R;
 import com.example.testapp.ReceiverManager.BaoReceiver;
+import com.example.testapp.SQLiteManager.DBManager;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,6 +67,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     Calendar cal,calnow,callap,calthongbao,_calgiobd,_calgioht;
     Date dateStart,hourStart,hourFinish,hourthongbao;
     Date datenow,hournow;
+    private DBManager db;
     //Báo thức
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
@@ -76,6 +79,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         layTheHien();
         loadUI();
         sukien();
+        db=new DBManager(this);
     }
     private void layTheHien()
     {
@@ -111,6 +115,13 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         calnow= Calendar.getInstance();
         datenow=calnow.getTime();
         hournow=calnow.getTime();
+        //lấy ngày hiện tại của hệ thống
+        cal=Calendar.getInstance();
+        callap=Calendar.getInstance();
+        calthongbao=Calendar.getInstance();
+        _calgioht=Calendar.getInstance();
+        _calgiobd=Calendar.getInstance();
+
         arrthongbao=getResources().getStringArray(R.array.dsthongbaocv);
         loadDataSpinner();
         layKeyCapNhat();
@@ -221,6 +232,8 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 showDialogThongBao();
                 break;
             case R.id.capnhatcv_btnthoat:
+                Intent intent=new Intent();
+                setResult(Activity_DSCongViec_Ngay.RESULT_CANCELED,intent);
                 finish();
                 break;
         }
@@ -370,6 +383,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
                         databaseReference.updateChildren(childUpdates);
+                        db.Update(cv,key);
                         return;
                     }
 
@@ -407,58 +421,41 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
      */
     public void getDefaultInfor()
     {
-        //lấy ngày hiện tại của hệ thống
-        cal=Calendar.getInstance();
-        callap=Calendar.getInstance();
-        calthongbao=Calendar.getInstance();
-        _calgioht=Calendar.getInstance();
-        _calgiobd=Calendar.getInstance();
+        //Lấy ngày, tháng, năm từ bên ngày
         String s=ngaybatdau.getText()+"";
         String strr[]=s.split("/");
         int d=Integer.parseInt(strr[0]);
         int m=Integer.parseInt(strr[1])-1;
         int y=Integer.parseInt(strr[2]);
-        SimpleDateFormat dft=null;
-        //Định dạng ngày / tháng /năm
-        dft=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String strDate=dft.format(cal.getTime());
-        //Định dạng giờ phút am/pm
-        dft=new SimpleDateFormat("hh:mm a",Locale.getDefault());
+        //Lấy giờ, phút bắt đầu công việc từ ngày
         String strgiobd=giobatdau.getText()+"";
         String strrgiobd[]=strgiobd.split(":");
         int hbd=Integer.parseInt(strrgiobd[0]);
-        String tach=strrgiobd[1];
-        String ppbd[]=tach.split(" ");
-        int pbd=Integer.parseInt(ppbd[0]);
-        cal.set(y,m,d,hbd,pbd);
-        _calgiobd.setTime(cal.getTime());
-        String muigiobd=ppbd[1];
-        if(muigiobd.equals("PM"))
-            hbd=hbd+12;
-        _calgiobd.set(y,m,d,hbd,pbd);
-        String strTime=dft.format(_calgiobd.getTime());
-        giobatdau.setText(strTime);
-        dateStart=_calgiobd.getTime();
-        hourStart=_calgiobd.getTime();
+        int pbd=Integer.parseInt(strrgiobd[1]);
+        //Lấy giờ, phút hoàn thành công việc từ ngày
         String strgioht=giohoanthanh.getText()+"";
         String strrgioht[]=strgioht.split(":");
         int hht=Integer.parseInt(strrgioht[0]);
-        String tach1=strrgioht[1];
-        String ppbd1[]=tach1.split(" ");
-        int pht=Integer.parseInt(ppbd1[0]);
-        cal.set(y,m,d,hht,pht);
-        _calgioht.setTime(cal.getTime());
-        String muigioht=ppbd1[1];
-        if(muigioht.equals("PM"))
-            hht=hht+12;
+        int pht=Integer.parseInt(strrgioht[1]);
+        SimpleDateFormat dft=null;
+        //Set giá trị cho calendar ngày
+        cal.set(y,m,d);
+        //Lưu giá trị so sánh
+        dateStart=cal.getTime();
+        //Định dạng ngày
+        dft=new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        //Set giá trị cho calendar gio bắt đầu
+        _calgiobd.set(y,m,d,hbd,pbd);
+        hourStart=_calgiobd.getTime();
+        //Set giá trị cho calendar giờ hoàn thành
         _calgioht.set(y,m,d,hht,pht);
         hourFinish=_calgioht.getTime();
-        strTime=dft.format(_calgioht.getTime());
-        giohoanthanh.setText(strTime);
+        calthongbao.setTime(_calgioht.getTime());
+        hourthongbao=calthongbao.getTime();
         //lấy giờ theo 24 để lập trình theo Tag
         dft=new SimpleDateFormat("HH:mm",Locale.getDefault());
-        giobatdau.setTag(dft.format(cal.getTime()));
-        giohoanthanh.setTag(dft.format(cal.getTime()));
+        giobatdau.setTag(dft.format(_calgiobd.getTime()));
+        giohoanthanh.setTag(dft.format(_calgioht.getTime()));
         //gán cal.getTime() cho ngày hoàn thành và giờ hoàn thành
 
 
@@ -483,7 +480,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                         (dayOfMonth) +"/"+thang+"/"+year);
                 //Lưu vết lại biến ngày hoàn thành
                 cal.set(year, monthOfYear, dayOfMonth);
-                dateStart=cal.getTime();
+                getDefaultInfor();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong DatePickerDialog
@@ -508,18 +505,15 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             public void onTimeSet(TimePicker view,
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
+                //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
-                String phutam=minute+"";
-                if(phutam.length()<=1)
-                    phutam="0"+phutam;
-                thongbao.setText
-                        (giotam +":"+minute +(hourOfDay>12?" PM":" AM"));
+                String phuttam=minute+"";
+                if(phuttam.length()<=1)
+                    phuttam="0"+phuttam;
+                thongbao.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 thongbao.setTag(s);
                 //lưu vết lại giờ vào hourFinish
@@ -537,7 +531,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         TimePickerDialog time=new TimePickerDialog(
                 CapNhatCV.this,
                 callback, gio, phut, true);
-        time.setTitle("Chọn giờ bắt đầu");
+        time.setTitle("Chọn giờ thông báo");
         time.show();
     }
     public void showTimePickerDialogStart()
@@ -547,24 +541,19 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
-                String phutam=minute+"";
-                if(phutam.length()<=1)
-                    phutam="0"+phutam;
-                giobatdau.setText
-                        (giotam +":"+phutam +(hourOfDay>12?" PM":" AM"));
+                String phuttam=minute+"";
+                if(phuttam.length()<=1)
+                    phuttam="0"+phuttam;
+                giobatdau.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 giobatdau.setTag(s);
                 //lưu vết lại giờ vào hourFinish
                 _calgiobd.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 _calgiobd.set(Calendar.MINUTE, minute);
                 hourStart=_calgiobd.getTime();
-                dateStart=_calgiobd.getTime();
             }
         };
         //các lệnh dưới này xử lý ngày giờ trong TimePickerDialog
@@ -586,17 +575,13 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
-                String phutam=minute+"";
-                if(phutam.length()<=1)
-                    phutam="0"+phutam;
-                giohoanthanh.setText
-                        (giotam +":"+phutam +(hourOfDay>12?" PM":" AM"));
+                String phuttam=minute+"";
+                if(phuttam.length()<=1)
+                    phuttam="0"+phuttam;
+                giohoanthanh.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 giohoanthanh.setTag(s);
                 //lưu vết lại giờ vào hourFinish

@@ -41,6 +41,8 @@ import com.example.testapp.Custome.Custome_RecyclerView;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
+import com.example.testapp.Model.CongViecSQlite;
+import com.example.testapp.Model.Nhan;
 import com.example.testapp.R;
 import com.example.testapp.SQLiteManager.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layTheHien();
         loadUI();
         sukien();
+
     }
     private void loadUI()
     {
@@ -126,16 +129,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadSuKienTrenLich();
         congViecList=new ArrayList<>();
         listsqlite=new ArrayList<>();
-        //loadDSSearch();
+        //Load danh sách tìm kiếm
         loadDSSearch();
         listsqlite=db.getALLCV();
-        Collections.sort(listsqlite);
+        Toast.makeText(this, ""+listsqlite.size(), Toast.LENGTH_SHORT).show();
         dscv.setHasFixedSize(true);
         layoutManager= new LinearLayoutManager(MainActivity.this);
         arrayAdapter = new Custome_RecyclerView(listsqlite);
         dscv.setLayoutManager(layoutManager);
         dscv.setAdapter(arrayAdapter);
-
         dscv.setVisibility(View.GONE);
         //Hiện công việc chưa hoàn thành
         get_danh_sach_cv_chua_hoan_thanh();
@@ -236,8 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 layout_main.setVisibility(View.VISIBLE);
                 dscv.setVisibility(View.GONE);
-                deleteFile(_emaim_signin);
-                loadDSSearch();
+                arrayAdapter.notifyDataSetChanged();
                 return true;
             }
 
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.home:
                 dscv.setVisibility(View.GONE);
                 layout_main.setVisibility(View.VISIBLE);
-                loadDSSearch();
+                arrayAdapter.notifyDataSetChanged();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -370,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         Intent intent=new Intent(this,Google_sign_in.class);
         startActivity(intent);
+        finish();
     }
     private void showDialogHoi()
     {
@@ -417,6 +419,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 loadSuKienTrenLich();
+                loadDSSearch();
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -461,20 +465,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pic.setTitle("Chọn ngày bạn muốn");
         pic.show();
     }
-    public  void loadDSSearch()
+    public void deleteTableCV()
     {
-        final int[] i = {0};
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot data:dataSnapshot.getChildren())
                 {
+                    String key=data.getKey();
                     CongViec cv=data.getValue(CongViec.class);
                     if(cv.getEmail().equals(_emaim_signin))
                     {
-                        db.addCV(cv, i[0]);
+                        for (CongViecSQlite cvlite:db.getALLCVSQlite())
+                        {
+                            if(cvlite.getId().equals(key))
+                            {
+                                db.deleteCV(key);
+                            }
+                        }
                     }
-                    i[0]++;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public  void loadDSSearch()
+    {
+        listsqlite.clear();
+        deleteTableCV();
+        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
+                {
+                    String key=data.getKey();
+                    CongViec cv=data.getValue(CongViec.class);
+                    if(cv.getEmail().equals(_emaim_signin))
+                    {
+                        db.addCV(cv,key);
+                    }
                 }
             }
             @Override

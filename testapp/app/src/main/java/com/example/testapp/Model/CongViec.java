@@ -152,12 +152,7 @@ public class CongViec implements Serializable,Comparable<CongViec> {
         int y=Integer.parseInt(strrngay[0]);
         String strrgiobd[]=this.giobatdau.split(":");
         int giobd=Integer.parseInt(strrgiobd[0]);
-        String strgiobd=strrgiobd[1];
-        String strrphutbd []=strgiobd.split(" ");
-        String muigio=strrphutbd[1];
-        int phutbd=Integer.parseInt(strrphutbd[0]);
-        if(muigio.equals("PM"))
-            phutbd=phutbd+12;
+        int phutbd=Integer.parseInt(strrgiobd[1]);
         cal.set(y,m,d,giobd,phutbd);
         a=cal.getTime();
     }
@@ -172,12 +167,7 @@ public class CongViec implements Serializable,Comparable<CongViec> {
         int y=Integer.parseInt(strrngay[0]);
         String strrgiobd[]=o.getGiobatdau().split(":");
         int giobd=Integer.parseInt(strrgiobd[0]);
-        String strgiobd=strrgiobd[1];
-        String strrphutbd []=strgiobd.split(" ");
-        String muigio=strrphutbd[1];
-        int phutbd=Integer.parseInt(strrphutbd[0]);
-        if(muigio.equals("PM"))
-            giobd=giobd+12;
+        int phutbd=Integer.parseInt(strrgiobd[1]);
         cal.set(y,m,d,giobd,phutbd);
         b=cal.getTime();
         int result=a.compareTo(b);

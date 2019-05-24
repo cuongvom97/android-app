@@ -57,11 +57,11 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     public static final int REQUEST_CODE=4000;
     public static  final int RESULT_CODETHEM=4001;
     public static  final int RESULT_CODECAPNHAT=4002;
-    public static String EMAIL_THEMCV_NGAY="emailthemcv";
-    public static String EMAIL_CAPNHATCV_NGAY="cncv";
-    public static String NGAYBD_THEMCV_NGAY="ngaybdd";
-    public  static String KEYCN="keycn";
-    public static String CVCAPNHAT="capnhat";
+    public static String EMAIL_THEMCV_NGAY="email_themcv";
+    public static String EMAIL_CAPNHATCV_NGAY="email_cap_nhat_cv";
+    public static String NGAYBD_THEMCV_NGAY="ngay_bd_themcv";
+    public  static String KEYCN="key_cn";
+    public static String CVCAPNHAT="cong_viec_cap_nhat";
     private String _ngay="",_email="",_tt="",_tts="";
     private static String _tieude="",_key="";
     private static CongViec _cv=null;
@@ -77,7 +77,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         layTheHien();
         loadUI();
         sukien();
-        //db=new DBManager(this);
+        db=new DBManager(this);
     }
     private void layTheHien()
     {
@@ -182,24 +182,42 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             return;
         }
         else {
-            AlertDialog.Builder builder=new AlertDialog.Builder(Activity_DSCongViec_Ngay.this);
-            builder.setTitle("Thông báo");
-            builder.setMessage("Bạn có chắc?");
-            builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    hoanthanhCV();
-                    Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công", Toast.LENGTH_SHORT).show();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            try {
+                Calendar calht = Calendar.getInstance();
+                Date a = calht.getTime();
+                Date b= df.parse(_cv.getNgaybatdau()+"");
+                int check=a.compareTo(b);
+                if(check>=0)
+                {
+                    AlertDialog.Builder builder=new AlertDialog.Builder(Activity_DSCongViec_Ngay.this);
+                    builder.setTitle("Thông báo");
+                    builder.setMessage("Bạn có chắc?");
+                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            hoanthanhCV();
+                            Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }).setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog dialog=builder.create();
+                    dialog.show();
                 }
-            });
-            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
+                else
+                {
+                    Toast.makeText(Activity_DSCongViec_Ngay.this,
+                            "Công việc hiện tại không được đánh hoàn thành",
+                            Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            });
-            AlertDialog dialog=builder.create();
-            dialog.show();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -220,6 +238,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
                         reference.updateChildren(childUpdates);
+                        db.Update(cv,key);
                     }
                 }
                 loadDataListView(_tts);
@@ -270,6 +289,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put("/CongViec/"+key,values);
                         reference.updateChildren(childUpdates);
+                        db.deleteCV(key);
                     }
                 }
                 loadDataListView(_tts);
@@ -324,13 +344,19 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             switch (resultCode)
             {
                 case RESULT_CODETHEM:
-                    _ngay=data.getStringExtra("ngay_duoc_chon");
-                    reloadActivity();
+                    _ngay=data.getStringExtra("ngay_duoc_them");
+                    ngay.setText(_ngay);
+                    Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
+                    loadDataListView(_tts);
                     break;
                 case RESULT_CODECAPNHAT:
                     _ngay=data.getStringExtra("ngay_duoc_cap_nhat");
-                    reloadActivity();
+                    ngay.setText(_ngay);
                     Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
+                    loadDataListView(_tts);
+                    break;
+                case RESULT_CANCELED:
+                    loadDataListView(_tts);
                     break;
             }
         }
@@ -366,7 +392,6 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
                 }
 
                 @Override

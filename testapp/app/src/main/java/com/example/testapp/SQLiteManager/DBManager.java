@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.testapp.Model.CongViec;
+import com.example.testapp.Model.CongViecSQlite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class DBManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sqlQuery = "CREATE TABLE "+TABLE_NAME +" (" +
-                ID +" integer primary key, "+
+                ID +" TEXT primary key, "+
                 TIEUDE + " TEXT, "+
                 EMAIL +" TEXT, "+
                 GHICHU+" TEXT," +
@@ -55,7 +56,7 @@ public class DBManager extends SQLiteOpenHelper {
         System.out.println("Xóa thành công");
     }
     //thêm công việc
-    public void addCV(CongViec cv,int id){
+    public void addCV(CongViec cv,String id){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TIEUDE, cv.getTieude());
@@ -67,27 +68,38 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(TRANGTHAI, cv.getTrangthai());
         values.put(NHACNHO, cv.getNhacnho());
         values.put(ID, id);
+        values.put(EMAIL,cv.getEmail());
         //Neu de null thi khi value bang null thi loi
 
         db.insert(TABLE_NAME,null,values);
-
         db.close();
+        System.out.println("Thêm thành công"+id);
     }
-    public void deleteTable(String email)
-    {
+    public void deleteCV(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] { TIEUDE,
-                        GHICHU, EMAIL,NHAN,NGAYBATDAU,GIOKETTHUC,GIOBATDAU,TRANGTHAI,NHACNHO },null,
-                null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                db.delete(TABLE_NAME,ID + " = ?",
-                        new String[] { String.valueOf(1) });
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
+        db.delete(TABLE_NAME, ID + " = ?",
+                new String[] { String.valueOf(id) });
         db.close();
+        System.out.println("Xóa thành công"+id);
+    }
+    public int Update(CongViec cv,String key){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(TIEUDE, cv.getTieude());
+        values.put(GHICHU, cv.getGhichu());
+        values.put(NGAYBATDAU, cv.getNgaybatdau());
+        values.put(GIOBATDAU, cv.getGiobatdau());
+        values.put(GIOKETTHUC, cv.getGioketthuc());
+        values.put(NHAN, cv.getTennhan());
+        values.put(TRANGTHAI, cv.getTrangthai());
+        values.put(NHACNHO, cv.getNhacnho());
+        values.put(ID, key);
+        values.put(EMAIL,cv.getEmail());
+
+        return db.update(TABLE_NAME,values,ID +"=?",new String[] {key});
+
+
     }
     //lấy danh sách
     public List<CongViec> getALLCV(){
@@ -109,6 +121,33 @@ public class DBManager extends SQLiteOpenHelper {
                 cv.setGiobatdau(cursor.getString(6));
                 cv.setTrangthai(cursor.getString(7));
                 cv.setNhacnho(cursor.getString(8));
+                list.add(cv);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+    public List<CongViecSQlite> getALLCVSQlite(){
+        List<CongViecSQlite> list=new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, new String[] { TIEUDE,
+                        GHICHU, EMAIL,NHAN,NGAYBATDAU,GIOKETTHUC,GIOBATDAU,TRANGTHAI,NHACNHO,ID },null,
+                null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                CongViecSQlite cv = new CongViecSQlite();
+                cv.setTieude(cursor.getString(0));
+                cv.setGhichu(cursor.getString(1));
+                cv.setEmail(cursor.getString(2));
+                cv.setTennhan(cursor.getString(3));
+                cv.setNgaybatdau(cursor.getString(4));
+                cv.setGioketthuc(cursor.getString(5));
+                cv.setGiobatdau(cursor.getString(6));
+                cv.setTrangthai(cursor.getString(7));
+                cv.setNhacnho(cursor.getString(8));
+                cv.setId(cursor.getString(9));
                 list.add(cv);
             } while (cursor.moveToNext());
         }

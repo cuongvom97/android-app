@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -281,6 +282,8 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
                         listcv_inday.add(cv);
                         adapter_dayselected.notifyDataSetChanged();
                     }
+                    Collections.sort(listcv_inday);
+                    adapter_dayselected.notifyDataSetChanged();
                 }
             }
 

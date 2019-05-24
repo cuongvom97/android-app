@@ -143,17 +143,20 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         {
             case R.id.themcv_btnthem:
                 themCongViec();
-                resetForm();
-                break;
-            case R.id.themcv_btnthoat:
                 guiActivity_DSCongViec_Ngay(Activity_DSCongViec_Ngay.RESULT_CODETHEM);
                 break;
+            case R.id.themcv_btnthoat:
+                guiActivity_DSCongViec_Ngay(Activity_DSCongViec_Ngay.RESULT_CANCELED);
+                break;
             case R.id.tv_themcv_ngaybatdau:
-                showDatePickerDialogStart();break;
+                //showDatePickerDialogStart();
+                break;
             case R.id.tv_themcv_giobatdau:
-                showTimePickerDialogStart();break;
+                showTimePickerDialogStart();
+                break;
             case R.id.tv_themcv_gioht:
-                showTimePickerDialogFinish();break;
+                showTimePickerDialogFinish();
+                break;
             case R.id.themcv_tvlap:
                 showDialogLap();
             break;
@@ -595,7 +598,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         callap.set(y,m,d);
         SimpleDateFormat dft=null;
         //Định dạng giờ phút am/pm
-        dft=new SimpleDateFormat("hh:mm a",Locale.getDefault());
+        dft=new SimpleDateFormat("HH:mm",Locale.getDefault());
         cal.add(Calendar.MINUTE,10);
         String strTime=dft.format(cal.getTime());
         hourStart=cal.getTime();
@@ -675,7 +678,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                 dateStart=cal.getTime();
                 cal.add(Calendar.MINUTE,10);
                 hourStart=cal.getTime();
-                SimpleDateFormat df=new SimpleDateFormat("hh:mm a",Locale.getDefault());
+                SimpleDateFormat df=new SimpleDateFormat("HH:mm",Locale.getDefault());
                 giobatdau.setText(df.format(cal.getTime())+"");
                 cal.add(Calendar.MINUTE,15);
                 hourFinish=cal.getTime();
@@ -706,17 +709,13 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
                 String phuttam=minute+"";
                 if(phuttam.length()<=1)
                     phuttam="0"+phuttam;
-                thongbao.setText
-                        (giotam +":"+phuttam +(hourOfDay>12?" PM":" AM"));
+                thongbao.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 thongbao.setTag(s);
                 //lưu vết lại giờ vào hourFinish
@@ -744,17 +743,13 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
                 String phuttam=minute+"";
                 if(phuttam.length()<=1)
                     phuttam="0"+phuttam;
-                giobatdau.setText
-                        (giotam +":"+phuttam +(hourOfDay>12?" PM":" AM"));
+                giobatdau.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 giobatdau.setTag(s);
                 //lưu vết lại giờ vào hourFinish
@@ -781,18 +776,15 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
             public void onTimeSet(TimePicker view,
                                   int hourOfDay, int minute) {
                 //Xử lý lưu giờ và AM,PM
+                //Xử lý lưu giờ và AM,PM
                 String s=hourOfDay +":"+minute;
-                int hourTam=hourOfDay;
-                if(hourTam>12)
-                    hourTam=hourTam-12;
-                String giotam=hourTam+"";
+                String giotam=hourOfDay+"";
                 if(giotam.length()<=1)
                     giotam="0"+giotam;
                 String phuttam=minute+"";
                 if(phuttam.length()<=1)
                     phuttam="0"+phuttam;
-                giohoanthanh.setText
-                        (giotam +":"+phuttam +(hourOfDay>12?" PM":" AM"));
+                giohoanthanh.setText(giotam +":"+phuttam);
                 //lưu giờ thực vào tag
                 giohoanthanh.setTag(s);
                 //lưu vết lại giờ vào hourFinish
