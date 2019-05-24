@@ -164,21 +164,15 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         LayoutInflater inflater=getLayoutInflater();
         View v=inflater.inflate(R.layout.dialog_them_nhan,null);
         final EditText them_nhan=v.findViewById(R.id.ed_them_nhan);
-        Button them=v.findViewById(R.id.them_nhan);
-        them.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _nhan=them_nhan.getText()+"";
-                them_nhan.setText("");
-                Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
-            }
-        });
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("Thêm nhãn");
         builder.setView(v);
-        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                _nhan=them_nhan.getText()+"";
+                Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
                 dialog.cancel();
             }
         });

@@ -2,22 +2,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="4"
+    android:orientation="vertical"
     android:gravity="center">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/blue_grey_800"
         android:textSize="20sp"
-        android:layout_weight="1"
         android:id="@+id/ed_them_nhan"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/them_nhan"
-        android:text="OK"
-        android:background="@drawable/shape_button"
-        android:textColor="@color/blue_grey_800"
-        android:layout_weight="3"/>
 </LinearLayout>
