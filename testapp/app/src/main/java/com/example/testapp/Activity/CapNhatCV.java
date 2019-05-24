@@ -39,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -137,36 +138,52 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 _vitrithongbao=i;
         }
     }
-
     private void loadDataSpinner() {
-        databaseReference.child("Nhan").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("Nhan").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Nhan nhan=dataSnapshot.getValue(Nhan.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
+                {
+                    Nhan nhan=data.getValue(Nhan.class);
+                    list.add(nhan);
+                    stringArrayAdapterpinner.notifyDataSetChanged();
+                }
+                Nhan nhan=new Nhan("Khác");
                 list.add(nhan);
                 stringArrayAdapterpinner.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+    }
+    private void showDialogThem_Nhan()
+    {
+        LayoutInflater inflater=getLayoutInflater();
+        View v=inflater.inflate(R.layout.dialog_them_nhan,null);
+        final EditText them_nhan=v.findViewById(R.id.ed_them_nhan);
+        Button them=v.findViewById(R.id.them_nhan);
+        them.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _nhan=them_nhan.getText()+"";
+                them_nhan.setText("");
+                Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Thêm nhãn");
+        builder.setView(v);
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     private void sukien(){
@@ -183,10 +200,10 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     private void layKeyCapNhat()
     {
         try{
-            _email=getIntent().getStringExtra(Activity_DSCongViec_Ngay.EMAIL_CAPNHATCV_NGAY).toString();
-            _key=getIntent().getStringExtra(Activity_DSCongViec_Ngay.KEYCN).toString();
+            _email=getIntent().getStringExtra("email_cap_nhat_cv").toString();
+            _key=getIntent().getStringExtra("key_cn").toString();
             Bundle bundle=getIntent().getExtras();
-            CongViec cv= (CongViec) bundle.getSerializable(Activity_DSCongViec_Ngay.CVCAPNHAT);
+            CongViec cv= (CongViec) bundle.getSerializable("cong_viec_cap_nhat");
             tieude.setText(cv.getTieude()+"");
             trangthai.setText(cv.getTrangthai()+"");
             ghichu.setText(cv.getGhichu()+"");
@@ -415,6 +432,8 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         this._nhan=parent.getItemAtPosition(position).toString();
+        if(_nhan.equals("Khác"))
+            showDialogThem_Nhan();
     }
     /**
      * Hàm lấy các thông số mặc định khi lần đầu tiền chạy ứng dụng

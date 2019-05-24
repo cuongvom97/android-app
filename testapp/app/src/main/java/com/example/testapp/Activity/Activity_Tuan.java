@@ -257,6 +257,7 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         listView.setAdapter(adapter_dayselected);
         getCVinDay();
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Danh sách công việc ngày "+itemselected);
         builder.setView(v);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/blue_grey_700"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Ngày"
+            app:title="Thống kê"
             app:titleTextColor="@color/colorWhite"/>
 
     </android.support.design.widget.AppBarLayout>

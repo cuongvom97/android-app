@@ -39,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -807,39 +808,61 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
     }
     public void loadDataSpinner()
     {
-        databaseReference.child("Nhan").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("Nhan").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Nhan nhan=dataSnapshot.getValue(Nhan.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren())
+                {
+                    Nhan nhan=data.getValue(Nhan.class);
+                    list.add(nhan);
+                    stringArrayAdapterpinner.notifyDataSetChanged();
+                }
+                Nhan nhan=new Nhan("Khác");
                 list.add(nhan);
                 stringArrayAdapterpinner.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-        })    ;
+        });
+
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         _nhan=parent.getItemAtPosition(position).toString();
+        if (_nhan.equals("Khác"))
+        {
+            showDialogThem_Nhan();
+        }
+    }
+    private void showDialogThem_Nhan()
+    {
+        LayoutInflater inflater=getLayoutInflater();
+        View v=inflater.inflate(R.layout.dialog_them_nhan,null);
+        final EditText them_nhan=v.findViewById(R.id.ed_them_nhan);
+        Button them=v.findViewById(R.id.them_nhan);
+        them.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _nhan=them_nhan.getText()+"";
+                them_nhan.setText("");
+                Toast.makeText(Activity_ThemCongViec.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Thêm nhãn");
+        builder.setView(v);
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     @Override

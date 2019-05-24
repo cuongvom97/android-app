@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Load danh sách tìm kiếm
         loadDSSearch();
         listsqlite=db.getALLCV();
-        Toast.makeText(this, ""+listsqlite.size(), Toast.LENGTH_SHORT).show();
         dscv.setHasFixedSize(true);
         layoutManager= new LinearLayoutManager(MainActivity.this);
         arrayAdapter = new Custome_RecyclerView(listsqlite);
