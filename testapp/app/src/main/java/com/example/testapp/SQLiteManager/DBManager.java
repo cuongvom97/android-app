@@ -48,7 +48,9 @@ public class DBManager extends SQLiteOpenHelper {
         db.execSQL(sqlQuery);
         System.out.println("Tạo thành công");
     }
-
+//    public void deleteAllCv(){
+//
+//    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
@@ -83,6 +85,7 @@ public class DBManager extends SQLiteOpenHelper {
         System.out.println("Xóa thành công"+id);
     }
     public int Update(CongViec cv,String key){
+//        System.out.println("cap nhat db");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 

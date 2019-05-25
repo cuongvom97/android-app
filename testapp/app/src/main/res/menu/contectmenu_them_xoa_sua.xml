@@ -4,6 +4,6 @@
         android:id="@+id/contextmenu_sua"/>
     <item android:title="Xóa"
         android:id="@+id/contextmenu_xoa"/>
-    <item android:title="Hoàn thành"
+    <item android:title="Đổi trạng thái"
         android:id="@+id/contextmenu_hoanthanh"/>
 </menu>

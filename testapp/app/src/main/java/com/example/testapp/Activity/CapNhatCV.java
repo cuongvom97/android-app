@@ -171,8 +171,22 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 _nhan=them_nhan.getText()+"";
-                Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
+                if(_nhan==""){
+                    Toast.makeText(CapNhatCV.this, "Nhãn không được trống",
+                            Toast.LENGTH_SHORT).show();
+                    showDialogThem_Nhan();
+                }
+                else{
+
+                    Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công",
+                            Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            }
+        });
+        builder.setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });

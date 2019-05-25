@@ -850,7 +850,26 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 _nhan=them_nhan.getText()+"";
-                Toast.makeText(Activity_ThemCongViec.this, "Thêm nhãn "+_nhan+" thành công", Toast.LENGTH_SHORT).show();
+                if(_nhan==""){
+                    Toast.makeText(Activity_ThemCongViec.this,
+                            "Nhãn không được trống",
+                            Toast.LENGTH_SHORT).show();
+                    nhanspinner.setSelection(6);
+                    showDialogThem_Nhan();
+                }
+                else{
+
+                    Toast.makeText(Activity_ThemCongViec.this, "Thêm nhãn "+_nhan+" thành công",
+                            Toast.LENGTH_SHORT).show();
+                    nhanspinner.setSelection(6);
+                    dialog.cancel();
+                }
+            }
+        });
+        builder.setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                nhanspinner.setSelection(0);
                 dialog.cancel();
             }
         });

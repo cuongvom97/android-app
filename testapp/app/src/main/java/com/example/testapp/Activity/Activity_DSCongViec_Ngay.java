@@ -176,12 +176,12 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     }
     private void showHoiHT()
     {
-        if(_cv.getTrangthai().equals("Hoàn thành"))
+        if(_cv.getTrangthai().equals(".."))
         {
             Toast.makeText(Activity_DSCongViec_Ngay.this, "Công việc đã hoàn thành rồi.", Toast.LENGTH_SHORT).show();
             return;
         }
-        else {
+//        else {
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             try {
                 Calendar calht = Calendar.getInstance();
@@ -194,7 +194,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                     builder.setTitle("Thông báo");
                     builder.setMessage("Bạn có chắc?");
                     builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                        @Override
+//                        @Override
                         public void onClick(DialogInterface dialog, int which) {
                             hoanthanhCV();
                             Toast.makeText(Activity_DSCongViec_Ngay.this, "Thành công", Toast.LENGTH_SHORT).show();
@@ -211,7 +211,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                 else
                 {
                     Toast.makeText(Activity_DSCongViec_Ngay.this,
-                            "Công việc hiện tại không được đánh hoàn thành",
+                            "Bạn không thể hoàn thành công việc ở tương lai",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -220,7 +220,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             }
         }
 
-    }
+//    }
     private void hoanthanhCV() {
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -231,8 +231,15 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
                     String key=data.getKey();
                     if(cv.getEmail().equals(_email)&&key.equals(_key))
                     {
+                        String text =  cv.getTrangthai();
+                        if(text== "Hoàn thành"){
+                            text= "Chưa hoàn thành";
+                        }
+                        else{
+                            text="Hoàn thành";
+                        }
                         CongViec congViec=new CongViec(cv.getTieude(),cv.getGhichu(),_email,
-                                cv.getNgaybatdau(),cv.getGiobatdau(),cv.getGioketthuc(),cv.getTennhan(),"Hoàn thành",
+                                cv.getNgaybatdau(),cv.getGiobatdau(),cv.getGioketthuc(),cv.getTennhan(),text,
                                 null);
                         Map<String,Object> values=congViec.toMap();
                         Map<String, Object> childUpdates = new HashMap<>();
@@ -313,12 +320,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     }
     private void loadCapNhatCV()
     {
-        if(_cv.getTrangthai().equals("Hoàn thành"))
-        {
-            Toast.makeText(this, "Công việc đã hoàn thành không thể cập nhật", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else {
+
             Bundle bundle=new Bundle();
             bundle.putSerializable(CVCAPNHAT,_cv);
             Intent intent=new Intent(this,CapNhatCV.class);
@@ -326,7 +328,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             intent.putExtra(EMAIL_CAPNHATCV_NGAY,_email);
             intent.putExtra(KEYCN,_key);
             startActivityForResult(intent,REQUEST_CODE);
-        }
+
     }
     //Load activuty Activity_ThemCongViec
     private void loadActivityThemCV(String email,String ngaybd)

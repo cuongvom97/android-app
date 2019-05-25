@@ -89,8 +89,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SearchView searchView;
     private DBManager db;
     //FirebaseAuth myAuth;
+    Bundle bundle;
+    Context a = this;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
+        bundle=savedInstanceState;
         super.onCreate(savedInstanceState);
         Google_sign_in.myAuth =FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         congViecList=new ArrayList<>();
         listsqlite=new ArrayList<>();
         //Load danh sách tìm kiếm
-        loadDSSearch();
+//        loadDSSearch();
         listsqlite=db.getALLCV();
         dscv.setHasFixedSize(true);
         layoutManager= new LinearLayoutManager(MainActivity.this);
@@ -238,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 layout_main.setVisibility(View.VISIBLE);
                 dscv.setVisibility(View.GONE);
                 arrayAdapter.notifyDataSetChanged();
+                loadUI();
                 return true;
             }
 
@@ -418,8 +422,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 loadSuKienTrenLich();
-                loadDSSearch();
-                arrayAdapter.notifyDataSetChanged();
+//                loadUI();
+//                reloadUI();
             }
 
             @Override
@@ -495,9 +499,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         listsqlite.clear();
         deleteTableCV();
+        reloadUI();
+//        db.getALLCV();
+
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot data:dataSnapshot.getChildren())
                 {
                     String key=data.getKey();
