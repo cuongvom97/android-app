@@ -13,7 +13,7 @@
         android:paddingBottom="5dp">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_search"
+            android:id="@+id/toolbar_ds_cv_cht"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/blue_grey_700"
