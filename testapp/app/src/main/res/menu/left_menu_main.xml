@@ -3,11 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="Search"
         android:id="@+id/search_left_menu_main"
-        android:icon="@mipmap/icon_search"
+        android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <item android:title="Kiểm tra"
+        android:id="@+id/kiem_tra_left_menu_main"
+        android:icon="@drawable/ic_check_black_24dp"
+        app:showAsAction="always"/>
     <item android:title="@string/leftmenu_tailai"
         android:id="@+id/tailai_leftmenu_main"
         android:icon="@mipmap/icon_refresh2"/>
-
 </menu>

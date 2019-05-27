@@ -1,4 +1,4 @@
-package com.example.testapp;
+package com.example.testapp.Activity;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+
+import com.example.testapp.R;
 
 public class Activity_CaiDat extends AppCompatActivity implements View.OnClickListener {
     private LinearLayout layout_caidat;

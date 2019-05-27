@@ -174,12 +174,14 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 if(_nhan==""){
                     Toast.makeText(CapNhatCV.this, "Nhãn không được trống",
                             Toast.LENGTH_SHORT).show();
+                    nhanspinner.setSelection(6);
                     showDialogThem_Nhan();
                 }
                 else{
 
                     Toast.makeText(CapNhatCV.this, "Thêm nhãn "+_nhan+" thành công",
                             Toast.LENGTH_SHORT).show();
+                    nhanspinner.setSelection(6);
                     dialog.cancel();
                 }
             }
@@ -187,6 +189,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
         builder.setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                nhanspinner.setSelection(0);
                 dialog.cancel();
             }
         });
@@ -258,7 +261,7 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.capnhatcv_btnthoat:
                 Intent intent=new Intent();
-                setResult(Activity_DSCongViec_Ngay.RESULT_CANCELED,intent);
+                setResult(RESULT_CANCELED,intent);
                 finish();
                 break;
         }
@@ -360,12 +363,12 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
                 {
                     capnhatCVCSDL(dateStart);
                     setchuongBao(hourthongbao);
-                    send_to_Activity_DSCongViec(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
+                    send_to_Activity_DSCongViec(RESULT_OK);
                 }
                 else
                 {
                     capnhatCVCSDL(dateStart);
-                    send_to_Activity_DSCongViec(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
+                    send_to_Activity_DSCongViec(RESULT_OK);
                 }
             }
         }
@@ -434,7 +437,6 @@ public class CapNhatCV extends AppCompatActivity implements View.OnClickListener
 
             }
         });
-        setResult(Activity_DSCongViec_Ngay.RESULT_CODECAPNHAT);
     }
 
     @Override

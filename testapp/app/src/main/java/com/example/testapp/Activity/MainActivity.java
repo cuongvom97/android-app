@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -18,52 +19,42 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.testapp.Activity_CaiDat;
-import com.example.testapp.Custome.Custom_DS_CongViec_CHT;
-import com.example.testapp.Custome.CustomeXemDanhSachCV;
 import com.example.testapp.Custome.Custome_RecyclerView;
+import com.example.testapp.Custome.My_ViewHolder;
 import com.example.testapp.CustomeCalandar.Adapter_Calandar;
 import com.example.testapp.CustomeCalandar.LuaChonTrongLich;
 import com.example.testapp.Model.CongViec;
 import com.example.testapp.Model.CongViecSQlite;
-import com.example.testapp.Model.Nhan;
 import com.example.testapp.R;
 import com.example.testapp.SQLiteManager.DBManager;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-
-import lecho.lib.hellocharts.model.AxisValue;
 
 import static android.support.v7.widget.SearchView.*;
 
@@ -88,12 +79,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayAdapter<CongViec> adapter;
     private SearchView searchView;
     private DBManager db;
+    private SharedPreferences mSharedPref;
+    private FirebaseRecyclerAdapter<CongViec, My_ViewHolder> adapterholder;
+    private String _key;
+    private CongViec _cv;
     //FirebaseAuth myAuth;
-    Bundle bundle;
-    Context a = this;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
-        bundle=savedInstanceState;
         super.onCreate(savedInstanceState);
         Google_sign_in.myAuth =FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
@@ -102,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layTheHien();
         loadUI();
         sukien();
-
     }
     private void loadUI()
     {
@@ -132,17 +123,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadSuKienTrenLich();
         congViecList=new ArrayList<>();
         listsqlite=new ArrayList<>();
+
         //Load danh sách tìm kiếm
-//        loadDSSearch();
-        listsqlite=db.getALLCV();
+        mSharedPref = getSharedPreferences("SortSettings", MODE_PRIVATE);
+        String mSorting = mSharedPref.getString("Sort", "newest"); //where if no settingsis selected newest will be default
+
+        if (mSorting.equals("newest")) {
+            layoutManager = new LinearLayoutManager(this);
+            //this will load the items from bottom means newest first
+            ((LinearLayoutManager) layoutManager).setReverseLayout(true);
+            ((LinearLayoutManager) layoutManager).setStackFromEnd(true);
+        } else if (mSorting.equals("oldest")) {
+            layoutManager = new LinearLayoutManager(this);
+            //this will load the items from bottom means oldest first
+            ((LinearLayoutManager) layoutManager).setReverseLayout(false);
+            ((LinearLayoutManager) layoutManager).setStackFromEnd(false);
+        }
+        loadDSSearch();
+
         dscv.setHasFixedSize(true);
-        layoutManager= new LinearLayoutManager(MainActivity.this);
-        arrayAdapter = new Custome_RecyclerView(listsqlite);
+
         dscv.setLayoutManager(layoutManager);
-        dscv.setAdapter(arrayAdapter);
         dscv.setVisibility(View.GONE);
-        //Hiện công việc chưa hoàn thành
-        get_danh_sach_cv_chua_hoan_thanh();
     }
     private void layTheHien()
     {
@@ -160,12 +162,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         gridview.setOnItemClickListener(this);
         dangxuat.setOnClickListener(this);
         tv_month.setOnClickListener(this);
-        arrayAdapter.setOnItemClickListener(new Custome_RecyclerView.OnItemClickListener() {
+        dscv.setOnClickListener(new OnClickListener() {
             @Override
-            public void onItemClick(int position) {
-                CongViec cv=listsqlite.get(position);
-                _ngay_hientai=cv.getNgaybatdau()+"";
-                guiDSCongViec_Ngay(_emaim_signin);
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "VL", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -240,8 +240,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 layout_main.setVisibility(View.VISIBLE);
                 dscv.setVisibility(View.GONE);
-                arrayAdapter.notifyDataSetChanged();
-                loadUI();
                 return true;
             }
 
@@ -250,21 +248,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
-        searchView.setOnCloseListener(new OnCloseListener() {
-            @Override
-            public boolean onClose() {
-
-                return false;
-            }
-        });
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                //firebasesearch(query,_emaim_signin);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                //firebasesearch(newText,_emaim_signin);
                 arrayAdapter.getFilter().filter(newText);
                 return false;
             }
@@ -287,6 +280,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dscv.setVisibility(View.GONE);
                 layout_main.setVisibility(View.VISIBLE);
                 arrayAdapter.notifyDataSetChanged();
+                break;
+            case R.id.kiem_tra_left_menu_main:
+                Intent intent=new Intent(MainActivity.this,Activity_DS_Chua_HT.class);
+                intent.putExtra("email",_emaim_signin);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -339,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==REQUEST_CODE_NGAY)
+        if(requestCode==REQUEST_CODE_NGAY)
         {
             switch (resultCode)
             {
@@ -422,8 +420,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 loadSuKienTrenLich();
-//                loadUI();
-//                reloadUI();
+                loadDSSearch();
             }
 
             @Override
@@ -499,9 +496,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         listsqlite.clear();
         deleteTableCV();
-        reloadUI();
-//        db.getALLCV();
-
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -515,75 +509,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         db.addCV(cv,key);
                     }
                 }
+                listsqlite=db.getALLCV();
+                arrayAdapter = new Custome_RecyclerView(listsqlite);
+                dscv.setAdapter(arrayAdapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-    }
-    private void get_danh_sach_cv_chua_hoan_thanh()
-    {
-        congViecList.clear();
-        final Calendar calendar=Calendar.getInstance();
-        final Date datenow=calendar.getTime();
-        reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot data:dataSnapshot.getChildren())
-                {
-                    CongViec cv=data.getValue(CongViec.class);
-
-                    if(cv.getEmail().equals(_emaim_signin))
-                    {
-                        String str[]=cv.getNgaybatdau().split("/");
-                        int day=Integer.parseInt(str[0]);
-                        int month=Integer.parseInt(str[1])-1;
-                        int year=Integer.parseInt(str[2]);
-                        calendar.set(year,month,day);
-                        Date date=calendar.getTime();
-                        int result=date.compareTo(datenow);
-                        if(result<0&&cv.getTrangthai().equals("Chưa hoàn thành"))
-                        {
-                            congViecList.add(cv);
-                        }
-                    }
-                }
-                Collections.sort(congViecList);
-                show_danh_sach_cv_chua_hoan_thanh();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-    private void show_danh_sach_cv_chua_hoan_thanh(){
-        if(congViecList.size()!=0){
-            LayoutInflater inflater=getLayoutInflater();
-            View view=inflater.inflate(R.layout.danh_sach_cong_viec_chua_hoan_thanh,null);
-            ListView listViewcht=view.findViewById(R.id.ds_cong_viec_cht_list);
-            listViewcht.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    CongViec cv=congViecList.get(position);
-                    _ngay_hientai=cv.getNgaybatdau()+"";
-                    guiDSCongViec_Ngay(_emaim_signin);
-                }
-            });
-            adapter=new Custom_DS_CongViec_CHT(this,R.layout.custom_ds_cong_viec_cht,congViecList);
-            listViewcht.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setView(view);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog dialog=builder.create();
-            dialog.show();
-        }
     }
 }

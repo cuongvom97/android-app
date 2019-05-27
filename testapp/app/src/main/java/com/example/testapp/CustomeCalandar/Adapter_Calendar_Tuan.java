@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.testapp.Custome.CustomeXemDanhSachCV;
+import com.example.testapp.Custome.My_custome_item_list_tuan;
 import com.example.testapp.Model.CongViec;
 import com.example.testapp.R;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -60,22 +62,23 @@ public class Adapter_Calendar_Tuan extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        TextView dayView,tong;
+        ListView listView;
         //List<CongViec> listtam=new ArrayList<>();
         if (convertView == null) { // if it's not recycled, initialize some
             // attributes
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.item_calendar_tuan, null);
         }
-        dayView=v.findViewById(R.id.tieude_tuan_ngay);
-        tong=v.findViewById(R.id.tongcv_ngay_tuan);
-        dayView.setText(ngaytrongtuan.get(position).toString());
-        getAllCV(position,tong);
+        listView=v.findViewById(R.id.list_item_tuan);
+        getListAllCV(position,listView);
         return v;
     }
-    private void getAllCV(final int vt, final TextView t)
+    private void getListAllCV(final int vt,ListView view)
     {
         reference=FirebaseDatabase.getInstance().getReference();
+        final List<CongViec> list=new ArrayList<>();
+        final ArrayAdapter<CongViec> adapter=new My_custome_item_list_tuan(context,R.layout.item_list_tuan,list);
+        view.setAdapter(adapter);
         reference.child("CongViec").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -83,11 +86,11 @@ public class Adapter_Calendar_Tuan extends BaseAdapter {
                 {
                     CongViec cv=data.getValue(CongViec.class);
                     if(cv.getEmail().equals(_email)&&cv.getNgaybatdau().equals(ngaytrongtuan.get(vt).toString())){
-                        _dem++;
+                        list.add(cv);
                     }
                 }
-                t.setText(_dem+"");
-                _dem=0;
+                Collections.sort(list);
+                adapter.notifyDataSetChanged();
             }
 
             @Override

@@ -54,9 +54,8 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
     private ArrayAdapter<CongViec> arrayAdapter;
     private ArrayList<CongViec> arrayList;
     private DatabaseReference reference;
-    public static final int REQUEST_CODE=4000;
-    public static  final int RESULT_CODETHEM=4001;
-    public static  final int RESULT_CODECAPNHAT=4002;
+    public static final int REQUEST_CODE_THEM=4000;
+    public static final int REQUEST_CODE_CAP_NHAT=10000;
     public static String EMAIL_THEMCV_NGAY="email_themcv";
     public static String EMAIL_CAPNHATCV_NGAY="email_cap_nhat_cv";
     public static String NGAYBD_THEMCV_NGAY="ngay_bd_themcv";
@@ -97,8 +96,8 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         dscongviec.setAdapter(arrayAdapter);
         //Nhận ngay và email từ main;
         Intent intent=getIntent();
-        _ngay=intent.getStringExtra(MainActivity.NGAYBD_THEMCV);
-        _email=intent.getStringExtra(MainActivity.EMAIL_THEMCV);
+        _ngay=intent.getStringExtra("ngay_ngay");
+        _email=intent.getStringExtra("email_email");
         ngay.setText(_ngay);
         //Đưa dữ liệu vào spinner lọc
         arrdsloc=getResources().getStringArray(R.array.dsloc);
@@ -327,7 +326,7 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
             intent.putExtras(bundle);
             intent.putExtra(EMAIL_CAPNHATCV_NGAY,_email);
             intent.putExtra(KEYCN,_key);
-            startActivityForResult(intent,REQUEST_CODE);
+            startActivityForResult(intent,REQUEST_CODE_CAP_NHAT);
 
     }
     //Load activuty Activity_ThemCongViec
@@ -336,27 +335,37 @@ public class Activity_DSCongViec_Ngay extends AppCompatActivity implements Adapt
         Intent intent=new Intent(this, Activity_ThemCongViec.class);
         intent.putExtra(EMAIL_THEMCV_NGAY,email);
         intent.putExtra(NGAYBD_THEMCV_NGAY,ngaybd);
-        startActivityForResult(intent,REQUEST_CODE);
+        startActivityForResult(intent,REQUEST_CODE_THEM);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==REQUEST_CODE)
+        if(requestCode==REQUEST_CODE_THEM)
         {
             switch (resultCode)
             {
-                case RESULT_CODETHEM:
+                case RESULT_OK:
                     _ngay=data.getStringExtra("ngay_duoc_them");
                     ngay.setText(_ngay);
                     Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
                     loadDataListView(_tts);
                     break;
-                case RESULT_CODECAPNHAT:
+                case RESULT_CANCELED:
+                    loadDataListView(_tts);
+                    break;
+            }
+        }
+        if(requestCode==REQUEST_CODE_CAP_NHAT)
+        {
+            switch (resultCode)
+            {
+                case RESULT_OK:
                     _ngay=data.getStringExtra("ngay_duoc_cap_nhat");
                     ngay.setText(_ngay);
                     Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
                     loadDataListView(_tts);
                     break;
+
                 case RESULT_CANCELED:
                     loadDataListView(_tts);
                     break;

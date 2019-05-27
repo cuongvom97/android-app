@@ -17,18 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity_Search">
-
-        </activity>
-        <activity android:name=".Activity_CaiDat"></activity>
+        <activity android:name=".Activity.Activity_DS_Chua_HT"></activity>
+        <activity android:name=".Activity.Activity_CaiDat" />
         <activity android:name=".Activity.Activity_ThongKe" />
         <activity android:name=".Activity.Activity_GioiThieu" />
         <activity android:name=".Activity.Activity_Tuan" />
         <activity android:name=".Activity.CapNhatCV" />
-        <activity android:name=".Activity.MainActivity"
-            android:launchMode="singleTop">
-
-        </activity>
+        <activity
+            android:name=".Activity.MainActivity"
+            android:launchMode="singleTop"></activity>
         <activity android:name=".Activity.Activity_DSCongViec_Ngay" />
         <activity android:name=".Activity.Google_sign_in">
             <intent-filter>

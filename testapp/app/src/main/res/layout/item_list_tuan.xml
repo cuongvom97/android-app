@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/layout_item_list_tuan"
+    android:padding="5dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue_grey_800"
+        android:text="Tiêu đề"
+        android:id="@+id/tieu_de_item_list_tuan"
+        android:gravity="center"
+        android:textSize="13dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue_grey_800"
+        android:text="Giờ"
+        android:id="@+id/gio_item_list_tuan"
+        android:gravity="center"
+        android:textSize="13dp"/>
+</LinearLayout>

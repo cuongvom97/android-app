@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Search"
+    tools:context=".Activity.Activity_DS_Chua_HT"
     android:orientation="vertical">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -18,19 +18,11 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/blue_grey_700"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Tìm kiếm"/>
+            app:title="Danh sách công việc chưa hoàn thành"/>
     </android.support.design.widget.AppBarLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/blue_grey_800"
-        android:textSize="23sp"
-        android:text="Danh sách công việc"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="3dp"/>
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_dscv"></ListView>
-
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:id="@+id/ds_cong_viec_cht_list"></ListView>
 </LinearLayout>

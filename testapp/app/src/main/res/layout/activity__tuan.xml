@@ -109,7 +109,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/TextView06"
+                            android:id="@+id/cn_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -118,7 +118,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/TextView05"
+                            android:id="@+id/t2_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -127,7 +127,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/TextView04"
+                            android:id="@+id/t3_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -136,7 +136,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/TextView03"
+                            android:id="@+id/t4_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -145,7 +145,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/TextView02"
+                            android:id="@+id/t5_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -154,7 +154,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/TextView01"
+                            android:id="@+id/t6_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -163,7 +163,7 @@
                             android:textColor="#4b4a4a" />
 
                         <TextView
-                            android:id="@+id/textView1"
+                            android:id="@+id/t7_tuan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

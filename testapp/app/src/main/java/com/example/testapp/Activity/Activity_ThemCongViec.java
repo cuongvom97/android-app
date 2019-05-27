@@ -144,10 +144,10 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         {
             case R.id.themcv_btnthem:
                 themCongViec();
-                guiActivity_DSCongViec_Ngay(Activity_DSCongViec_Ngay.RESULT_CODETHEM);
+                guiActivity_DSCongViec_Ngay(RESULT_OK);
                 break;
             case R.id.themcv_btnthoat:
-                guiActivity_DSCongViec_Ngay(Activity_DSCongViec_Ngay.RESULT_CANCELED);
+                guiActivity_DSCongViec_Ngay(RESULT_CANCELED);
                 break;
             case R.id.tv_themcv_ngaybatdau:
                 //showDatePickerDialogStart();

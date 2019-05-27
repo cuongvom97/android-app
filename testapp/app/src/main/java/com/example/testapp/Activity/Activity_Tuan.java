@@ -2,12 +2,17 @@ package com.example.testapp.Activity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,8 +48,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class Activity_Tuan extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    private TextView tieude,ngay_start_end;
+    private TextView tieude,ngay_start_end,t2,t3,t4,t5,t6,t7,cn;
     private ImageButton next,pre;
+    private ListView listView;
     private GridView gridView;
     private ArrayList<String> dsngaytrongtuan;
     private DatabaseReference reference;
@@ -56,6 +62,7 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
     private int _day,_month,_year;
     private List<CongViec> listcv_inday;
     private ArrayAdapter<CongViec> adapter_dayselected;
+    public final static int REQUESTCODE=9000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +81,19 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         gridView=findViewById(R.id.listcv_tuan);
         pre=findViewById(R.id.ib_prev_tuan);
         next=findViewById(R.id.Ib_next_tuan);
+        t2=findViewById(R.id.t2_tuan);
+        t3=findViewById(R.id.t3_tuan);
+        t4=findViewById(R.id.t4_tuan);
+        t5=findViewById(R.id.t5_tuan);
+        t6=findViewById(R.id.t6_tuan);
+        t7=findViewById(R.id.t7_tuan);
+        cn=findViewById(R.id.cn_tuan);
     }
 
     private void loadUI()
     {
+        Toolbar toolbar=findViewById(R.id.toolbar_tuancv);
+        setSupportActionBar(toolbar);
         layEmailtuMain();
         dsngaytrongtuan=new ArrayList<>();
         cal=Calendar.getInstance();
@@ -89,7 +105,39 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         gridView.setAdapter(adapter_calendar_tuan);
         setListNgaytrongtuan();
         tieude.setText("Tuần "+cal.get(Calendar.WEEK_OF_YEAR)+" năm "+_year);
+        setDay_in_week();
         ngay_start_end.setText(_ngaybatdautuan+"-"+_ngaketthuctuan);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.right_menu_refresh, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.right_menu_refresh:
+                Intent intent=this.getIntent();
+                finish();
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setDay_in_week()
+    {
+        cn.setText("CN-"+stringSplitDay(dsngaytrongtuan.get(0).toString()));
+        t2.setText("T2-"+stringSplitDay(dsngaytrongtuan.get(1).toString()));
+        t3.setText("T3-"+stringSplitDay(dsngaytrongtuan.get(2).toString()));
+        t4.setText("T4-"+stringSplitDay(dsngaytrongtuan.get(3).toString()));
+        t5.setText("T5-"+stringSplitDay(dsngaytrongtuan.get(4).toString()));
+        t6.setText("T6-"+stringSplitDay(dsngaytrongtuan.get(5).toString()));
+        t7.setText("T7-"+stringSplitDay(dsngaytrongtuan.get(6).toString()));
     }
     private void layEmailtuMain()
     {
@@ -101,6 +149,14 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         next.setOnClickListener(this);
         pre.setOnClickListener(this);
         tieude.setOnClickListener(this);
+        t2.setOnClickListener(this);
+        t3.setOnClickListener(this);
+        t4.setOnClickListener(this);
+        t5.setOnClickListener(this);
+        t6.setOnClickListener(this);
+        t7.setOnClickListener(this);
+        cn.setOnClickListener(this);
+
     }
     private void getdayStartEndinWeek()
     {
@@ -205,13 +261,53 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
             case R.id.tv_tuan:
                 showDatePickerDialog();
                 break;
+            case R.id.cn_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(0).toString());
+                break;
+            case R.id.t2_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(1).toString());
+                break;
+            case R.id.t3_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(2).toString());
+                break;
+            case R.id.t4_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(3).toString());
+                break;
+            case R.id.t5_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(4).toString());
+                break;
+            case R.id.t6_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(5).toString());
+                break;
+            case R.id.t7_tuan:
+                send_to_dsngay(dsngaytrongtuan.get(6).toString());
+                break;
         }
+    }
+    private void send_to_dsngay(String ngay)
+    {
+        Intent intent=new Intent(Activity_Tuan.this,Activity_DSCongViec_Ngay.class);
+        intent.putExtra("ngay_ngay",ngay);
+        intent.putExtra("email_email",_email);
+        startActivityForResult(intent,REQUESTCODE);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==REQUESTCODE)
+        {
+            switch (resultCode)
+            {
+                case RESULT_OK:
+                    refreshUI();
+                    break;
+            }
+        }
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         itemselected=Adapter_Calendar_Tuan.ngaytrongtuan.get(position).toString();
-        showDialogDSCV();
     }
     private void clickNext()
     {
@@ -233,6 +329,7 @@ public class Activity_Tuan extends AppCompatActivity implements View.OnClickList
         ngay_start_end.setText(_ngaybatdautuan+"-"+_ngaketthuctuan);
         setListNgaytrongtuan();
         adapter_calendar_tuan.notifyDataSetChanged();
+        setDay_in_week();
     }
     private void setValuesfromcalendar()
     {
