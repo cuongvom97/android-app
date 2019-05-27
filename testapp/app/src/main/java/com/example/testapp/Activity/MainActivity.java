@@ -473,17 +473,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for(DataSnapshot data:dataSnapshot.getChildren())
                 {
                     String key=data.getKey();
-                    CongViec cv=data.getValue(CongViec.class);
-                    if(cv.getEmail().equals(_emaim_signin))
-                    {
-                        for (CongViecSQlite cvlite:db.getALLCVSQlite())
-                        {
-                            if(cvlite.getId().equals(key))
-                            {
-                                db.deleteCV(key);
-                            }
-                        }
-                    }
+                    db.deleteCV(key);
                 }
             }
             @Override
