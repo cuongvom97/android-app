@@ -144,7 +144,6 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
         {
             case R.id.themcv_btnthem:
                 themCongViec();
-                guiActivity_DSCongViec_Ngay(RESULT_OK);
                 break;
             case R.id.themcv_btnthoat:
                 guiActivity_DSCongViec_Ngay(RESULT_CANCELED);
@@ -361,6 +360,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                     hourthongbao=calthongbao.getTime();
                                     kc--;
                                 }
+                                guiActivity_DSCongViec_Ngay(RESULT_OK);
                             }
                             else
                             {
@@ -371,6 +371,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                     dateStart=callap.getTime();
                                     kc--;
                                 }
+                                guiActivity_DSCongViec_Ngay(RESULT_OK);
                             }
                         }
                         if(_vitrilap==2)
@@ -394,6 +395,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         hourthongbao=calthongbao.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                                 else
                                 {
@@ -404,6 +406,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         dateStart=callap.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                             }
                         }
@@ -429,6 +432,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         hourthongbao=calthongbao.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                                 else
                                 {
@@ -439,6 +443,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         dateStart=callap.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                             }
                         }
@@ -465,6 +470,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         hourthongbao=calthongbao.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                                 else
                                 {
@@ -475,6 +481,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         dateStart=callap.getTime();
                                         kc--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                             }
                         }
@@ -502,6 +509,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         hourthongbao=calthongbao.getTime();
                                         lap--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                                 else
                                 {
@@ -512,6 +520,7 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                                         dateStart=callap.getTime();
                                         lap--;
                                     }
+                                    guiActivity_DSCongViec_Ngay(RESULT_OK);
                                 }
                             }
                         }
@@ -523,10 +532,12 @@ public class Activity_ThemCongViec extends AppCompatActivity implements View.OnC
                         {
                             themCVCSDL(dateStart);
                             setchuongBao(hourthongbao);
+                            guiActivity_DSCongViec_Ngay(RESULT_OK);
                         }
                         else
                         {
                             themCVCSDL(dateStart);
+                            guiActivity_DSCongViec_Ngay(RESULT_OK);
                         }
                     }
                 }

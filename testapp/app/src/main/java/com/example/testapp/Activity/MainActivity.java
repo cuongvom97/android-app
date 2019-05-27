@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layTheHien();
         loadUI();
         sukien();
+        reference.child("CongViec").push().setValue(new CongViec(
+                "Đi chơi","","vmccuong1997@gmail.com","01/05/2019",
+                "09:00","17:00","Giải trí","Hoàn thành","Không có"));
+        reference.child("CongViec").push().setValue(new CongViec(
+                "Ăn tối","","vmccuong1997@gmail.com","01/05/2019",
+                "09:00","17:00","Giải trí","Hoàn thành","Không có"));
     }
     private void loadUI()
     {

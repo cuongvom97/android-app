@@ -23,7 +23,8 @@ public class CongViec implements Serializable,Comparable<CongViec> {
     public CongViec() {
     }
 
-    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String giobatdau, String gioketthuc, String tennhan, String trangthai,String nhacnho) {
+    public CongViec(String tieude, String ghichu, String email, String ngaybatdau, String giobatdau,
+                    String gioketthuc, String tennhan, String trangthai,String nhacnho) {
         this.tieude = tieude;
         this.ghichu = ghichu;
         this.email = email;
